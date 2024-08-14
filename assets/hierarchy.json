@@ -1,0 +1,99 @@
+[
+    {
+        "user_id": 1,
+        "name": "John Doe",
+        "role": "CEO",
+        "level": 1,
+        "reporting_to": null,
+        "children": [
+            {
+                "user_id": 2,
+                "name": "Jane Smith",
+                "role": "VP Sales",
+                "level": 1,
+                "reporting_to": 1,
+                "user_id": 2,
+                "name": "Jane Smith",
+                "role": "VP Sales",
+                "level": 2,
+                "reporting_to": 1,
+                "user_id": 2,
+                "name": "Jane Smith",
+                "role": "VP Sales",
+                "level": 2,
+                "reporting_to": 1,
+                "children": [
+                    {
+                        "user_id": 3,
+                        "name": "Jim Brown",
+                        "role": "Sales Director",
+                        "level": 3,
+                        "reporting_to": 2,
+                        "children": [
+                            {
+                                "user_id": 4,
+                                "name": "Jake White",
+                                "role": "Regional Manager",
+                                "level": 4,
+                                "reporting_to": 3,
+                                "children": [
+                                    {
+                                        "user_id": 5,
+                                        "name": "Julie Black",
+                                        "role": "Area Manager",
+                                        "level": 5,
+                                        "reporting_to": 4,
+                                        "children": [
+                                            {
+                                                "user_id": 6,
+                                                "name": "Jill Green",
+                                                "role": "Sales Manager",
+                                                "level": 6,
+                                                "reporting_to": 5,
+                                                "children": [
+                                                    {
+                                                        "user_id": 7,
+                                                        "name": "Jack Red",
+                                                        "role": "Sales Executive",
+                                                        "level": 7,
+                                                        "reporting_to": 6,
+                                                        "children": [
+                                                            {
+                                                                "user_id": 8,
+                                                                "name": "Jerry Blue",
+                                                                "role": "Sales Representative",
+                                                                "level": 8,
+                                                                "reporting_to": 7,
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "user_id": 9,
+                                                                "name": "Janet Purple",
+                                                                "role": "Sales Representative",
+                                                                "level": 8,
+                                                                "reporting_to": 7,
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "user_id": 10,
+                                                                "name": "Jason Orange",
+                                                                "role": "Sales Representative",
+                                                                "level": 8,
+                                                                "reporting_to": 7,
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
