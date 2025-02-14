@@ -30,177 +30,376 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/css/fontawesome/all.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/vendor.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/dashboard-menu-theme-default.css'); ?>">
-
-
     <!-- <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css'> -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
 
+
     <style>
-    /* General styling for the menu */
-    .nav-divider {
-        height: 1px;
-        background-color: #ddd;
-
-    }
-
-    .nav>li {
-        list-style: none;
-        position: relative;
-        transition: background-color 0.3s ease;
-        /* border-left: 4px solid; */
-        /* Base border for levels */
-        cursor: pointer;
-        /* Add pointer cursor to indicate clickable items */
-    }
-
-
-
-    /* Active state styling */
-    .nav>li.active {
-        background-color: #e9ecef;
-        font-weight: bold;
-        color: #007bff;
-    }
-
-    /* Styling for different levels */
-    .nav>li[data-level="1"] {
-        border-color: #007bff;
-        /* Blue for Level 1 */
-    }
-
-    .nav>li[data-level="2"] {
-        border-color: #28a745;
-        /* Green for Level 2 */
-    }
-
-    .nav>li[data-level="3"] {
-        border-color: #17a2b8;
-        /* Teal for Level 3 */
-    }
-
-    .nav>li[data-level="4"] {
-        border-color: #ffc107;
-        /* Yellow for Level 4 */
-    }
-
-    .nav>li[data-level="5"] {
-        border-color: #dc3545;
-        /* Red for Level 5 */
-    }
-
-    .nav>li[data-level="6"] {
-        border-color: #6f42c1;
-        /* Purple for Level 6 */
-    }
-
-    .nav>li[data-level="7"] {
-        border-color: #343a40;
-        /* Dark for Level 7 */
-
-        /* Hide Level 7 */
-    }
-
-    /* Styling for menu items */
-
-    @keyframes slideDown {
-        from {
-            height: 0;
-            opacity: 0;
+        .dataTables_wrapper .top {
+            text-align: right;
+            /* Align buttons to the right */
         }
 
-        to {
-            height: auto;
-            opacity: 1;
+        /* Ensure length menu is visible */
+        .dataTables_length {
+            display: block;
         }
-    }
+
+        .dt-paging {
+            float: right;
+        }
+
+
+
+        .dt-buttons {
+            float: right;
+        }
+
+        .dt-length label {
+            display: none;
+        }
+
+        /* General styling for the menu */
+        .nav-divider {
+            height: 1px;
+            background-color: #ddd;
+
+        }
+
+        .nav>li {
+            list-style: none;
+            position: relative;
+            transition: background-color 0.3s ease;
+            /* border-left: 4px solid; */
+            /* Base border for levels */
+            cursor: pointer;
+            /* Add pointer cursor to indicate clickable items */
+        }
+
+
+
+        /* Active state styling */
+        .nav>li.active {
+            background-color: #e9ecef;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        /* Styling for different levels */
+        .nav>li[data-level="1"] {
+            border-color: #007bff;
+            /* Blue for Level 1 */
+        }
+
+        .nav>li[data-level="2"] {
+            border-color: #28a745;
+            /* Green for Level 2 */
+        }
+
+        .nav>li[data-level="3"] {
+            border-color: #17a2b8;
+            /* Teal for Level 3 */
+        }
+
+        .nav>li[data-level="4"] {
+            border-color: #ffc107;
+            /* Yellow for Level 4 */
+        }
+
+        .nav>li[data-level="5"] {
+            border-color: #dc3545;
+            /* Red for Level 5 */
+        }
+
+        .nav>li[data-level="6"] {
+            border-color: #6f42c1;
+            /* Purple for Level 6 */
+        }
+
+        .nav>li[data-level="7"] {
+            border-color: #343a40;
+            /* Dark for Level 7 */
+
+            /* Hide Level 7 */
+        }
+
+        /* Styling for menu items */
+
+        @keyframes slideDown {
+            from {
+                height: 0;
+                opacity: 0;
+            }
+
+            to {
+                height: auto;
+                opacity: 1;
+            }
+        }
     </style>
 
     <style>
-    /* .mgscd-menu .app-side,
+        /* .mgscd-menu .app-side,
     .mgscd-menu .app-side .side-nav ul,
     .mgscd-menu .app-side .side-nav a {
         position: relative;
         z-index: 9999 !important;
     } */
 
-    /* General Styling */
-    .nav-divider {
-        margin: 10px 0;
-        border-bottom: 1px solid #e0e0e0;
-    }
+        /* General Styling */
+        .nav-divider {
+            margin: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
 
-    .leaf-node .nav-tools {
-        display: none;
-        /* Hide toggle icon for Level 7 */
-    }
+        .mgscd-menu .app-side {
+            width: 251px;
+        }
 
-    .nav-title {
-        font-weight: 600;
-        font-size: 16px;
-        color: #2c3e50;
-    }
 
-    .nav-icon img {
-        transition: transform 0.3s ease;
-    }
 
-    .has-children:hover .nav-icon img {
-        transform: scale(1.1);
-    }
+        .leaf-node .nav-tools {
+            display: none;
+            /* Hide toggle icon for Level 7 */
+        }
 
-    .nav-sub {
-        margin-left: 20px;
-        border-left: 2px solid #e0e0e0;
-    }
-
-    .no-toggle {
-        cursor: default;
-        /* Disable pointer events on Level 7 */
-    }
-
-    /* Mobile Responsive Design */
-    @media (max-width: 768px) {
         .nav-title {
-            font-size: 14px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
         }
 
         .nav-icon img {
-            height: 25px;
+            transition: transform 0.3s ease;
         }
-    }
+
+        .has-children:hover .nav-icon img {
+            transform: scale(1.1);
+        }
+
+        .nav-sub {
+            margin-left: 20px;
+            border-left: 2px solid #e0e0e0;
+        }
+
+        .no-toggle {
+            cursor: default;
+            /* Disable pointer events on Level 7 */
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .nav-title {
+                font-size: 14px;
+            }
+
+            .nav-icon img {
+                height: 25px;
+            }
+        }
     </style>
     <style>
-    .nav-title {
-        font-size: 10px
-    }
+        .nav-title {
+            font-size: 10px
+        }
+
+        .mgscd-menu .app-main {
+            width: 79vw;
+
+        }
+
+        .mgscd-menu .navbar-default {
+            background-image: linear-gradient(3deg, #FB7D02 0%, #FDE20D 100%) !important;
+        }
     </style>
 
     <style>
-    /* CSS styles */
+        /* CSS styles */
 
 
 
 
-    thead .table-dark {
-        background: #bd0000 !important;
-        /* Background color for the header */
-    }
+        thead .table-dark {
+            background: #bd0000 !important;
+            /* Background color for the header */
+        }
     </style>
 
 
     <style>
-    .nav-sub {
-        display: none;
-        margin-left: 15px;
-    }
+        .nav-sub {
+            display: none;
+            margin-left: 15px;
+        }
 
-    .nav-sub.show {
-        display: block;
-    }
+        .nav-sub.show {
+            display: block;
+        }
 
-    .toggle-icon {
-        margin-left: 5px;
-    }
+        .toggle-icon {
+            margin-left: 5px;
+        }
+    </style>
+
+
+
+    <style>
+        .nav-sub {
+            display: none;
+        }
+
+        .nav-sub.open {
+            display: block;
+        }
+
+
+
+        /* Default style for all levels */
+        .nav-item {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .Level_1 {
+            background-color: rgb(248, 154, 3) !important;
+            /* AliceBlue */
+        }
+
+        .Level_2 {
+            background-color: rgb(248, 160, 22) !important;
+            /* LightBlue */
+        }
+
+        .Level_3 {
+            background-color: rgb(250, 169, 38) !important;
+            /* LightCyan */
+        }
+
+        .Level_4 {
+            background-color: rgb(251, 179, 55) !important;
+            /* LightSkyBlue */
+        }
+
+        .Level_5 {
+            background-color: rgb(253, 188, 71) !important;
+            /* SkyBlue */
+        }
+
+        .Level_6 {
+            background-color: rgb(254, 198, 88) !important;
+            /* DodgerBlue */
+        }
+
+        .Level_7 {
+            background-color: rgb(254, 207, 104) !important;
+            /* Blue */
+        }
+
+        /* Additional styling for nav tools */
+        .nav-tools {
+            float: right;
+            margin-left: 10px;
+        }
+
+        .nav-tools i {
+            color: #333;
+        }
+
+        /* Styling for active menu items */
+        /* .nav-item.active {
+            background-color: #b3e0ff;
+        } */
+
+        @media (min-width: 992px) {
+            .mgscd-menu .navbar-header-left {
+                width: 254px;
+            }
+        }
+
+        table th {
+            background: linear-gradient(3deg, #FB7D02 0%, #FDE20D 100%) !important;
+        }
+    </style>
+
+    <style>
+        /* .nav-item.active {
+                    background-color: red;
+                    color: #fff;
+                } */
+
+        /* .nav-item.active .nav-title {
+            color: red;
+
+        } */
+
+        .nav-sub {
+            display: none;
+        }
+
+        .nav-sub.open {
+            display: block;
+        }
+    </style>
+
+
+    <style>
+        .table-responsive {
+            width: 100%;
+
+            /* Use max-width instead of width */
+            overflow-x: auto;
+            /* Allow horizontal scrolling */
+            border: 1px solid #ddd;
+            /* Optional: Add a border for better visibility */
+            border-radius: 5px;
+            /* Optional: Add rounded corners */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* Optional: Add a subtle shadow */
+        }
+
+        /* Optional: Style for the table inside the responsive container */
+        .table-responsive table {
+            width: 100%;
+            border-collapse: collapse;
+            /* Remove space between table cells */
+        }
+
+        .table-responsive th,
+        .table-responsive td {
+            padding: 12px;
+            /* Add padding for better spacing */
+            text-align: left;
+            /* Align text to the left */
+        }
+
+        .table-responsive th {
+            background-color: #f2f2f2;
+            /* Optional: Add a background color for header */
+        }
+
+
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+        }
+
+        .app-side,
+        .mgscd-menu .side-visible-line {
+            background-color: #C7E2DB;
+        }
+
+        table.dataTable>tbody>tr>th,
+        table.dataTable>tbody>tr>td {
+            padding: 4px 10px !important;
+        }
     </style>
 
 </head>
@@ -228,16 +427,17 @@
                                     class="logo-xs hidden-md"><img src="assets/img/logo-sm.png"
                                         alt="logo-sm"></span><span class="logo-lg visible-md"><img
                                         src="assets/img/logo.png" alt="logo"></span></a> </div>
-                        <nav class="nav navbar-header-nav"><a class="hidden-md b-r" href="#" data-side="collapse"><i
+                        <nav class="nav navbar-header-nav">
+                            <!-- <a class="hidden-md b-r" href="#" data-side="collapse"><i
                                     class="fa-solid fa-bars fa-fw"></i></a><a class="visible-md b-r" href="#"
-                                data-side="mini"><i class="fa-solid fa-bars fa-fw"></i></a>
-                            <form class="navbar-form visible-md b-r">
+                                data-side="mini"><i class="fa-solid fa-bars fa-fw"></i></a> -->
+                            <!-- <form class="navbar-form visible-md b-r">
                                 <div class="icon-after-input"><input type="text" name="s" class="form-control"
                                         placeholder="Search">
                                     <div class="icon"><a href="#"><i class="fa-solid fa-magnifying-glass fa-fw"></i></a>
                                     </div>
                                 </div>
-                            </form>
+                            </form> -->
                         </nav>
                         <ul class="nav navbar-header-nav m-l-a">
                             <li class="hidden-md b-l"><a href="#top-search" data-toggle="canvas"><i
@@ -247,16 +447,20 @@
                             <li class="dropdown b-l">
                                 <a class="dropdown-toggle profile-pic" href="#" data-bs-toggle="dropdown" role="button"
                                     aria-haspopup="true" aria-expanded="false">
-                                    <img class="img-circle" src="assets//img/m1.jpg" alt="Jone Doe"><b
-                                        class="visible-md hidden-sm logged-user-display-name"> Admin
-                                    </b></a>
+                                    <!-- <img class="img-circle" src="assets//img/m1.jpg" alt="Jone Doe">
+                                    
+                                     -->
+                                    <b class="visible-md hidden-sm logged-user-display-name"> Welcome,
+                                        <?php echo htmlspecialchars($user_name); ?>!
+                                    </b>
+                                </a>
                                 <ul class="dropdown-menu animated flipInY float-right">
 
 
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="<?php echo base_url('login'); ?>"><i
-                                                class="fa-solid fa-right-from-bracket fa-fw"></i>
-                                            Logout</a></li>
+                                    <li><a href="<?php echo base_url('welcome/logout'); ?>"><i
+                                                class="fa-solid fa-right-from-bracket fa-fw"></i> Logout</a></li>
+
                                 </ul>
                             </li>
                         </ul>
@@ -271,413 +475,177 @@
                         <div class="user-panel">
                             <div class="user-image">
                                 <a href="#">
-                                    <img class="img-circle" src="./assets/img/Group8143.png" alt="John Doe"></a>
+                                    <img class="img-circle" src="./assets/img/Bloom.png" alt="John Doe"></a>
                             </div>
 
                         </div>
                         <?php
+                        function render_tree($tree, $level = 1)
+                        {
+                            $html = '';
 
+                            foreach ($tree as $key => $subTree) {
+                                $level_class = "Level_$level";
+                                $level_label = "Level $level"; // Label for the current level
 
+                                $html .= "<li class='$level_class'>";
 
+                                // Check if the current level is the last level (Level 7)
+                                $is_last_level = ($level == 7);
 
-$levels = [
-    'Level_1' => [],
-    'Level_2' => [],
-    'Level_3' => [],
-    'Level_4' => [],
-    'Level_5' => [],
-    'Level_6' => [],
-    'Level_7' => []
-];
+                                // Construct the link with or without icon based on whether it's the last level
+                                $html .= "<a href='javascript:void(0);' class='nav-item' data-id='" . htmlspecialchars($key) . "' data-level='" . $level . "'>";
+                                $html .= "<span class='nav-icon'><img src='./assets/img/profile.png' alt='' class='img-circle' style='height: 20px;'></span>";
+                                $html .= "<span class='nav-title'>" . htmlspecialchars($level_label . ": " . " (" . $subTree['name'] . ")") . "</span>";
 
-// Iterate through the mappings to separate data by levels
-foreach ($users['mappings'] as $mapping) {
-    for ($i = 1; $i <= 7; $i++) {
-        $level_key = "Level_$i";
-        if (!empty($mapping[$level_key])) {
-            $levels[$level_key][] = [
-                $level_key => $mapping[$level_key],
-                'DB_Code' => $mapping['DB_Code'],
-                'Distinct_Column' => $mapping['Distinct_Column'],
-                'id' => $mapping['id']
-            ];
-        }
-    }
-}
+                                // Only include the arrow icon if it's not the last level
+                                if (!$is_last_level) {
+                                    $html .= "<span class='nav-tools'><i class='fa-solid fa-plus'></i></span>";
+                                }
 
-// Remove duplicates from each level data
-foreach ($levels as $key => $level) {
-    $levels[$key] = array_map("unserialize", array_unique(array_map("serialize", $level)));
-}
+                                $html .= "</a>";
 
-// Encode the results as JSON
-$levels_json = json_encode($levels);
+                                // Check if there are nested levels
+                                if (!empty($subTree['children'])) {
+                                    $html .= "<ul class='nav nav-sub'>";
+                                    $html .= render_tree($subTree['children'], $level + 1); // Recursive call
+                                    $html .= "</ul>";
+                                }
 
-?>
-                        <!-- Pass the PHP data to JavaScript -->
+                                $html .= "</li>";
+                            }
+
+                            return $html;
+                        }
+                        ?>
 
 
                         <nav class="side-nav dmvertical-menu">
-                            <ul id="menuContainer" class="metismenu nav nav-inverse nav-bordered"></ul>
+                            <ul class="metismenu nav nav-inverse nav-bordered" data-plugin="dashboardmenu">
+                                <?php echo render_tree($maping); ?>
+                            </ul>
                         </nav>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                // Select all menu items
+                                const menuItems = document.querySelectorAll('.nav-item');
+
+                                menuItems.forEach(item => {
+                                    item.addEventListener('click', function() {
+                                        // Remove the 'active' class from all items
+                                        menuItems.forEach(i => {
+                                            i.classList.remove('active');
+                                            // Reset all icons to the "+" symbol
+                                            const icon = i.querySelector('.nav-tools i');
+                                            if (icon) {
+                                                icon.classList.remove('fa-minus');
+                                                icon.classList.add('fa-plus');
+                                            }
+                                        });
+
+                                        // Add the 'active' class to the clicked item
+                                        this.classList.add('active');
+
+                                        // Optionally, you can open the submenu if it has one
+                                        const subMenu = this.nextElementSibling;
+                                        if (subMenu && subMenu.classList.contains('nav-sub')) {
+                                            subMenu.classList.toggle('open');
+                                        }
+
+                                        // Toggle the icon for the clicked item
+                                        const icon = this.querySelector('.nav-tools i');
+                                        if (icon) {
+                                            if (subMenu && subMenu.classList.contains('open')) {
+                                                // Change icon to "-" when submenu is open
+                                                icon.classList.remove('fa-plus');
+                                                icon.classList.add('fa-minus');
+                                            } else {
+                                                // Reset icon to "+" when submenu is closed
+                                                icon.classList.remove('fa-minus');
+                                                icon.classList.add('fa-plus');
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
+
+
 
 
 
                     </div>
-                    <!-- <div class="side-footer p-h-15 p-t-15 p-b-10">
-                        <p>
-                            <img src="./assets/img/Group8143.png" alt="" class="img-circle" style="height: 30px;">
-                            Sales Hierarchy
-                        </p>
 
-
-                    </div> -->
                 </aside>
-                <div class="side-visible-line visible-md" data-side="collapse"><i class="fa-solid fa-caret-left"></i><i
-                        class="fa-solid fa-arrow-right-arrow-left"></i></div>
+
+
+
+                <div class="side-visible-line visible-md" data-side="collapse">
+                    <!-- 
+                    <i class="fa-solid fa-caret-left"></i><i class="fa-solid fa-arrow-right-arrow-left"></i> -->
+                </div>
                 <div class="app-main">
-                    <!-- <header class="main-heading shadow-2dp">
-                        <div class="dashhead bg-white">
-                            <div class="dashhead-titles">
-                                <h3 class="dashhead-title">
 
-                                    <img src="./assets/img/Component1.png" alt="" class="src">
-                                </h3>
-                            </div>
-                            <div class="dashhead-toolbar">
-                                <div class="dashhead-toolbar-item"><a href="index">
-                                        <img src="./assets/img/Component2.png" alt="" class="src">
-
-                                </div>
-                            </div>
-                        </div>
-                    </header> -->
                     <div class="main-content bg-clouds">
                         <div class="container p-t-15">
                             <div class="row">
-                                <div class="col-md-12" style="width:100%">
-                                    <div class="box shadow-2dp b-r-2">
-                                        <!-- <header class="b-b">
-                                            <h4>Members</h4>
-                                            <div class="box-tools"><span class="label label-success">5</span></div>
-                                        </header> -->
-                                        <div class="box-body">
 
 
-                                            <form action="" method="post">
-                                                <div class="row">
-
-                                                    <div class="col-md-4">
-
-                                                        <div class="form-group p-b-10">
-
-                                                            <label for="sel1" class="form-label">Select Category
-                                                            </label>
-
-                                                            <select class="form-select"
-                                                                aria-label="Default select example">
-                                                                <option selected> select </option>
-                                                                <option value="1">One</option>
-                                                                <option value="2">Two</option>
-                                                                <option value="3">Three</option>
-                                                            </select>
-
-                                                        </div>
-
-
-                                                    </div>
-                                                    <div class="col-md-4">
-
-                                                        <div class="form-group p-b-10">
-
-                                                            <label for="sel1" class="form-label">Select Category
-                                                            </label>
-
-                                                            <select class="form-select"
-                                                                aria-label="Default select example">
-                                                                <option selected> select </option>
-                                                                <option value="1">One</option>
-                                                                <option value="2">Two</option>
-                                                                <option value="3">Three</option>
-                                                            </select>
-
-                                                        </div>
-
-
-                                                    </div>
-                                                    <div class="col-md-4">
-
-                                                        <div class="form-group p-b-10">
-
-                                                            <label for="sel1" class="form-label">Select Category
-                                                            </label>
-
-                                                            <select class="form-select"
-                                                                aria-label="Default select example">
-                                                                <option selected> select </option>
-                                                                <option value="1">One</option>
-                                                                <option value="2">Two</option>
-                                                                <option value="3">Three</option>
-                                                            </select>
-
-                                                        </div>
-
-
-                                                    </div>
-                                                </div>
-                                            </form>
-
-                                            <div class="table-responsive">
-
-
-
-                                                <!-- <table id="example" class="table table-bordered  table-striped "
-                                                    cellspacing="0" width="100%">
-
-                                                    <thead class="table-danger">
-                                                        <tr>
-                                                            <td>Customer Code</td>
-
-                                                            <td>Customer Name</td>
-                                                            <td>Pin Code</td>
-                                                            <td>City</td>
-                                                            <td>District</td>
-                                                            <td>Contact Number</td>
-                                                            <td>Country</td>
-                                                            <td>Zone</td>
-                                                            <td>State Name</td>
-                                                            <td>Population Strata-1</td>
-                                                            <td>Population Strata-2</td>
-                                                            <td>Country Group</td>
-                                                            <td>GTM Type</td>
-                                                            <td>SuperStockist Y/N</td>
-                                                            <td>Customer Active ?</td>
-                                                            <td>Customer Type Code</td>
-                                                            <td>Sales Org. Code</td>
-                                                            <td>Customer Type Name</td>
-                                                            <td>Customer Group Code</td>
-                                                            <td>Customer Creation Date</td>
-                                                            <td>Division Code</td>
-                                                            <td>Sector Code</td>
-                                                            <td>State Code</td>
-                                                            <td>Zone Code</td>
-                                                            <td>Distribution Channel Code</td>
-                                                            <td>Distribution Channel Name</td>
-                                                            <td>Customer Group Name</td>
-                                                            <td>Sales Org. Name</td>
-                                                            <td>Division Name</td>
-                                                            <td>Sector Name</td>
-                                                            <td>Levelx7_Designation Label</td>
-                                                            <td>Levelx7_Name</td>
-                                                            <td>_Levelx6_Designation Label</td>
-                                                            <td>_Levelx6_Name</td>
-                                                            <td>Levelx5Designation Label</td>
-                                                            <td>Levelx5Name</td>
-                                                            <td>_Levelx4Designation Label</td>
-                                                            <td>_Levelx4Name</td>
-                                                            <td>Levelx3Designation Label</td>
-                                                            <td>Levelx3Name</td>
-                                                            <td>_Levelx2Designation Label</td>
-                                                            <td>_Levelx2Name</td>
-                                                            <td>Levelx1 Designation Label</td>
-                                                            <td>Level 1 Name</td>
-                                                        </tr>
-                                                    </thead>
-
-
-                                                    <tr>
-                                                        <td>0002110459</td>
-
-                                                        <td>SEFALI COMMERCIAL PVT LTD</td>
-                                                        <td>713101</td>
-                                                        <td>BARDDHAMAN</td>
-                                                        <td>BIRBHUM</td>
-                                                        <td>9332241707</td>
-                                                        <td>India</td>
-                                                        <td>East</td>
-                                                        <td>West Bengal</td>
-                                                        <td>FLP</td>
-                                                        <td>URBAN</td>
-                                                        <td>Domestic</td>
-                                                        <td>GTM</td>
-                                                        <td>N</td>
-                                                        <td>ACTIVE</td>
-                                                        <td>04</td>
-                                                        <td>1000</td>
-                                                        <td>Overall Common</td>
-                                                        <td>01</td>
-                                                        <td>6/22/18</td>
-                                                        <td>20</td>
-                                                        <td>S061</td>
-                                                        <td>19</td>
-                                                        <td>05</td>
-                                                        <td>10</td>
-                                                        <td>Customer sale</td>
-                                                        <td>Company Distributor</td>
-                                                        <td>AWL Marketing</td>
-                                                        <td>Besan traded</td>
-                                                        <td>Barddham</td>
-                                                        <td></td>
-                                                        <td>DSM</td>
-                                                        <td>Nakul</td>
-                                                        <td>ASE</td>
-                                                        <td>Bheema</td>
-                                                        <td>ASM</td>
-                                                        <td>Bipin</td>
-                                                        <td>RSM</td>
-                                                        <td>Sandeep</td>
-                                                        <td>ZSM</td>
-                                                        <td>Vishal</td>
-                                                        <td>Cluster Head</td>
-                                                        <td>Amar</td>
-                                                        <td>Business Head</td>
-                                                    </tr>
-
-
-
-                                                </table> -->
-
-
-                                                <div id="userTableContainer"></div>
-
-                                                <!-- 
-                                                <?php if (!empty($users['user'])): ?>
-                                                <table id="example2" class="table table-bordered  table-striped "
-                                                    cellspacing="0" width="100%">
-                                                    <thead class="table-danger">
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>Pjp Code</th>
-                                                            <th>Employee ID</th>
-                                                            <th>Name</th>
-                                                            <th>Email ID</th>
-                                                            <th>Mobile No</th>
-                                                            <th>Level</th>
-                                                            <th>Designation</th>
-                                                            <th>Designation Label</th>
-                                                            <th>DOJ</th>
-                                                            <th>Employee Status</th>
-                                                            <th>Town</th>
-                                                            <th>District Code</th>
-                                                            <th>District</th>
-                                                            <th>State</th>
-                                                            <th>Address</th>
-                                                            <th>Region</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td><?php echo isset($users['user']['id']) ? $users['user']['id'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Pjp_Code']) ? $users['user']['Pjp_Code'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Employee_Id']) ? $users['user']['Employee_Id'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Name']) ? $users['user']['Name'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Email_Id']) ? $users['user']['Email_Id'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Mobile_No']) ? $users['user']['Mobile_No'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Level']) ? $users['user']['Level'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Designation']) ? $users['user']['Designation'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Designation_label']) ? $users['user']['Designation_label'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['DOJ']) ? $users['user']['DOJ'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Employee_Status']) ? $users['user']['Employee_Status'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Town']) ? $users['user']['Town'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['District_Code']) ? $users['user']['District_Code'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['District']) ? $users['user']['District'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['State']) ? $users['user']['State'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Address']) ? $users['user']['Address'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($users['user']['Region']) ? $users['user']['Region'] : 'Vacand'; ?>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <?php else: ?>
-                                                <p>No user details available.</p>
-                                                <?php endif; ?> -->
-
-                                                <!-- Mappings Table -->
-                                                <!-- <h2>Mappings</h2>
-                                                <?php if (!empty($users['mappings'])): ?>
-                                                <table id="example" class="table table-bordered  table-striped "
-                                                    cellspacing="0" width="100%">
-                                                    <thead class="table-danger">
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>DB Code</th>
-                                                            <th>Distinct Column</th>
-                                                            <th>Level 1</th>
-                                                            <th>Level 2</th>
-                                                            <th>Level 3</th>
-                                                            <th>Level 4</th>
-                                                            <th>Level 5</th>
-                                                            <th>Level 6</th>
-                                                            <th>Level 7</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php foreach ($users['mappings'] as $mapping): ?>
-                                                        <tr>
-                                                            <td><?php echo isset($mapping['id']) ? $mapping['id'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($mapping['DB_Code']) ? $mapping['DB_Code'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($mapping['Distinct_Column']) ? $mapping['Distinct_Column'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($mapping['Level_1']) ? $mapping['Level_1'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($mapping['Level_2']) ? $mapping['Level_2'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($mapping['Level_3']) ? $mapping['Level_3'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($mapping['Level_4']) ? $mapping['Level_4'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($mapping['Level_5']) ? $mapping['Level_5'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($mapping['Level_6']) ? $mapping['Level_6'] : 'Vacand'; ?>
-                                                            </td>
-                                                            <td><?php echo isset($mapping['Level_7']) ? $mapping['Level_7'] : 'Vacand'; ?>
-                                                            </td>
-                                                        </tr>
-                                                        <?php endforeach; ?>
-                                                    </tbody>
-                                                </table>
-                                                <?php else: ?>
-                                                <p>No mappings available.</p>
-                                                <?php endif; ?> -->
-
-
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="table-responsive">
+                                    <table id="example" class="table table-bordered table-striped" cellspacing="0"
+                                        width="100%">
+                                        <thead class="table-danger">
+                                            <tr>
+                                                <th>Customer Name</th>
+                                                <th>Customer Code</th>
+                                                <th>Pin Code</th>
+                                                <th>City</th>
+                                                <th>District</th>
+                                                <th>Contact Number</th>
+                                                <th>Country</th>
+                                                <th>Zone</th>
+                                                <th>State</th>
+                                                <th>Population Strata 1</th>
+                                                <th>Population Strata 2</th>
+                                                <th>Country Group</th>
+                                                <th>GTM TYPE</th>
+                                                <th>SUPER STOCKIST</th>
+                                                <th>STATUS</th>
+                                                <th>Customer Type Name</th>
+                                                <th>Customer Type Code</th>
+                                                <th>Sales Name</th>
+                                                <th>Sales Code</th>
+                                                <th>Customer Group Name</th>
+                                                <th>Customer Group Code</th>
+                                                <th>Division Name</th>
+                                                <th>Division Code</th>
+                                                <th>Sector Name</th>
+                                                <th>Sector Code</th>
+                                                <th>State Code</th>
+                                                <th>Zone Code</th>
+                                                <th>Distributor Channel Name</th>
+                                                <th>Distributor Channel Code</th>
+                                                <th>Level 7 Designation Name</th>
+                                                <th>Level 7 Name</th>
+                                                <th>Level 6 Designation Name</th>
+                                                <th>Level 6 Name</th>
+                                                <th>Level 5 Designation Name</th>
+                                                <th>Level 5 Name</th>
+                                                <th>Level 4 Designation Name</th>
+                                                <th>Level 4 Name</th>
+                                                <th>Level 3 Designation Name</th>
+                                                <th>Level 3 Name</th>
+                                                <th>Level 2 Designation Name</th>
+                                                <th>Level 2 Name</th>
+                                                <th>Level 1 Designation Name</th>
+                                                <th>Level 1 Name</th>
+                                                <th>Customer Creation Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
                                 </div>
-
-
-
-
-
-
-                                <div class="col-md-12">
-                                    <div class="box shadow-2dp b-r-2">
-                                        <div class="box-body">
-                                            <div id="userListContainer"></div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -696,6 +664,52 @@ $levels_json = json_encode($levels);
             </footer>
         </div>
     </div>
+
+    <div id="loader" style="display: none ">
+        <div class="spinner"></div>
+    </div>
+
+    <style>
+        /* Loader container */
+        #loader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            /* background-color: rgba(255, 255, 255, 0.8); */
+            /* Semi-transparent background */
+            display: flex;
+            justify-content: center;
+            /* Center horizontally */
+            align-items: center;
+            /* Center vertically */
+            z-index: 9999;
+            /* Ensure loader is above other content */
+        }
+
+        /* Loader spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Spinner animation */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
     <!-- <a href="#" class="scrollup"><i class="fa-solid fa-circle-arrow-up"></i></a> -->
     <script src="<?php echo base_url('assets/js/jquery-3.5.1.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/js/popper.min.js'); ?>"></script>
@@ -710,598 +724,171 @@ $levels_json = json_encode($levels);
 
 
     <script>
-    new DataTable('#example');
-    new DataTable('#example2');
-    </script>
-
-
-
-
-
-
-
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.has-children').forEach(item => {
-            item.addEventListener('click', function() {
-                const subMenu = this.nextElementSibling;
-                const icon = this.querySelector('.toggle-icon');
-
-                if (subMenu && subMenu.classList.contains('nav-sub')) {
-                    subMenu.classList.toggle('show');
-                    if (icon) {
-                        icon.classList.toggle('fa-plus');
-                        icon.classList.toggle('fa-minus');
-                    }
-                }
-            });
-        });
-    });
+        new DataTable('#example');
     </script>
 
     <script>
-    function transformHierarchy(flatData) {
-        const hierarchy = {};
+        $(document).ready(function() {
 
-        flatData.Level_1.forEach(level1 => {
-            if (level1.Level_1 !== "NULL") {
-                if (!hierarchy[level1.Level_1]) {
-                    hierarchy[level1.Level_1] = {
-                        name: level1.Level_1,
-                        distinct: level1.Distinct_Column,
-                        dbCode: level1.DB_Code, // Include DB_Code
-                        id: level1.id,
+            function loadTreeData(id, level) {
+                console.log(id);
+                console.log(level);
 
-                        level: 1,
-                        children: []
-                    };
-                }
+                $('#loader').show();
 
-                flatData.Level_2.forEach(level2 => {
-                    if (level2.Distinct_Column === level1.Distinct_Column && level2.Level_2 !==
-                        "NULL") {
-                        const level1Children = hierarchy[level1.Level_1].children;
 
-                        if (!level1Children.some(child => child.name === level2.Level_2)) {
-                            level1Children.push({
-                                name: level2.Level_2,
-                                distinct: level2.Distinct_Column,
-                                dbCode: level2.DB_Code, // Include DB_Code
-                                id: level2.id,
-
-                                level: 2,
-                                children: []
-                            });
-                        }
-
-                        flatData.Level_3.forEach(level3 => {
-                            if (level3.Distinct_Column === level2.Distinct_Column && level3
-                                .Level_3 !== "NULL") {
-                                const level2Children = level1Children.find(child => child
-                                    .name === level2.Level_2).children;
-
-                                if (!level2Children.some(child => child.name === level3
-                                        .Level_3)) {
-                                    level2Children.push({
-                                        name: level3.Level_3,
-                                        distinct: level3.Distinct_Column,
-                                        dbCode: level3.DB_Code, // Include DB_Code
-                                        id: level3.id,
-
-                                        level: 3,
-                                        children: []
-                                    });
-                                }
-
-                                flatData.Level_4.forEach(level4 => {
-                                    if (level4.Distinct_Column === level3
-                                        .Distinct_Column && level4.Level_4 !== "NULL") {
-                                        const level3Children = level2Children.find(
-                                                child => child.name === level3.Level_3)
-                                            .children;
-
-                                        if (!level3Children.some(child => child.name ===
-                                                level4.Level_4)) {
-                                            level3Children.push({
-                                                name: level4.Level_4,
-                                                distinct: level4
-                                                    .Distinct_Column,
-                                                dbCode: level4
-                                                    .DB_Code, // Include DB_Code
-                                                id: level4.id,
-
-                                                level: 4,
-                                                children: []
-                                            });
-                                        }
-
-                                        flatData.Level_5.forEach(level5 => {
-                                            if (level5.Distinct_Column ===
-                                                level4.Distinct_Column && level5
-                                                .Level_5 !== "NULL") {
-                                                const level4Children =
-                                                    level3Children.find(child =>
-                                                        child.name === level4
-                                                        .Level_4).children;
-
-                                                if (!level4Children.some(
-                                                        child => child.name ===
-                                                        level5.Level_5)) {
-                                                    level4Children.push({
-                                                        name: level5
-                                                            .Level_5,
-                                                        distinct: level5
-                                                            .Distinct_Column,
-                                                        dbCode: level5
-                                                            .DB_Code, // Include DB_Code
-                                                        id: level5.id,
-
-                                                        level: 5,
-                                                        children: []
-                                                    });
-                                                }
-
-                                                flatData.Level_6.forEach(
-                                                    level6 => {
-                                                        if (level6
-                                                            .Distinct_Column ===
-                                                            level5
-                                                            .Distinct_Column &&
-                                                            level6
-                                                            .Level_6 !==
-                                                            "NULL") {
-                                                            const
-                                                                level5Children =
-                                                                level4Children
-                                                                .find(
-                                                                    child =>
-                                                                    child
-                                                                    .name ===
-                                                                    level5
-                                                                    .Level_5
-                                                                )
-                                                                .children;
-
-                                                            if (!
-                                                                level5Children
-                                                                .some(
-                                                                    child =>
-                                                                    child
-                                                                    .name ===
-                                                                    level6
-                                                                    .Level_6
-                                                                )) {
-                                                                level5Children
-                                                                    .push({
-                                                                        name: level6
-                                                                            .Level_6,
-                                                                        distinct: level6
-                                                                            .Distinct_Column,
-                                                                        dbCode: level6
-                                                                            .DB_Code, // Include DB_Code
-                                                                        id: level6
-                                                                            .id,
-
-                                                                        level: 6,
-                                                                        children: []
-                                                                    });
-                                                            }
-
-                                                            flatData.Level_7
-                                                                .forEach(
-                                                                    level7 => {
-                                                                        if (level7
-                                                                            .Distinct_Column ===
-                                                                            level6
-                                                                            .Distinct_Column &&
-                                                                            level7
-                                                                            .Level_7 !==
-                                                                            "NULL"
-                                                                        ) {
-                                                                            const
-                                                                                level6Children =
-                                                                                level5Children
-                                                                                .find(
-                                                                                    child =>
-                                                                                    child
-                                                                                    .name ===
-                                                                                    level6
-                                                                                    .Level_6
-                                                                                )
-                                                                                .children;
-
-                                                                            if (!
-                                                                                level6Children
-                                                                                .some(
-                                                                                    child =>
-                                                                                    child
-                                                                                    .name ===
-                                                                                    level7
-                                                                                    .Level_7
-                                                                                )
-                                                                            ) {
-                                                                                level6Children
-                                                                                    .push({
-                                                                                        name: level7
-                                                                                            .Level_7,
-                                                                                        distinct: level7
-                                                                                            .Distinct_Column,
-                                                                                        dbCode: level7
-                                                                                            .DB_Code, // Include DB_Code
-                                                                                        id: level7
-                                                                                            .id,
-
-                                                                                        level: 7,
-                                                                                        children: []
-                                                                                    });
-                                                                            }
-                                                                        }
-                                                                    });
-                                                        }
-                                                    });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                $.ajax({
+                    url: '<?php echo base_url('welcome/ajax_endpoint'); ?>',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        id: id,
+                        level: level
+                    }),
+                    success: function(data) {
+                        var treeArray = data;
+                        $('#loader').hide();
+                        treeajex(treeArray);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
                     }
                 });
             }
-        });
 
-        return Object.values(hierarchy);
-    }
-
-    function generateMenu(hierarchy) {
-        let menu = '';
-
-        hierarchy.forEach(item => {
-
-            console.log('====================================');
-            console.log("itemitemitem", item);
-            console.log('====================================');
-            let isLeafNode = item.level === 7; // Check if the current level is 7
-            let toggleIcon = isLeafNode ? '' : '<i class="fa-solid fa-plus fa-fw toggle-icon"></i>';
-            let childrenMenu = item.children.length > 0 ? '<ul class="nav nav-sub">' + generateMenu(item
-                .children) + '</ul>' : '';
-
-            menu += `
-            <li class="nav-divider"></li>
-            <li data-level="${item.level}" onclick="setActive(this)">
-                <a href="javascript:void(0);" class="has-children" data-name="${item.name}" data-id="${item.id}" data-dbcode="${item.dbCode}">
-                    <span class="nav-icon">
-                        <img src="./assets/img/profile.png" alt="" class="img-circle" style="height: 30px;">
-                    </span>
-                    <span class="nav-title">Level ${item.level} - ${item.name}</span>
-                    <span class="nav-tools">
-                        ${item.level < 7 ? '<i class="fa-solid fa-plus fa-fw toggle-icon"></i>' : ''}
-                    </span>
-                </a>
-                ${item.children.length > 0 ? '<ul class="nav nav-sub">' + generateMenu(item.children) + '</ul>' : ''}
-                <li class="nav-divider"></li>
-            </li>
-        `;;
-        });
-
-        return menu;
-    }
-
-
-    function initializeMenu() {
-        const menuItems = document.querySelectorAll('.has-children');
-
-        menuItems.forEach(item => {
-            item.addEventListener('click', (event) => {
-                // Get the name and dbCode from the data attributes
-                const name = item.getAttribute('data-name');
-                const dbCode = item.getAttribute('data-dbcode');
-                const id = item.getAttribute('data-id');
-
-
-                console.log(name, dbCode, id);
-                dataload(name, dbCode, id); // or dataload(name) if that's what you need
-
-                // Toggle the sub-menu visibility
-                const subMenu = item.nextElementSibling;
-                const toggleIcon = item.querySelector('.toggle-icon');
-
-                if (subMenu) {
-                    subMenu.classList.toggle('show');
-                    toggleIcon.classList.toggle('fa-plus');
-                    toggleIcon.classList.toggle('fa-minus');
-                }
-
-                // Prevent the event from bubbling up to parent levels
-                event.stopPropagation();
+            var sessionPjpCode = '<?php echo $pjp_code; ?>';
+            var sessionLevel = '<?php echo $level; ?>';
+            loadTreeData(sessionPjpCode, sessionLevel);
+            $('.side-nav a').on('click', function() {
+                var id = $(this).data('id');
+                var level = $(this).data('level');
+                loadTreeData(id, level);
             });
         });
-    }
-
-    // Initialize the menu when the document is ready
-    document.addEventListener('DOMContentLoaded', initializeMenu);
-
-    document.addEventListener('DOMContentLoaded', () => {
-        var flatData = <?php echo json_encode($levels); ?>;
-
-        // Log the data to the console
-        console.log('Levels Data:', flatData);
-
-        const hierarchy = transformHierarchy(flatData);
-        const menuContainer = document.getElementById('menuContainer');
-        menuContainer.innerHTML = generateMenu(hierarchy);
-        initializeMenu();
-    });
-    </script>
 
 
 
-
-    <script>
-    function dataload(name, dbCode, id) {
-        $.ajax({
-            url: `<?php echo base_url('welcome/Usermaster_data'); ?>`,
-            method: 'GET',
-            data: {
-
-                level: name,
-                db_code: dbCode,
-                id: id
-            },
-            dataType: 'json',
-            success: function(data) {
-                // Handle the data received from the server
-
-                // Process and display the data as needed
-                displayUserData(data);
-                UserData(data)
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error loading data:', textStatus, errorThrown);
+        function escapeHtml(unsafe) {
+            if (typeof unsafe !== 'string') {
+                return '';
             }
-        });
-    }
-
-
-    function displayUserData(data) {
-        console.log('====================================');
-        console.log('Data:', data);
-        console.log('====================================');
-
-        if (!data || !data.distributor || !data.get_sales_hierarchy) {
-            console.error('Missing data.');
-            return;
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
-        // Create a mapping from DB_Code to hierarchy data
-        const hierarchyMap = new Map();
-        if (Array.isArray(data.get_sales_hierarchy.mappings)) {
-            data.get_sales_hierarchy.mappings.forEach(itm => {
-                if (itm.DB_Code && itm.Levels) {
-                    hierarchyMap.set(itm.DB_Code, itm.Levels);
+        if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().clear().destroy();
+        }
+        var table = $('#example').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            autoWidth: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            scrollY: "400px",
+            scrollCollapse: true,
+            fixedHeader: true,
+            fixedFooter: true,
+            dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"B><"p-2 bd-highlight"f>>t<"bottom"ip><"clear">',
+            buttons: [{
+                extend: 'excelHtml5', // Keeps Excel functionality
+                text: '<i class="fa fa-download"></i> Download', // Adds icon and custom text
+                titleAttr: 'Download as Excel', // Tooltip text
+                exportOptions: {
+                    // Optional: customize columns or rows here
+                }
+            }]
+        });
+
+        function treeajex(treeArray) {
+            $('#loader').show();
+
+            $.ajax({
+                url: '<?php echo base_url('welcome/treeajexsave'); ?>',
+                method: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(treeArray),
+                success: function(response) {
+                    $('#loader').hide();
+
+                    if (response.status === 'success') {
+                        console.log('response Employee Data:', response);
+                        displayEmployeeData(response.data);
+                    } else {
+                        console.error('Error:', response.message);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX Error:', textStatus, errorThrown);
                 }
             });
-        } else {
-            console.error('Mappings is not an array:', data.get_sales_hierarchy.mappings);
         }
 
-        // Log the hierarchyMap contents
 
-        // Example user data
-
-
-        // Initialize the Map
-        // Example JSON data
-
-        const usermap = new Map();
-
-        // Iterate through each user in data.usermaster
-        data.usermaster.forEach(user => {
-            // Log user object
-            console.log(user);
-
-            // Use Employee_Id (or any other unique identifier) as the key
-            // and the user object as the value
-            usermap.set(user.Employee_Id, user);
-        });
-
-        // Log the contents of the Map
-        console.log('====================================************');
-        console.log(usermap);
-        console.log('====================================************');
-
-        // Initialize the Map
-
-
-
-
-        let tableHtml = `
-        <table id="example" class="table table-bordered table-striped" cellspacing="0" width="100%">
-            <thead class="table-danger">
-                <tr>
-                    <th>Customer Code</th>
-                    <th>Customer Name</th>
-                    <th>Pin Code</th>
-                    <th>City</th>
-                    <th>District</th>
-                    <th>Contact Number</th>
-                    <th>Country</th>
-                    <th>Zone</th>
-                    <th>State Name</th>
-                    <th>Population Strata-1</th>
-                    <th>Population Strata-2</th>
-                    <th>Country Group</th>
-                    <th>GTM Type</th>
-                    <th>SuperStockist Y/N</th>
-                    <th>Customer Active ?</th>
-                    <th>Customer Type Code</th>
-                    <th>Sales Org. Code</th>
-                    <th>Customer Type Name</th>
-                    <th>Customer Group Code</th>
-                    <th>Customer Creation Date</th>
-                    <th>Division Code</th>
-                    <th>Sector Code</th>
-                    <th>State Code</th>
-                    <th>Zone Code</th>
-                    <th>Distribution Channel Code</th>
-                    <th>Distribution Channel Name</th>
-                    <th>Customer Group Name</th>
-                    <th>Sales Org. Name</th>
-                    <th>Division Name</th>
-                    <th>Sector Name</th>
-                    <th>Level 1 Designation Label</th>
-                    <th>Level 1 Name</th>
-                    <th>Level 2 Designation Label</th>
-                    <th>Level 2 Name</th>
-                    <th>Level 3 Designation Label</th>
-                    <th>Level 3 Name</th>
-
-                    <th>Level 4 Designation Label</th>
-                    <th>Level 4 Name</th>
-
-                    <th>Level 5 Designation Label</th>
-                    <th>Level 5 Name</th>
-
-                    <th>Level 6 Designation Label</th>
-                    <th>Level 6 Name</th>
-
-                    <th>Level 7 Designation Label</th>
-                    <th>Level 7 Name</th>
-                 
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-        data.distributor.forEach(user => {
-
-
-            const hierarchy = hierarchyMap.get(user.Customer_Code) || {};
-
-            const users_ = hierarchyMap.get(user.Employee_Id) || {};
-
-            console.log('=========================fdcgvhbjnmnhgbf===========');
-            console.log(users_);
-            console.log('==================szdxvfbcnvb n==================');
-
-
-            // Log the hierarchy data for each user
-            //  console.log(`Hierarchy for ${user.Customer_Code}:`, hierarchy);
-
-            tableHtml += `
-            <tr>
-                <td>${user.Customer_Code}</td>
-                <td>${user.Customer_Name}</td>
-                <td>${user.Pin_Code}</td>
-                <td>${user.City}</td>
-                <td>${user.District}</td>
-                <td>${user.Contact_Number}</td>
-                <td>${user.Country}</td>
-                <td>${user.Zone}</td>
-                <td>${user.State}</td>
-                <td>${user.Population_Strata_1}</td>
-                <td>${user.Population_Strata_2}</td>
-                <td>${user.Country_Group}</td>
-                <td>${user.GTM_TYPE}</td>
-                <td>${user.SUPERSTOCKIST}</td>
-                <td>${user.STATUS}</td>
-                <td>${user.Customer_Type_Code}</td>
-                <td>${user.Sales_Code}</td>
-                <td>${user.Customer_Type_Name}</td>
-                <td>${user.Customer_Group_Code}</td>
-                <td>${user.Customer_Creation_Date}</td>
-                <td>${user.Division_Code}</td>
-                <td>${user.Sector_Code}</td>
-                <td>${user.State_Code}</td>
-                <td>${user.Zone_Code}</td>
-                <td>${user.Distribution_Channel_Code}</td>
-                <td>${user.Distribution_Channel_Name}</td>
-                <td>${user.Customer_Group_Name}</td>
-                <td>${user.Sales_Name}</td>
-                <td>${user.Division_Name}</td>
-                <td>${user.Sector_Name}</td>
-                <td>${hierarchy.Level_1 ? hierarchy.Level_1.Designation : ''}</td>
-                <td>${hierarchy.Level_1 ? hierarchy.Level_1.Name : ''}</td>
-                <td>${hierarchy.Level_2 ? hierarchy.Level_2.Designation : ''}</td>
-                <td>${hierarchy.Level_2 ? hierarchy.Level_2.Name : ''}</td>
-                <td>${hierarchy.Level_3 ? hierarchy.Level_3.Designation : ''}</td>
-                <td>${hierarchy.Level_3 ? hierarchy.Level_3.Name : ''}</td>
-
-                       <td>${hierarchy.Level_4 ? hierarchy.Level_4.Designation : ''}</td>
-                <td>${hierarchy.Level_4 ? hierarchy.Level_4.Name : ''}</td>
-
-                       <td>${hierarchy.Level_5 ? hierarchy.Level_5.Designation : ''}</td>
-                <td>${hierarchy.Level_5 ? hierarchy.Level_5.Name : ''}</td>
-
-                       <td>${hierarchy.Level_6 ? hierarchy.Level_6.Designation : ''}</td>
-                <td>${hierarchy.Level_6 ? hierarchy.Level_6.Name : ''}</td>
-
-                       <td>${hierarchy.Level_7 ? hierarchy.Level_7.Designation : ''}</td>
-                <td>${hierarchy.Level_7 ? hierarchy.Level_7.Name : ''}</td>
-                
-            
-            </tr>
-        `;
-        });
-
-        tableHtml += `</tbody></table>`;
-
-        // Assuming there's a div with id 'userTableContainer' to display the table
-        document.getElementById('userTableContainer').innerHTML = tableHtml;
-    }
-    </script>
-
-    <script>
-    function UserData(data) {
-        // Ensure data is in correct format
-        if (!data || !data.usermaster) {
-            console.error('No user data found.');
-            return;
+        function displayEmployeeData(employeeData) {
+            table.clear();
+            $.each(employeeData, function(index, employee) {
+                var row = `
+          <tr>
+            <td>${employee.Customer_Name}</td>
+            <td>${employee.DB_Code}</td>
+            <td>${employee.Pin_Code}</td>
+            <td>${employee.City}</td>
+            <td>${employee.District}</td>
+            <td>${employee.Contact_Number}</td>
+            <td>${employee.Country}</td>
+              <td>${employee.Zone}</td>
+                <td>${employee.State}</td>
+                  <td>${employee.Population_Strata_1}</td>
+                    <td>${employee.Population_Strata_2}</td>
+                      <td>${employee.Country_Group}</td>
+                        <td>${employee.GTM_TYPE}</td>
+                          <td>${employee.SUPERSTOCKIST}</td>
+                            <td>${employee.STATUS}</td>
+                            <td>${employee.Customer_Type_Name}</td>
+                            <td>${employee.Customer_Type_Code}</td>
+                            <td>${employee.Sales_Name}</td>
+                             <td>${employee.Sales_Code}</td>
+                            <td>${employee.Customer_Group_Name}</td>
+                            <td>${employee.Customer_Group_Code}</td>
+                            <td>${employee.Division_Name}</td>
+                            <td>${employee.Division_Code}</td>
+                                        <td>${employee.Sector_Name}</td>
+                                          <td>${employee.Sector_Code}</td>
+                                            <td>${employee.State_Code}</td>
+                                               <td>${employee.Zone_Code}</td>
+                                                <td>${employee.Distribution_Channel_Name}</td>
+                                                  <td>${employee.Distribution_Channel_Code}</td>
+                                                    <td>${employee.emp1_employee_id}</td>
+                                                       <td>${employee.emp1_name}</td>
+                                                        <td>${employee.emp2_employee_id}</td>
+                                                        <td>${employee.emp2_name}</td>
+                                                        <td>${employee.emp3_employee_id}</td>
+                                                         <td>${employee.emp3_name}</td>
+                                                          <td>${employee.emp4_employee_id}</td>
+                                                           <td>${employee.emp4_name}</td>
+                                                            <td>${employee.emp5_employee_id}</td>
+                                                             <td>${employee.emp5_name}</td>
+                                                              <td>${employee.emp6_employee_id}</td>
+                                                               <td>${employee.emp6_name}</td>
+                                                                <td>${employee.emp7_employee_id}</td>
+                                                                 <td>${employee.emp7_name}</td>
+                                                                  <td>${employee.Customer_Creation_Date} 
+                                                                   </td>
+                                                                   </tr>`;
+                table.row.add($(row));
+            });
+            table.draw();
         }
-
-        let userHtml = '';
-
-        data.usermaster.forEach(user => {
-            userHtml += `
-            <ul class="members">
-                <li class="member">
-                    <div class="member-media">
-                        <a class="member-media-link" href="#">
-                            <img class="member-media-img" src="./assets/img/Group8143.png" alt="${user.Name}">
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <h4 class="member-name">${user.Name ? user.Name : 'Vacand'}</h4>
-                        <div class="member-skills">${user.Designation_label ? user.Designation_label : 'Vacand'}</div>
-                    </div>
-                    <div class="col-md-3">
-                        <p>${user.Email_Id ? user.Email_Id : 'Vacand'}</p>
-                        <p>Mobile: ${user.Mobile_No ? user.Mobile_No : 'Vacand'}</p>
-                    </div>
-                    <div class="col-md-5">
-                        <p>ID: ${user.id ? user.id : 'Vacand'} <br>
-                           Region: ${user.State ? user.State : 'Vacand'}, Market: UP (East)</p>
-                    </div>
-                </li>
-            </ul>
-        `;
-        });
-
-        // Assuming there's a div with id 'userListContainer' to display the list
-        document.getElementById('userListContainer').innerHTML = userHtml;
-    }
     </script>
 
-
-    <script>
-    function setActive(element) {
-        // Remove 'active' class from all items
-        document.querySelectorAll('.nav > li').forEach(item => item.classList.remove('active'));
-
-        // Add 'active' class to the clicked item
-        element.classList.add('active');
-    }
-    </script>
 </body>
 
 </html>

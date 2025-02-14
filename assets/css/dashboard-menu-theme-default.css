@@ -48,7 +48,7 @@ body {
 }
 
 .mgscd-menu a:focus,
-.mgscd-menu a:hover {
+.mgscd-menu a:hoverss {
 	text-decoration: none;
 }
 
@@ -115,7 +115,7 @@ body {
 	cursor: pointer;
 }
 
-.mgscd-menu .side-visible-line:hover {
+.mgscd-menu .side-visible-line:hoverss {
 	background-color: #8ed2ed;
 }
 
@@ -132,12 +132,12 @@ body {
 	display: block;
 }
 
-.mgscd-menu .side-visible-line:hover .fas.fa-caret-left,
-.fas.fa-caret-left:hover,
-.mgscd-menu .side-visible-line:hover .fas.fa-caret-right,
-.fas.fa-caret-right:hover,
-.mgscd-menu .side-visible-line:hover .fas.fa-exchange-alt,
-.fas.fa-exchange-alt:hover {
+.mgscd-menu .side-visible-line:hoverss .fas.fa-caret-left,
+.fas.fa-caret-left:hoverss,
+.mgscd-menu .side-visible-line:hoverss .fas.fa-caret-right,
+.fas.fa-caret-right:hoverss,
+.mgscd-menu .side-visible-line:hoverss .fas.fa-exchange-alt,
+.fas.fa-exchange-alt:hoverss {
 	color: #0307ae;
 }
 
@@ -210,7 +210,7 @@ body {
 }
 
 @media (min-width: 992px) {
-	.page-fixed:not(.app-side-expand-on-hover) [data-side="mini"] {
+	.page-fixed:not(.app-side-expand-on-hoverss) [data-side="mini"] {
 		display: none;
 	}
 
@@ -223,7 +223,7 @@ body {
 		z-index: 1;
 	}
 
-	.app-side-opened.app-side-mini.app-side-expand-on-hover .app-side:hover {
+	.app-side-opened.app-side-mini.app-side-expand-on-hoverss .app-side:hoverss {
 		width: 240px;
 	}
 }
@@ -239,7 +239,7 @@ body {
 }
 
 .mgscd-menu .user-image img {
-	max-width: 40px;
+	max-width: 74px;
 	height: auto;
 }
 
@@ -271,7 +271,7 @@ body {
 }
 
 .mgscd-menu .user-info .dropdown>a,
-.user-info .dropdown>a:hover,
+.user-info .dropdown>a:hoverss,
 .user-info .dropdown>a:focus {
 	background-color: transparent !important;
 }
@@ -280,7 +280,7 @@ body {
 	display: none !important;
 }
 
-.app-side-mini.app-side-expand-on-hover .app-side:hover .user-info {
+.app-side-mini.app-side-expand-on-hoverss .app-side:hoverss .user-info {
 	display: -webkit-flex !important;
 	display: -ms-flexbox !important;
 	display: flex !important;
@@ -302,7 +302,7 @@ body {
 		overflow-x: hidden;
 	}
 
-	.page-fixed.side-fixed .app-side:hover .side-content {
+	.page-fixed.side-fixed .app-side:hoverss .side-content {
 		overflow-y: auto;
 	}
 }
@@ -316,9 +316,9 @@ body {
 		display: none;
 	}
 
-	.page-fixed.app-side-mini.app-side-expand-on-hover .app-side:hover .side-tools,
-	.page-fixed.app-side-mini.app-side-expand-on-hover .app-side:hover .nav-header,
-	.page-fixed.app-side-mini.app-side-expand-on-hover .app-side:hover .side-footer {
+	.page-fixed.app-side-mini.app-side-expand-on-hoverss .app-side:hoverss .side-tools,
+	.page-fixed.app-side-mini.app-side-expand-on-hoverss .app-side:hoverss .nav-header,
+	.page-fixed.app-side-mini.app-side-expand-on-hoverss .app-side:hoverss .side-footer {
 		display: block;
 	}
 }
@@ -363,12 +363,12 @@ body {
 }
 
 .mgscd-menu .navbar-header .navbar-header-left {
-	background-color: #faad33;
+	background-color: #ffffff;
 	text-align: center;
 }
 
 .mgscd-menu .logo-lg {
-	padding: 0 10px;
+	padding: 2px 10px;
 }
 
 @media (min-width: 992px) {
@@ -416,7 +416,7 @@ body {
 }
 
 @media (min-width: 992px) {
-	.mgscd-menu .nav.nav-hoverable>li:hover>.nav-sub {
+	.mgscd-menu .nav.nav-hoverssable>li:hoverss>.nav-sub {
 		display: block !important;
 	}
 }
@@ -462,12 +462,12 @@ body {
 	border-color: transparent;
 }
 
-.mgscd-menu .nav-bordered>li>a:hover,
+.mgscd-menu .nav-bordered>li>a:hoverss,
 .mgscd-menu .nav-bordered>li>a:focus {
 	background-color: none;
 }
 
-/**hover animation**/
+/**hoverss animation**/
 .mgscd-menu .nav-bordered>li:not(.disabled)>a:not(.disabled):after,
 .mgscd-menu .nav-bordered>a:not(.disabled):after {
 	position: absolute;
@@ -492,28 +492,28 @@ body {
 
 .mgscd-menu .nav-bordered>li.active>a:after,
 .mgscd-menu .nav-bordered>a.active:after,
-.mgscd-menu .nav-bordered>li.active>a:hover:after,
-.mgscd-menu .nav-bordered>a.active:hover:after,
+.mgscd-menu .nav-bordered>li.active>a:hoverss:after,
+.mgscd-menu .nav-bordered>a.active:hoverss:after,
 .mgscd-menu .nav-bordered>li.active>a:focus:after,
 .mgscd-menu .nav-bordered>a.active:focus:after,
 .mgscd-menu .nav-bordered>li.mm-active>a:after,
 .mgscd-menu .nav-bordered>a.active:after,
-.mgscd-menu .nav-bordered>li.mm-active>a:hover:after,
-.mgscd-menu .nav-bordered>a.active:hover:after,
+.mgscd-menu .nav-bordered>li.mm-active>a:hoverss:after,
+.mgscd-menu .nav-bordered>a.active:hoverss:after,
 .mgscd-menu .nav-bordered>li.mm-active>a:focus:after,
 .mgscd-menu .nav-bordered>a.active:focus:after {
 	-webkit-transform: scale3d(1, 1, 1);
 	transform: scale3d(1, 1, 1);
 }
 
-.mgscd-menu .nav-bordered>li:not(.disabled)>a:not(.disabled):hover:after,
+.mgscd-menu .nav-bordered>li:not(.disabled)>a:not(.disabled):hoverss:after,
 .mgscd-menu .nav-bordered>li:not(.disabled)>a:not(.disabled):focus:after {
 	-webkit-transform: scale3d(1, 1, 1);
 	transform: scale3d(1, 1, 1);
 }
 
-.mgscd-menu .nav-bordered>li.disabled>a:hover:after,
-.mgscd-menu .nav-bordered>a.disabled:hover:after,
+.mgscd-menu .nav-bordered>li.disabled>a:hoverss:after,
+.mgscd-menu .nav-bordered>a.disabled:hoverss:after,
 .mgscd-menu .nav-bordered>li.disabled>a:focus:after,
 .mgscd-menu .nav-bordered>a.disabled:focus:after {
 	-webkit-transform: scale3d(0, 0, 1);
@@ -562,8 +562,8 @@ body {
 
 .mgscd-menu .nav-inverse>li>a:focus,
 .mgscd-menu .nav-inverse>a:focus,
-.mgscd-menu .nav-inverse>li>a:hover,
-.mgscd-menu .nav-inverse>a:hover {
+.mgscd-menu .nav-inverse>li>a:hoverss,
+.mgscd-menu .nav-inverse>a:hoverss {
 	color: #ecf0f1;
 	background-color: #4d4d4d;
 }
@@ -593,9 +593,9 @@ body {
 .mgscd-menu .side-nav a.active:before {
 	position: absolute;
 	content: '';
-	border-width: 10px;
-	border-style: solid;
-	border-color: transparent #fff transparent transparent;
+	/* border-width: 10px; */
+	/* border-style: solid;
+	border-color: transparent #fff transparent transparent; */
 	right: 0;
 	top: 50%;
 	-webkit-transform: translateY(-50%);
@@ -638,31 +638,31 @@ body {
 		display: none;
 	}
 
-	.app-side-opened.app-side-mini.app-side-expand-on-hover .app-side:hover .side-nav>ul>li>a>.nav-title,
-	.app-side-opened.app-side-mini.app-side-expand-on-hover .app-side:hover .side-nav>ul>li>a>.nav-tools {
+	.app-side-opened.app-side-mini.app-side-expand-on-hoverss .app-side:hoverss .side-nav>ul>li>a>.nav-title,
+	.app-side-opened.app-side-mini.app-side-expand-on-hoverss .app-side:hoverss .side-nav>ul>li>a>.nav-tools {
 		display: inline-block;
 	}
 
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.active>a,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.mm-active>a,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li:hover>a {
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.active>a,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.mm-active>a,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li:hoverss>a {
 		min-width: 240px;
 		top: 0;
 	}
 
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.active>a .nav-title,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.mm-active>a .nav-title,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li:hover>a .nav-title,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.active>a .nav-tools,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.mm-active>a .nav-tools,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li:hover>a .nav-tools {
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.active>a .nav-title,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.mm-active>a .nav-title,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li:hoverss>a .nav-title,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.active>a .nav-tools,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.mm-active>a .nav-tools,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li:hoverss>a .nav-tools {
 		display: inline-block;
 	}
 
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li>ul.collapsing,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li>ul.collapse,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.active>ul.collapse.in,
-	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.mm-active>ul.mm-collapse.mm-show {
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li>ul.collapsing,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li>ul.collapse,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.active>ul.collapse.in,
+	.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.mm-active>ul.mm-collapse.mm-show {
 		min-width: 180px;
 		left: 100%;
 		top: 100%;
@@ -819,7 +819,7 @@ body {
 }
 
 .mgscd-menu .logo,
-.mgscd-menu .logo:hover,
+.mgscd-menu .logo:hoverss,
 .mgscd-menu .logo:focus {
 	text-decoration: none;
 }
@@ -859,7 +859,7 @@ body {
 	display: none;
 }
 
-.app-side-mini.app-side-expand-on-hover .app-side:hover .logo-lg {
+.app-side-mini.app-side-expand-on-hoverss .app-side:hoverss .logo-lg {
 	display: block;
 }
 
@@ -867,7 +867,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	display: none;
 }
 
-.app-side-mini.app-side-expand-on-hover .app-side:hover .logo-xs {
+.app-side-mini.app-side-expand-on-hoverss .app-side:hoverss .logo-xs {
 	display: none;
 }
 
@@ -983,7 +983,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu .bg-transparent,
-.mgscd-menu .bg-transparent:hover,
+.mgscd-menu .bg-transparent:hoverss,
 .mgscd-menu .bg-transparent:focus {
 	background-color: transparent !important;
 }
@@ -993,7 +993,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #fff;
 }
 
-.mgscd-menu a.bg-emerland:hover,
+.mgscd-menu a.bg-emerland:hoverss,
 .mgscd-menu a.bg-emerland:focus {
 	text-decoration: none;
 	background-color: #29b765 !important;
@@ -1004,7 +1004,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #fff;
 }
 
-.mgscd-menu a.bg-carrot:hover,
+.mgscd-menu a.bg-carrot:hoverss,
 .mgscd-menu a.bg-carrot:focus {
 	text-decoration: none;
 	background-color: #d67118 !important;
@@ -1015,7 +1015,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #fff;
 }
 
-.mgscd-menu a.bg-alizarin:hover,
+.mgscd-menu a.bg-alizarin:hoverss,
 .mgscd-menu a.bg-alizarin:focus {
 	text-decoration: none;
 	background-color: #e43725 !important;
@@ -1026,7 +1026,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #333;
 }
 
-.mgscd-menu a.bg-clouds:hover,
+.mgscd-menu a.bg-clouds:hoverss,
 .mgscd-menu a.bg-clouds:focus {
 	text-decoration: none;
 	background-color: #dde4e6 !important;
@@ -1037,7 +1037,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #333;
 }
 
-.mgscd-menu a.bg-white:hover,
+.mgscd-menu a.bg-white:hoverss,
 .mgscd-menu a.bg-white:focus {
 	text-decoration: none;
 	background-color: #f2f2f2 !important;
@@ -1047,7 +1047,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #1abc9c !important;
 }
 
-.mgscd-menu a.text-turquoise:hover,
+.mgscd-menu a.text-turquoise:hoverss,
 .mgscd-menu a.text-turquoise:focus {
 	color: #148f77 !important;
 }
@@ -1056,7 +1056,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #8e44ad !important;
 }
 
-.mgscd-menu a.text-wisteria:hover,
+.mgscd-menu a.text-wisteria:hoverss,
 .mgscd-menu a.text-wisteria:focus {
 	color: #703688 !important;
 }
@@ -1065,7 +1065,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #e74c3c !important;
 }
 
-.mgscd-menu a.text-alizarin:hover,
+.mgscd-menu a.text-alizarin:hoverss,
 .mgscd-menu a.text-alizarin:focus {
 	color: #d62c1a !important;
 }
@@ -1074,7 +1074,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #7f8c8d !important;
 }
 
-.mgscd-menu a.text-asbestos:hover,
+.mgscd-menu a.text-asbestos:hoverss,
 .mgscd-menu a.text-asbestos:focus {
 	color: #667273 !important;
 }
@@ -1083,7 +1083,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #fff !important;
 }
 
-.mgscd-menu a.text-white:hover,
+.mgscd-menu a.text-white:hoverss,
 .mgscd-menu a.text-white:focus {
 	color: #e6e6e6 !important;
 }
@@ -1092,7 +1092,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #333 !important;
 }
 
-.mgscd-menu a.text-black:hover,
+.mgscd-menu a.text-black:hoverss,
 .mgscd-menu a.text-black:focus {
 	color: #1a1a1a !important;
 }
@@ -1122,7 +1122,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu .no-shadow,
-.mgscd-menu .no-shadow:hover,
+.mgscd-menu .no-shadow:hoverss,
 .mgscd-menu .no-shadow:active,
 .mgscd-menu .no-shadow:focus,
 .mgscd-menu .no-shadow.active {
@@ -1277,7 +1277,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	background-color: transparent;
 }
 
-.top-search-btn-icon.btn-danger:hover {
+.top-search-btn-icon.btn-danger:hoverss {
 	color: #fff;
 	background-color: #dc3545;
 }
@@ -1296,7 +1296,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 .mgscd-menu .app-side,
 .mgscd-menu .app-side .side-nav ul,
 .mgscd-menu .app-side .side-nav a {
-	background-color: #ffffff !important;
+	/* background-color: #ffffff !important; */
 	color: rgba(0, 0, 0, 0.8);
 	font-weight: 700;
 }
@@ -1306,10 +1306,10 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	background-color: rgba(0, 0, 0, 0.4);
 } */
 
-.mgscd-menu .app-side .side-nav a:hover,
+.mgscd-menu .app-side .side-nav a:hoverss,
 .mgscd-menu .app-side .side-nav a:focus,
 .mgscd-menu .app-side .side-nav li.active>a,
-.mgscd-menu .app-side .side-nav a:hover,
+.mgscd-menu .app-side .side-nav a:hoverss,
 .mgscd-menu .app-side .side-nav a:focus,
 .mgscd-menu .app-side .side-nav li.mm-active>a {
 	color: #000000;
@@ -1318,7 +1318,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu .app-side .side-nav a.active,
-.mgscd-menu .app-side .side-nav a.active:hover,
+.mgscd-menu .app-side .side-nav a.active:hoverss,
 .mgscd-menu .app-side .side-nav a.active:focus {
 	/* background-color: #0307ae; */
 	color: #000000;
@@ -1338,7 +1338,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 
 .mgscd-menu aside.app-side .nav>li>a {
 	width: 100%;
-	max-width: 200px;
+	max-width: 212px;
 }
 
 .app-side-opened.app-side-mini aside.app-side .nav>li>a {
@@ -1352,7 +1352,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 .mgscd-menu aside.app-side .nav>li>a {
 	position: relative;
 	display: block;
-	padding: 3px 15px;
+	padding: 3px 3px;
 }
 
 .mgscd-menu .nav .nav-divider {
@@ -1361,13 +1361,13 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	overflow: hidden;
 }
 
-.mgscd-menu .side-nav ul.nav a:hover .nav-icon i,
-.mgscd-menu .side-nav ul.nav-sub a:hover i {
+.mgscd-menu .side-nav ul.nav a:hoverss .nav-icon i,
+.mgscd-menu .side-nav ul.nav-sub a:hoverss i {
 	-webkit-animation: fa-spin 2s infinite linear;
 	animation: fa-spin 2s infinite linear;
 }
 
-.mgscd-menu .side-nav ul.nav a:hover .nav-tools i {
+.mgscd-menu .side-nav ul.nav a:hoverss .nav-tools i {
 	-webkit-animation: none;
 	animation: none;
 }
@@ -1385,7 +1385,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 } */
 
 .mgscd-menu aside.app-side ul.nav.nav-sub>li a {
-	padding-left: 5px;
+	padding-left: 2px;
 }
 
 .mgscd-menu aside.app-side ul.nav.nav-sub>li ul.nav.nav-sub li a {
@@ -1408,9 +1408,9 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	width: auto;
 }
 
-.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li>ul.collapse,
-.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.active>ul.collapse.in,
-.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hover) .app-side .side-nav>ul>li.mm-active>ul.mm-collapse.mm-show {
+.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li>ul.collapse,
+.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.active>ul.collapse.in,
+.app-side-opened.app-side-mini:not(.page-fixed):not(.app-side-expand-on-hoverss) .app-side .side-nav>ul>li.mm-active>ul.mm-collapse.mm-show {
 	position: static !important;
 	margin-left: 60px;
 }
@@ -1428,11 +1428,11 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #333;
 }
 
-.mgscd-menu .navbar-default .navbar-header-nav>li>a:hover,
+/* .mgscd-menu .navbar-default .navbar-header-nav>li>a:hoverss,
 .mgscd-menu .navbar-default .navbar-header-nav>li>a:focus {
 	color: #000;
 	background-color: transparent;
-}
+} */
 
 .mgscd-menu .nav.nav-bordered>li.active:not(.disabled)>a::after,
 .mgscd-menu .nav.nav-bordered>li.mm-active:not(.disabled)>a::after,
@@ -1494,18 +1494,18 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	padding: 6px 10px;
 }
 
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.active ul.nav.nav-sub.collapse.in>li:hover,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.mm-active ul.nav.nav-sub.collapse.in>li:hover,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li ul.nav.nav-sub.collapse>li:hover,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.active ul.nav.nav-sub.collapse.in>li:hover>a,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.mm-active ul.nav.nav-sub.collapse.in>li:hover>a,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li ul.nav.nav-sub.collapse>li:hover>a,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.active ul.nav.nav-sub.mm-collapse.mm-show>li:hover,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.mm-active ul.nav.nav-sub.mm-collapse.mm-show>li:hover,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li ul.nav.nav-sub.mm-collapse>li:hover,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.active ul.nav.nav-sub.mm-collapse.mm-show>li:hover>a,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.mm-active ul.nav.nav-sub.mm-collapse.mm-show>li:hover>a,
-.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li ul.nav.nav-sub.mm-collapse>li:hover>a {
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.active ul.nav.nav-sub.collapse.in>li:hoverss,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.mm-active ul.nav.nav-sub.collapse.in>li:hoverss,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li ul.nav.nav-sub.collapse>li:hoverss,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.active ul.nav.nav-sub.collapse.in>li:hoverss>a,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.mm-active ul.nav.nav-sub.collapse.in>li:hoverss>a,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li ul.nav.nav-sub.collapse>li:hoverss>a,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.active ul.nav.nav-sub.mm-collapse.mm-show>li:hoverss,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.mm-active ul.nav.nav-sub.mm-collapse.mm-show>li:hoverss,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li ul.nav.nav-sub.mm-collapse>li:hoverss,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.active ul.nav.nav-sub.mm-collapse.mm-show>li:hoverss>a,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li.mm-active ul.nav.nav-sub.mm-collapse.mm-show>li:hoverss>a,
+.mgscd-menu nav.dmhorizontal-menu .nav.nav-inline li ul.nav.nav-sub.mm-collapse>li:hoverss>a {
 	background-color: #ddd;
 }
 
@@ -1782,7 +1782,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: #888;
 }
 
-.mgscd-menu .box-tools a:hover,
+.mgscd-menu .box-tools a:hoverss,
 .mgscd-menu .box-tools a:focus {
 	color: #666;
 }
@@ -1837,7 +1837,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu .member-media-link:focus,
-.mgscd-menu .member-media-link:hover {
+.mgscd-menu .member-media-link:hoverss {
 	text-decoration: none;
 }
 
@@ -1849,7 +1849,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu .member-media-link:focus .member-media-img,
-.mgscd-menu .member-media-link:hover .member-media-img {
+.mgscd-menu .member-media-link:hoverss .member-media-img {
 	opacity: 0.5;
 }
 
@@ -1962,7 +1962,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu .task-info-link:focus,
-.mgscd-menu .task-info-link:hover {
+.mgscd-menu .task-info-link:hoverss {
 	text-decoration: none;
 	border-bottom: 1px dashed #444;
 	color: #444;
@@ -2336,10 +2336,10 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu .user-panel {
-	background-image: url('../img/Redshape.png');
+	/* background-image: url('../img/Redshape.png'); */
 	background-size: contain;
 	background-repeat: no-repeat;
-	width: 150px;
+	width: 180px;
 	margin: 0 auto;
 }
 

@@ -109,25 +109,40 @@
                                     alt="Otp Logo"></a> -->
                             <div class="">Please enter the OTP (one time password)
                                 to
-                                verify your account. A Code has been sent to +2*******337</div>
-                            <form action="./enterpass" method="get" id="otp-form">
+                                verify your account. </div>
+                            <?php if ($this->session->flashdata('error')): ?>
+                                <div class="alert alert-danger">
+                                    <?php echo $this->session->flashdata('error'); ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($this->session->flashdata('success')): ?>
+                                <div class="alert alert-success">
+                                    <?php echo $this->session->flashdata('success'); ?>
+                                </div>
+                            <?php endif; ?>
+                            <form action="<?php echo base_url('verifyotp'); ?>" method="post" id="otp-form">
+
                                 <label for="reset" class="fxt-label">Enter OTP Code Here</label>
                                 <div class="fxt-otp-row">
-                                    <input type="text" class="fxt-otp-col otp-input form-control" maxlength="1"
-                                        required="required" inputmode="numeric" pattern="[0-9]*">
-                                    <input type="text" class="fxt-otp-col otp-input form-control" maxlength="1"
-                                        required="required" inputmode="numeric" pattern="[0-9]*">
-                                    <input type="text" class="fxt-otp-col otp-input form-control" maxlength="1"
-                                        required="required" inputmode="numeric" pattern="[0-9]*">
-                                    <input type="text" class="fxt-otp-col otp-input form-control" maxlength="1"
-                                        required="required" inputmode="numeric" pattern="[0-9]*">
+                                    <input type="text" class="fxt-otp-col otp-input form-control" name="otp_digit1"
+                                        maxlength="1" required="required" inputmode="numeric" pattern="[0-9]*">
+                                    <input type="text" class="fxt-otp-col otp-input form-control" name="otp_digit2"
+                                        maxlength="1" required="required" inputmode="numeric" pattern="[0-9]*">
+                                    <input type="text" class="fxt-otp-col otp-input form-control" name="otp_digit3"
+                                        maxlength="1" required="required" inputmode="numeric" pattern="[0-9]*">
+                                    <input type="text" class="fxt-otp-col otp-input form-control" name="otp_digit4"
+                                        maxlength="1" required="required" inputmode="numeric" pattern="[0-9]*">
                                 </div>
+                                <!-- Hidden field for combined OTP -->
+                                <input type="hidden" name="otp" id="combined-otp">
                                 <div class="fxt-otp-btn">
                                     <button type="submit" class="fxt-btn-fill">Verify</button>
                                 </div>
                             </form>
-                            <div class="fxt-switcher-description3">Not received your code?<a href="otp"
+
+                            <div class="fxt-switcher-description3">Not received your code?<a href="?"
                                     class="fxt-switcher-text ms-1">Resend code</a></div>
+                            <p id="countdown"></p>
                         </div>
                     </div>
 
@@ -142,7 +157,49 @@
     <script src="<?php echo base_url('assets/js/validator.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 
+    <script>
+        function startCountdown(expirationTime) {
+            const countdownElement = document.getElementById('countdown');
+            const endTime = new Date(expirationTime).getTime();
 
+            const updateCountdown = () => {
+                const now = new Date().getTime();
+                const distance = endTime - now;
+
+                if (distance <= 0) {
+                    countdownElement.innerHTML = "OTP expired";
+                    clearInterval(timerInterval);
+                } else {
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    countdownElement.innerHTML = `${minutes}m ${seconds}s`;
+                }
+            };
+
+            // Update countdown every second
+            const timerInterval = setInterval(updateCountdown, 1000);
+            updateCountdown(); // Initial call
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pass expiration time from PHP to JavaScript
+            const expirationTime = "<?php echo $expiration_time; ?>";
+            console.log("Expiration Time from PHP:", expirationTime); // Check the value
+            startCountdown(expirationTime);
+        });
+    </script>
+
+
+
+
+    <style>
+        #countdown {
+            font-size: 18px;
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
 </body>
 
 

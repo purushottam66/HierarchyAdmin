@@ -120,32 +120,45 @@
 
                         <br>
                         <div class="fxt-form">
+
+                            <?php if ($this->session->flashdata('error')): ?>
+                            <div class="alert alert-danger">
+                                <?php echo $this->session->flashdata('error'); ?>
+                            </div>
+                            <?php endif; ?>
+                            <?php if ($this->session->flashdata('success')): ?>
+                            <div class="alert alert-success">
+                                <?php echo $this->session->flashdata('success'); ?>
+                            </div>
+                            <?php endif; ?>
+
+
                             <br>
-                            <form action="<?php echo base_url('enterpass'); ?>" method="get">
+                            <form action="<?php echo base_url('Welcome/loginuser'); ?>" method="post"
+                                autocomplete="off">
                                 <div class="form-group">
-                                    <input type="email" id="email" class="form-control" name="email"
-                                        placeholder="Enter Email " required="required">
+                                    <input type="email" id="email" autocomplete="new-email" class="form-control"
+                                        name="email" placeholder="Enter Email" required="required">
                                 </div>
                                 <div class="form-group">
-                                    <input id="password" type="password" class="form-control" name="password"
-                                        placeholder="********" required="required">
-
+                                    <input id="password" type="password" autocomplete="new-password"
+                                        class="form-control" name="password" placeholder="********" required="required">
                                 </div>
                                 <div class="form-group">
                                     <div class="fxt-switcher-description2 text-right">
                                         <a href="<?php echo base_url('forgot_password'); ?>"
-                                            class="fxt-switcher-text">Forgot
-                                            Password</a>
+                                            class="fxt-switcher-text">Forgot Password</a>
                                     </div>
                                 </div>
                                 <div class="form-group">
-
                                     <button type="submit" class="fxt-btn-fill"
-                                        style="color: white;    word-wrap: break-word;width: 100%; height: 100%; padding-left: 40px; padding-right: 40px; padding-top: 16px; padding-bottom: 16px; background: #F78842; border-radius: 12px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">Login</button>
+                                        style="color: white; word-wrap: break-word; width: 100%; height: 100%; padding-left: 40px; padding-right: 40px; padding-top: 16px; padding-bottom: 16px; background: #F78842; border-radius: 12px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+                                        Login
+                                    </button>
                                 </div>
                                 <br>
-
                             </form>
+
                         </div>
 
                     </div>

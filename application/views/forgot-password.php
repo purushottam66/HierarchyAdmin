@@ -120,20 +120,25 @@
 
                         <br>
                         <div class="fxt-form">
+                            <?php if ($this->session->flashdata('error')): ?>
+                            <div class="alert alert-danger">
+                                <?php echo $this->session->flashdata('error'); ?>
+                            </div>
+                            <?php endif; ?>
+                            <?php if ($this->session->flashdata('success')): ?>
+                            <div class="alert alert-success">
+                                <?php echo $this->session->flashdata('success'); ?>
+                            </div>
+                            <?php endif; ?>
                             <br>
-                            <form action="<?php echo base_url('otp'); ?>" method="get">
+                            <form action="<?php echo base_url('forgotpassword'); ?>" method="post">
                                 <div class="form-group">
-                                    <input type="email" id="email" class="form-control" name="email"
+                                    <input type="text" id="email" class="form-control" name="email_or_mobile"
                                         placeholder="Enter Email " required="required">
                                 </div>
-
                                 <div class="form-group">
-
-                                    <button type="submit" class="fxt-btn-fill"
-                                        style="color: white;    word-wrap: break-word;width: 100%; height: 100%; padding-left: 40px; padding-right: 40px; padding-top: 16px; padding-bottom: 16px; background: #F78842; border-radius: 12px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">Login</button>
+                                    <button type="submit" class="fxt-btn-fill">Send OTP</button>
                                 </div>
-                                <br>
-
                             </form>
                         </div>
 

@@ -1,0 +1,3 @@
+CREATE INDEX idx_mapping_db_code ON maping(DB_Code);
+CREATE INDEX idx_distributors_customer_code ON distributors(Customer_Code);
+
