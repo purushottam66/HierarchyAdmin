@@ -957,13 +957,8 @@
             });
         }
 
-        // fetchData('<?= site_url('admin/mapingajex'); ?>');
-
-
-
-
-
-
+         fetchData('<?= site_url('admin/mapingajex'); ?>');
+      
         function getParams() {
             return {
                 Sales_Code: $('#Sales_Code').val() || null,
