@@ -481,7 +481,7 @@ class Distributor_model extends CI_Model
 
 
 
-    public function get_distributors($start, $length, $search = '', $zone_ids = [], $order_column = '', $order_direction = '')
+    public function get_distributors($start, $length, $search = '', $zone_ids = [], $order_column = '', $order_direction = '', $filters = [])
     {
         // Start building the query
         $this->db->from('distributors'); // Specify the table name
@@ -491,9 +491,34 @@ class Distributor_model extends CI_Model
             $this->db->where_in('Zone_Code', $zone_ids);
         }
 
+        // Apply filters if provided
+        if (!empty($filters)) {
+            if (isset($filters['Sales_Code']) && $filters['Sales_Code']) {
+                $this->db->where('Sales_Code', $filters['Sales_Code']);
+            }
+            if (isset($filters['Distribution_Channel_Code']) && $filters['Distribution_Channel_Code']) {
+                $this->db->where('Distribution_Channel_Code', $filters['Distribution_Channel_Code']);
+            }
+            if (isset($filters['Division_Code']) && $filters['Division_Code']) {
+                $this->db->where('Division_Code', $filters['Division_Code']);
+            }
+            if (isset($filters['Customer_Type_Code']) && $filters['Customer_Type_Code']) {
+                $this->db->where('Customer_Type_Code', $filters['Customer_Type_Code']);
+            }
+            if (isset($filters['Customer_Group_Code']) && $filters['Customer_Group_Code']) {
+                $this->db->where('Customer_Group_Code', $filters['Customer_Group_Code']);
+            }
+            if (isset($filters['Population_Strata_2']) && $filters['Population_Strata_2']) {
+                $this->db->where('Population_Strata_2', $filters['Population_Strata_2']);
+            }
+            if (isset($filters['Zone']) && $filters['Zone']) {
+                $this->db->where('Zone_Code', $filters['Zone']);
+            }
+        }
+
         // Search filter: If a search term is provided, apply `like` conditions for various columns
         if ($search) {
-            $this->db->group_start(); // Group all OR LIKE conditions together to avoid ambiguity
+            $this->db->group_start();
             $this->db->like('Customer_Name', $search);
             $this->db->or_like('Customer_Code', $search);
             $this->db->or_like('Pin_Code', $search);
@@ -524,7 +549,7 @@ class Distributor_model extends CI_Model
             $this->db->or_like('Sales_Name', $search);
             $this->db->or_like('Division_Name', $search);
             $this->db->or_like('Sector_Name', $search);
-            $this->db->group_end(); // Close the OR group
+            $this->db->group_end();
         }
 
         // Define valid columns for sorting
@@ -541,7 +566,7 @@ class Distributor_model extends CI_Model
         // Limit the results based on pagination
         $this->db->limit($length, $start);
 
-        // Execute the query and return the result as an object, not an array
+        // Execute the query and return the result as an object
         return $this->db->get();
     }
 
@@ -549,14 +574,43 @@ class Distributor_model extends CI_Model
 
 
 
-    public function getTotal_distributors($search = '', $zone_ids = [])
+    public function getTotal_distributors($search = '', $zone_ids = [], $filters = [])
     {
+        $this->db->from('distributors');
+
+        // Filter by zone if zone_ids are provided
         if (!empty($zone_ids)) {
             $this->db->where_in('Zone_Code', $zone_ids);
         }
 
-        if ($search) {
+        // Apply filters if provided
+        if (!empty($filters)) {
+            if (isset($filters['Sales_Code']) && $filters['Sales_Code']) {
+                $this->db->where('Sales_Code', $filters['Sales_Code']);
+            }
+            if (isset($filters['Distribution_Channel_Code']) && $filters['Distribution_Channel_Code']) {
+                $this->db->where('Distribution_Channel_Code', $filters['Distribution_Channel_Code']);
+            }
+            if (isset($filters['Division_Code']) && $filters['Division_Code']) {
+                $this->db->where('Division_Code', $filters['Division_Code']);
+            }
+            if (isset($filters['Customer_Type_Code']) && $filters['Customer_Type_Code']) {
+                $this->db->where('Customer_Type_Code', $filters['Customer_Type_Code']);
+            }
+            if (isset($filters['Customer_Group_Code']) && $filters['Customer_Group_Code']) {
+                $this->db->where('Customer_Group_Code', $filters['Customer_Group_Code']);
+            }
+            if (isset($filters['Population_Strata_2']) && $filters['Population_Strata_2']) {
+                $this->db->where('Population_Strata_2', $filters['Population_Strata_2']);
+            }
+            if (isset($filters['Zone']) && $filters['Zone']) {
+                $this->db->where('Zone_Code', $filters['Zone']);
+            }
+        }
 
+        // Apply search if provided
+        if ($search) {
+            $this->db->group_start();
             $this->db->like('Customer_Name', $search);
             $this->db->or_like('Customer_Code', $search);
             $this->db->or_like('Pin_Code', $search);
@@ -587,15 +641,10 @@ class Distributor_model extends CI_Model
             $this->db->or_like('Sales_Name', $search);
             $this->db->or_like('Division_Name', $search);
             $this->db->or_like('Sector_Name', $search);
+            $this->db->group_end();
         }
 
-
-        $query = $this->db->select('COUNT(*) as total_get_distributors')->get('distributors');
-        $result = $query->row();
-        if ($result) {
-            return $result->total_get_distributors;
-        }
-        return 0;
+        return $this->db->count_all_results();
     }
 
 

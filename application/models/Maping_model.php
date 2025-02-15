@@ -467,6 +467,7 @@ class Maping_model extends CI_Model
         COALESCE(ds.STATUS, "N/A") AS STATUS, 
         COALESCE(ds.Customer_Type_Name, "N/A") AS Customer_Type_Name, 
         COALESCE(ds.Customer_Creation_Date, "N/A") AS Customer_Creation_Date, 
+        COALESCE(ds.Division_Name, "N/A") AS Division_Name, 
         COALESCE(ds.Sector_Code, "N/A") AS Sector_Code, 
         COALESCE(ds.State_Code, "N/A") AS State_Code, 
         COALESCE(ds.Zone_Code, "N/A") AS Zone_Code, 
@@ -506,48 +507,43 @@ class Maping_model extends CI_Model
 
 
         if (!empty($search)) {
-            $escaped_search = $this->db->escape_like_str($search);
-            $this->db->group_start();
-            $this->db->like('ds.Customer_Name', $escaped_search);
-            $this->db->or_like('ds.Sales_Code', $escaped_search);
-            $this->db->or_like('ds.Customer_Code', $escaped_search);
-            $this->db->or_like('ds.Pin_Code', $escaped_search);
-            $this->db->or_like('ds.City', $escaped_search);
-            $this->db->or_like('ds.District', $escaped_search);
-            $this->db->or_like('ds.Contact_Number', $escaped_search);
-            $this->db->or_like('ds.Country', $escaped_search);
-            $this->db->or_like('ds.Zone', $escaped_search);
-            $this->db->or_like('ds.State', $escaped_search);
-            $this->db->or_like('ds.Population_Strata_1', $escaped_search);
-            $this->db->or_like('ds.Population_Strata_2', $escaped_search);
-            $this->db->or_like('ds.Country_Group', $escaped_search);
-            $this->db->or_like('ds.GTM_TYPE', $escaped_search);
-            $this->db->or_like('ds.SUPERSTOCKIST', $escaped_search);
-            $this->db->or_like('ds.STATUS', $escaped_search);
-            $this->db->or_like('ds.Customer_Type_Code', $escaped_search);
-            $this->db->or_like('ds.Customer_Type_Name', $escaped_search);
-            $this->db->or_like('ds.Customer_Group_Code', $escaped_search);
-            $this->db->or_like('ds.Customer_Creation_Date', $escaped_search);
-            $this->db->or_like('ds.Division_Code', $escaped_search);
-            $this->db->or_like('ds.Sector_Code', $escaped_search);
-            $this->db->or_like('ds.State_Code', $escaped_search);
-            $this->db->or_like('ds.Zone_Code', $escaped_search);
-            $this->db->or_like('ds.Distribution_Channel_Code', $escaped_search);
-            $this->db->or_like('ds.Distribution_Channel_Name', $escaped_search);
-            $this->db->or_like('ds.Customer_Group_Name', $escaped_search);
-            $this->db->or_like('ds.Sales_Name', $escaped_search);
-            $this->db->or_like('ds.Division_Name', $escaped_search);
-            $this->db->or_like('ds.Sector_Name', $escaped_search);
+            $search = $this->db->escape_like_str($search);
+            
+            log_message('debug', 'Search applied with escaped term: ' . $search);
+            log_message('debug', 'Building search query...');
 
-
-            $this->db->or_like('emp1.name', $escaped_search);
-            $this->db->or_like('emp2.name', $escaped_search);
-            $this->db->or_like('emp3.name', $escaped_search);
-            $this->db->or_like('emp4.name', $escaped_search);
-            $this->db->or_like('emp5.name', $escaped_search);
-            $this->db->or_like('emp6.name', $escaped_search);
-            $this->db->or_like('emp7.name', $escaped_search);
-            $this->db->group_end();
+            $this->db->group_start()
+                ->like('ds.Customer_Code', $search)
+                ->or_like('ds.Customer_Name', $search)
+                ->or_like('ds.Pin_Code', $search)
+                ->or_like('ds.City', $search)
+                ->or_like('ds.District', $search)
+                ->or_like('ds.Contact_Number', $search)
+                ->or_like('ds.Country', $search)
+                ->or_like('ds.Zone', $search)
+                ->or_like('ds.State', $search)
+                ->or_like('ds.Population_Strata_1', $search)
+                ->or_like('ds.Population_Strata_2', $search)
+                ->or_like('ds.Country_Group', $search)
+                ->or_like('ds.GTM_TYPE', $search)
+                ->or_like('ds.SUPERSTOCKIST', $search)
+                ->or_like('ds.STATUS', $search)
+                ->or_like('ds.Customer_Type_Code', $search)
+                ->or_like('ds.Sales_Code', $search)
+                ->or_like('ds.Customer_Type_Name', $search)
+                ->or_like('ds.Customer_Group_Code', $search)
+                ->or_like('ds.Customer_Creation_Date', $search)
+                ->or_like('ds.Division_Code', $search)
+                ->or_like('ds.Sector_Code', $search)
+                ->or_like('ds.State_Code', $search)
+                ->or_like('ds.Zone_Code', $search)
+                ->or_like('ds.Distribution_Channel_Code', $search)
+                ->or_like('ds.Distribution_Channel_Name', $search)
+                ->or_like('ds.Customer_Group_Name', $search)
+                ->or_like('ds.Sales_Name', $search)
+                ->or_like('ds.Division_Name', $search)
+                ->or_like('ds.Sector_Name', $search)
+                ->group_end();
         }
 
 
@@ -628,10 +624,15 @@ class Maping_model extends CI_Model
             ds.Customer_Name,
             ds.Customer_Code,
             ds.Sales_Code,
+            ds.Sales_Name,
             ds.Distribution_Channel_Code,
+            ds.Distribution_Channel_Name,
             ds.Division_Code,
+            ds.Division_Name,
             ds.Customer_Type_Code,
             ds.Customer_Group_Code,
+            ds.Customer_Group_Name,
+            ds.Customer_Type_Name,
             ds.Pin_Code,
             ds.City,
             ds.District,
@@ -640,17 +641,21 @@ class Maping_model extends CI_Model
             ds.Zone,
             ds.Zone_Code,
             ds.State,
+            ds.State_Code,
+            ds.Population_Strata_2,
             mp.distributors_id
-        FROM 
+
+
+FROM 
             maping mp
-        LEFT JOIN employee emp1 ON mp.Level_1 = emp1.pjp_code
-        LEFT JOIN employee emp2 ON mp.Level_2 = emp2.pjp_code
-        LEFT JOIN employee emp3 ON mp.Level_3 = emp3.pjp_code
-        LEFT JOIN employee emp4 ON mp.Level_4 = emp4.pjp_code
-        LEFT JOIN employee emp5 ON mp.Level_5 = emp5.pjp_code
-        LEFT JOIN employee emp6 ON mp.Level_6 = emp6.pjp_code
-        LEFT JOIN employee emp7 ON mp.Level_7 = emp7.pjp_code
-        LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
+LEFT JOIN employee emp1 ON mp.Level_1 = emp1.pjp_code
+LEFT JOIN employee emp2 ON mp.Level_2 = emp2.pjp_code
+LEFT JOIN employee emp3 ON mp.Level_3 = emp3.pjp_code
+LEFT JOIN employee emp4 ON mp.Level_4 = emp4.pjp_code
+LEFT JOIN employee emp5 ON mp.Level_5 = emp5.pjp_code
+LEFT JOIN employee emp6 ON mp.Level_6 = emp6.pjp_code
+LEFT JOIN employee emp7 ON mp.Level_7 = emp7.pjp_code
+LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
             AND IFNULL(mp.Sales_Code, '') = IFNULL(ds.Sales_Code, '')
             AND IFNULL(mp.Distribution_Channel_Code, '') = IFNULL(ds.Distribution_Channel_Code, '')
             AND IFNULL(mp.Division_Code, '') = IFNULL(ds.Division_Code, '')
@@ -669,10 +674,15 @@ class Maping_model extends CI_Model
             ds.Customer_Name,
             ds.Customer_Code,
             ds.Sales_Code,
+            ds.Sales_Name,
             ds.Distribution_Channel_Code,
+            ds.Distribution_Channel_Name,
             ds.Division_Code,
+            ds.Division_Name,
             ds.Customer_Type_Code,
             ds.Customer_Group_Code,
+            ds.Customer_Group_Name,
+            ds.Customer_Type_Name,
             ds.Pin_Code,
             ds.City,
             ds.District,
@@ -680,17 +690,20 @@ class Maping_model extends CI_Model
             ds.Country,
             ds.Zone,
             ds.Zone_Code,
+            ds.State_Code,
             ds.State,
+            ds.Population_Strata_2,
             mp.distributors_id;
-    ";
+
+        ";
+
 
         $query = $this->db->query($sql);
         return $query->result_array();
     }
 
 
-
-    public function get_db_code_by_pjp_and_level($pjp_code, $level, $limit = 300, $offset = 0)
+    public function get_db_code_by_pjp_and_level($pjp_code, $level, $limit = 10, $offset = 0, $search = '')
     {
         if ($level < 1 || $level > 7) {
             log_message('error', 'Invalid level provided: ' . $level);
@@ -698,39 +711,197 @@ class Maping_model extends CI_Model
         }
 
         $level_column = 'Level_' . $level;
+        log_message('debug', "Level Column: " . $level_column); // Level column ko log karo
 
-        $sql = "
-            SELECT * 
-            FROM maping
-            INNER JOIN distributors 
-                ON distributors.Customer_Code = maping.DB_Code
-                AND distributors.Sales_Code = maping.Sales_Code
-                AND distributors.Distribution_Channel_Code = maping.Distribution_Channel_Code
-                AND distributors.Division_Code = maping.Division_Code
-                AND distributors.Customer_Type_Code = maping.Customer_Type_Code
-                AND distributors.Customer_Group_Code = maping.Customer_Group_Code
-            WHERE maping.$level_column = ?
-            GROUP BY
-                distributors.Customer_Code,
-                distributors.Sales_Code,
-                distributors.Distribution_Channel_Code,
-                distributors.Division_Code,
-                distributors.Customer_Type_Code,
-                distributors.Customer_Group_Code,
-                maping.distributors_id
-            LIMIT ? OFFSET ?";
+        
+        // Convert parameters to integers
+        $limit = (int)$limit;
+        $offset = (int)$offset;
 
-        $query = $this->db->query($sql, [$pjp_code, $limit, $offset]);
+        // Start building the query
+        $this->db->select('maping.*, distributors.*')
+            ->from('maping')
+            ->join('distributors', 
+                'distributors.Customer_Code = maping.DB_Code AND 
+                distributors.Sales_Code = maping.Sales_Code AND 
+                distributors.Distribution_Channel_Code = maping.Distribution_Channel_Code AND 
+                distributors.Division_Code = maping.Division_Code AND 
+                distributors.Customer_Type_Code = maping.Customer_Type_Code AND 
+                distributors.Customer_Group_Code = maping.Customer_Group_Code', 
+                'inner')
+            ->where("maping.$level_column", $pjp_code);
+
+        // Add search conditions if search term is provided
+        if (!empty($search)) {
+            // Escape the search term to prevent SQL injection
+            $search = $this->db->escape_like_str($search);
+            
+            log_message('debug', 'Search applied with escaped term: ' . $search);
+            log_message('debug', 'Building search query...');
+
+            $this->db->group_start()
+                ->like('distributors.Customer_Name', $search)
+                ->or_like('distributors.Customer_Code', $search)
+                ->or_like('distributors.Pin_Code', $search)
+                ->or_like('distributors.City', $search)
+                ->or_like('distributors.District', $search)
+                ->or_like('distributors.Contact_Number', $search)
+                ->or_like('distributors.Country', $search)
+                ->or_like('distributors.Zone', $search)
+                ->or_like('distributors.State', $search)
+                ->or_like('distributors.Population_Strata_1', $search)
+                ->or_like('distributors.Population_Strata_2', $search)
+                ->or_like('distributors.Country_Group', $search)
+                ->or_like('distributors.GTM_TYPE', $search)
+                ->or_like('distributors.SUPERSTOCKIST', $search)
+                ->or_like('distributors.STATUS', $search)
+                ->or_like('distributors.Customer_Type_Code', $search)
+                ->or_like('distributors.Sales_Code', $search)
+                ->or_like('distributors.Customer_Type_Name', $search)
+                ->or_like('distributors.Customer_Group_Code', $search)
+                ->or_like('distributors.Customer_Creation_Date', $search)
+                ->or_like('distributors.Division_Code', $search)
+                ->or_like('distributors.Sector_Code', $search)
+                ->or_like('distributors.State_Code', $search)
+                ->or_like('distributors.Zone_Code', $search)
+                ->or_like('distributors.Distribution_Channel_Code', $search)
+                ->or_like('distributors.Distribution_Channel_Name', $search)
+                ->or_like('distributors.Customer_Group_Name', $search)
+                ->or_like('distributors.Sales_Name', $search)
+                ->or_like('distributors.Division_Name', $search)
+                ->or_like('distributors.Sector_Name', $search)
+                ->group_end();
+        }
+
+        
+       
+        $this->db->group_by([
+            'distributors.Customer_Code',
+            'distributors.Sales_Code',
+            'distributors.Distribution_Channel_Code',
+            'distributors.Division_Code',
+            'distributors.Customer_Type_Code',
+            'distributors.Customer_Group_Code',
+            'maping.distributors_id'
+        ]);
+        $this->db->limit($limit, $offset);
+        $query = $this->db->get();
+        log_message('debug', 'get_db_code_by_pjp_and_level query: ' . $this->db->last_query());
         return $query->result_array();
+    }
+
+    public function get_total_records($pjp_code, $level, $search = '')
+    {
+        if ($level < 1 || $level > 7) {
+            return 0;
+        }
+
+        $level_column = 'Level_' . $level;
+
+        $this->db->select('COUNT( distributors.Customer_Code) as total')
+            ->from('maping')
+            ->join('distributors', 
+                'distributors.Customer_Code = maping.DB_Code AND 
+                distributors.Sales_Code = maping.Sales_Code AND 
+                distributors.Distribution_Channel_Code = maping.Distribution_Channel_Code AND 
+                distributors.Division_Code = maping.Division_Code AND 
+                distributors.Customer_Type_Code = maping.Customer_Type_Code AND 
+                distributors.Customer_Group_Code = maping.Customer_Group_Code', 
+                'inner')
+            ->where("maping.$level_column", $pjp_code);
+
+        if (!empty($search)) {
+            $search = $this->db->escape_like_str($search);
+            
+            log_message('debug', 'Search applied with escaped term: ' . $search);
+            log_message('debug', 'Building search query...');
+
+            $this->db->group_start()
+                ->like('distributors.Customer_Name', $search)
+                ->or_like('distributors.Customer_Code', $search)
+                ->or_like('distributors.Pin_Code', $search)
+                ->or_like('distributors.City', $search)
+                ->or_like('distributors.District', $search)
+                ->or_like('distributors.Contact_Number', $search)
+                ->or_like('distributors.Country', $search)
+                ->or_like('distributors.Zone', $search)
+                ->or_like('distributors.State', $search)
+                ->or_like('distributors.Population_Strata_1', $search)
+                ->or_like('distributors.Population_Strata_2', $search)
+                ->or_like('distributors.Country_Group', $search)
+                ->or_like('distributors.GTM_TYPE', $search)
+                ->or_like('distributors.SUPERSTOCKIST', $search)
+                ->or_like('distributors.STATUS', $search)
+                ->or_like('distributors.Customer_Type_Code', $search)
+                ->or_like('distributors.Sales_Code', $search)
+                ->or_like('distributors.Customer_Type_Name', $search)
+                ->or_like('distributors.Customer_Group_Code', $search)
+                ->or_like('distributors.Customer_Creation_Date', $search)
+                ->or_like('distributors.Division_Code', $search)
+                ->or_like('distributors.Sector_Code', $search)
+                ->or_like('distributors.State_Code', $search)
+                ->or_like('distributors.Zone_Code', $search)
+                ->or_like('distributors.Distribution_Channel_Code', $search)
+                ->or_like('distributors.Distribution_Channel_Name', $search)
+                ->or_like('distributors.Customer_Group_Name', $search)
+                ->or_like('distributors.Sales_Name', $search)
+                ->or_like('distributors.Division_Name', $search)
+                ->or_like('distributors.Sector_Name', $search)
+                ->group_end();
+        }
+
+        $result = $this->db->get()->row();
+        return $result ? $result->total : 0;
     }
 
 
 
 
 
-
-
-
+    public function get_common_records($pjp_code, $level)
+    {
+        if ($level < 1 || $level > 7) {
+            log_message('error', 'Invalid level provided: ' . $level);
+            return [];
+        }
+    
+        $level_column = 'Level_' . $level;
+        log_message('debug', "Level Column: " . $level_column); // Log level column
+    
+        // Start building the query to fetch all data without pagination or search
+        $this->db->select('maping.*, distributors.*')
+            ->from('maping')
+            ->join('distributors', 
+                'distributors.Customer_Code = maping.DB_Code AND 
+                distributors.Sales_Code = maping.Sales_Code AND 
+                distributors.Distribution_Channel_Code = maping.Distribution_Channel_Code AND 
+                distributors.Division_Code = maping.Division_Code AND 
+                distributors.Customer_Type_Code = maping.Customer_Type_Code AND 
+                distributors.Customer_Group_Code = maping.Customer_Group_Code', 
+                'inner')
+            ->where("maping.$level_column", $pjp_code); // Fetch records based on level and pjp_code
+    
+        // No search conditions applied now
+    
+        // Group by the necessary fields to avoid duplicates
+        $this->db->group_by([
+            'distributors.Customer_Code',
+            'distributors.Sales_Code',
+            'distributors.Distribution_Channel_Code',
+            'distributors.Division_Code',
+            'distributors.Customer_Type_Code',
+            'distributors.Customer_Group_Code',
+            'maping.distributors_id'
+        ]);
+    
+        // Fetch all records without any limit
+        $query = $this->db->get();
+        log_message('debug', 'get_common_records query: ' . $this->db->last_query());  // Log the query for debugging
+        return $query->result_array(); // Return all matching records
+    }
+    
+    
+    
 
 
 

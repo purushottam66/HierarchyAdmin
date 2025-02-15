@@ -100,7 +100,7 @@
 
                                             <input type="text" class="form-control" readonly id="selectedEmployees" />
 
-                                            <input type="hidden" class="form-control" readonly name="set_pjp_code"
+                                            <input type="text" class="form-control" readonly name="set_pjp_code"
                                                 id="selectedEmployeespjp_code" />
 
                                             <div id="hiddenDB_Code"></div>
@@ -187,7 +187,15 @@
 
                                         </tbody>
                                     </table>
+
+
+                                    <div id="pagination"></div>
+
+
+
                                 </div>
+
+
                             </div>
 
 
@@ -305,9 +313,6 @@
 
 
 
-
-
-
 <script>
     $(document).ready(function() {
         $('#saveReplaceForm').on('submit', function(e) {
@@ -324,11 +329,17 @@
                     confirmButtonColor: '#DD6B55',
                     confirmButtonText: 'Yes, submit it!',
                     cancelButtonText: 'No, cancel!',
-                    closeOnConfirm: false,
+                    closeOnConfirm: true,
                     closeOnCancel: true
                 },
                 function(isConfirm) {
                     if (isConfirm) {
+
+                        toastr.success("Form submission wait.");
+
+                        $("#loader").show();
+
+
 
                         submitForm(form);
                     } else {
@@ -527,10 +538,6 @@
                 var designationName = $(this).attr('data-designation_name');
                 var name = $(this).attr('data-name');
 
-
-
-
-
                 let mydata = `${selectedData.name}  (${selectedData.id}) (${selectedData.emp_city}) (${selectedData.level})`;
                 $('#selectedEmployees').val(mydata);
 
@@ -628,9 +635,9 @@
                                         Customer_Group_Code: item.Customer_Group_Code || 'N/A'
                                     });
                                     table.row.add([
-                                        `<input type="checkbox" class="row-checkbox" data-json='${escapeHtml(jsonData)}' checked>`,
+                                        `<input type="hidden" class="row-checkbox" data-json='${escapeHtml(jsonData)}' checked>`,
                                         escapeHtml(item.Customer_Name || 'N/A'),
-                                        
+
                                         escapeHtml(item.Customer_Code || 'N/A'),
                                         escapeHtml(item.Pin_Code || 'N/A'),
                                         escapeHtml(item.City || 'N/A'),
@@ -673,7 +680,7 @@
                                 });
                             } else {
                                 $('#vacant-container').hide()
-                                table.row.add(['', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '','']).draw();
+                                table.row.add(['', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '']).draw();
                             }
 
                         } else {
@@ -691,11 +698,6 @@
 
     });
 </script>
-
-
-
-
-
 
 
 
@@ -718,10 +720,10 @@
             $('#exampley').DataTable().clear().destroy();
         }
 
-        var table = $('#exampley').DataTable({
-            paging: true,
+        window.datatable = $('#exampley').DataTable({
+            paging: false,
             searching: true,
-            info: true,
+            info: false,
             autoWidth: true,
             pageLength: 10,
             lengthMenu: [10, 25, 50, 100],
@@ -731,11 +733,7 @@
             fixedFooter: true,
         });
 
-
-
-
-
-        function fetchData(url, params = {}) {
+        window.fetchData = function(url, params = {}) {
             $('#loader').show();
             $.ajax({
                 url: url,
@@ -743,6 +741,8 @@
                 data: params,
                 dataType: 'json',
                 success: function(response) {
+
+                    updatePagination(response);
                     $('#city').empty();
                     $('#city').append('<option selected>Select</option>');
 
@@ -763,10 +763,34 @@
                         $('#city').append('<option value="N/A">No employees available</option>');
                     }
 
-
                     $('#city').selectpicker('refresh');
                     $('#loader').hide();
-                    table.clear();
+                    window.datatable.clear();
+
+                    // Assuming response.common_records is an array
+                    response.common_records.forEach(item => {
+                        const jsonData = JSON.stringify({
+                            Customer_Code: item.Customer_Code || 'N/A',
+                            Sales_Code: item.Sales_Code || 'N/A',
+                            Distribution_Channel_Code: item.Distribution_Channel_Code || 'N/A',
+                            Division_Code: item.Division_Code || 'N/A',
+                            Customer_Type_Code: item.Customer_Type_Code || 'N/A',
+                            Customer_Group_Code: item.Customer_Group_Code || 'N/A',
+                            distributors_id: item.distributors_id || 'N/A'
+                        });
+
+                        // Create hidden input elements dynamically and append them to the container
+                        $('<input>').attr({
+                            type: 'hidden', // Changed to 'hidden' to hide the input
+                            id: 'hidden_' + item.Customer_Code,
+                            name: 'DB_Code[]',
+                            style: 'width: 1200px !important;',
+                            value: jsonData // Set the JSON data as the value
+                        }).appendTo('#hiddenFieldsContainer'); // Append to the container
+                    });
+
+
+
                     if (response && response.Distributor_data) {
                         $.each(response.Distributor_data, function(index, item) {
 
@@ -779,10 +803,11 @@
                                 Customer_Group_Code: item.Customer_Group_Code || 'N/A',
                                 distributors_id: item.distributors_id || 'N/A'
                             });
-                            table.row.add([
-                                `<input type="checkbox" class="row-checkbox" data-json='${escapeHtml(jsonData)}' checked>`, // Auto-checked checkbox
 
+                            window.datatable.row.add([`
+                            <input type="hidden" class="row-checkbox" data-json='${escapeHtml(jsonData)}' checked>`, // Auto-checked checkbox
                                 escapeHtml(item.Customer_Name || 'N/A'),
+
                                 escapeHtml(item.Customer_Code || 'N/A'),
                                 escapeHtml(item.Pin_Code || 'N/A'),
                                 escapeHtml(item.City || 'N/A'),
@@ -817,58 +842,137 @@
                                 escapeHtml(item.Level_1_employer_code || 'N/A'),
                                 escapeHtml(item.Level_1_designation_name || 'N/A'),
                                 `<div class="d-flex">
-                    <a href="<?= site_url('admin/hierarchyedit') ?>?id=${item.id}&customer_name=${encodeURIComponent(item.Customer_Name || 'N/A')}" class="btn btn-primary">
-                        <i class="fa-solid fa-pencil fa-fw"></i>
-                    </a>
-                    <a href="javascript:void(0);" data-id="${item.id}" class="delete-btn">
-                        <button class="btn btn-primary">
-                            <i class="fa-solid fa-trash fa-fw"></i>
-                        </button>
-                    </a>
-                </div>`
+                            <a href="<?= site_url('admin/hierarchyedit') ?>?id=${item.id}&customer_name=${encodeURIComponent(item.Customer_Name || 'N/A')}" class="btn btn-primary">
+                                <i class="fa-solid fa-pencil fa-fw"></i>
+                            </a>
+                            <a href="javascript:void(0);" data-id="${item.id}" class="delete-btn">
+                                <button class="btn btn-primary">
+                                    <i class="fa-solid fa-trash fa-fw"></i>
+                                </button>
+                            </a>
+                        </div>`
                             ]).draw();
 
 
 
 
-                            $('<input>').attr({
-                                type: 'hidden',
-                                id: 'hidden_' + item.Customer_Code,
-                                name: 'DB_Code[]',
-                                style: 'width: 1200px !important;',
-                                value: jsonData
-                            }).appendTo('#hiddenFieldsContainer');
                         });
-
-
                     } else {
-                        table.row.add(['No data found', '', '', '', '', '', '', '', '', '', '', '', '',
-                            '', '', '', '', '', '', '', '', '', '', '', '', '', ''
-                        ]).draw();
+                        window.datatable.row.add(['No data found', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']).draw();
                     }
-
                 },
                 error: function() {
                     $('#loader').hide();
-                    table.row.add(['An error occurred', '', '', '', '', '', '', '', '', '', '', '', '',
-                        '', '', '', '', '', '', '', '', '', '', '', '', '', ''
-                    ]).draw();
+                    window.datatable.row.add(['An error occurred', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']).draw();
                 }
             });
         }
 
+        window.datatable.on('page.dt', function() {
+            var info = window.datatable.page.info();
+            var params = getParams();
+            params.page = info.page + 1;
+            params.limit = window.datatable.page.len();
+            fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
+        });
 
-        function getParams() {
+        window.getParams = function() {
             var selectedOption = $('#level option:selected');
+            var searchValue = $('#dt-search-1').val() || '';
             return {
                 employee_level: selectedOption.val() || null,
                 pjp_code: selectedOption.data('pjp_code') || null,
-                City: selectedOption.data('city') || null
+                City: selectedOption.data('city') || null,
+                search: searchValue,
+                page: 1 // Reset to first page on search
             };
         }
 
+        function updatePagination(response) {
+            console.log("updatePagination", response);
+            var currentPage = parseInt(response.page);
+            var totalPages = parseInt(response.total_pages);
+            var totalRecords = parseInt(response.total_records);
+            var limit = parseInt(response.limit);
+            var paginationHtml = '';
+
+            // Calculate current range
+            var start = ((currentPage - 1) * limit) + 1;
+            var end = Math.min(start + limit - 1, totalRecords);
+
+            // Add entries info and total records count
+            paginationHtml += '<div class="d-flex align-items-center justify-content-between mb-2">';
+            paginationHtml += '<div class="pagination-info">';
+            paginationHtml += 'Showing ' + start + ' to ' + end + ' of ' + totalRecords + ' entries';
+            paginationHtml += '</div>';
+
+            if (totalPages > 1) {
+                paginationHtml += '<ul class="pagination mb-0">';
+
+                // Previous Button
+                if (currentPage > 1) {
+                    paginationHtml += '<li class="page-item"><a class="page-link prev-page" href="#" data-page="1">First</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link prev-page" href="#" data-page="' + (currentPage - 1) + '">Previous</a></li>';
+                }
+
+                // Calculate page range to show exactly 5 numbers
+                var startPage, endPage;
+                if (totalPages <= 5) {
+                    startPage = 1;
+                    endPage = totalPages;
+                } else {
+                    if (currentPage <= 3) {
+                        startPage = 1;
+                        endPage = 5;
+                    } else if (currentPage + 2 >= totalPages) {
+                        startPage = totalPages - 4;
+                        endPage = totalPages;
+                    } else {
+                        startPage = currentPage - 2;
+                        endPage = currentPage + 2;
+                    }
+                }
+
+                // Add page numbers
+                for (var i = startPage; i <= endPage; i++) {
+                    if (i === currentPage) {
+                        paginationHtml += '<li class="page-item active"><a class="page-link" href="#">' + i + '</a></li>';
+                    } else {
+                        paginationHtml += '<li class="page-item"><a class="page-link page-number" href="#" data-page="' + i + '">' + i + '</a></li>';
+                    }
+                }
+
+                // Next Button
+                if (currentPage < totalPages) {
+                    paginationHtml += '<li class="page-item"><a class="page-link next-page" href="#" data-page="' + (currentPage + 1) + '">Next</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link next-page" href="#" data-page="' + totalPages + '">Last</a></li>';
+                }
+
+                paginationHtml += '</ul>';
+            }
+            paginationHtml += '</div>';
+
+            $('#pagination').html(paginationHtml);
+
+            // Add click handlers
+            $('.page-number, .prev-page, .next-page').on('click', function(e) {
+                e.preventDefault();
+                var pageNumber = $(this).data('page');
+                changePage(pageNumber);
+            });
+        }
+
+        function changePage(pageNumber) {
+            if (window.datatable) {
+                var params = getParams();
+                params.page = pageNumber;
+                params.limit = window.datatable.page.len();
+                fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
+            }
+        }
+
         function fetchDataAndUpdate() {
-            table.clear().draw();
+            window.datatable.clear().draw();
             var params = getParams();
             fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
         }
@@ -877,6 +981,24 @@
             $('#Target_DBS').empty();
             fetchDataAndUpdate();
         });
+
+
+
+
+        $("#dt-search-1").keyup(function() {
+            var searchValue = $(this).val();
+
+            // Get all parameters and update search
+            var params = getParams();
+
+            // Debounce the search to avoid too many requests
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(function() {
+                fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
+            }, 500); // Wait 500ms after user stops typing
+        });
+
+
 
     });
 </script>

@@ -99,7 +99,14 @@
                 },
             ],
 
-            columns: [{
+            columns: [
+
+                {
+                    columns: "id",
+                    title: "id"
+                },
+                
+                {
                     columns: "Customer_Name",
                     title: "Customer Name"
                 },

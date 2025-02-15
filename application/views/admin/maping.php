@@ -335,73 +335,13 @@
                                         <div class="card mt-3">
                                             <div class="row">
                                                 <div class="table-responsive pb-2 ">
-                                                    <table id="example"
+                                                    <table id="examplecsv"
                                                         class="display nowrap table table-bordered table-hover text-center"
                                                         style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th><input type="checkbox" id="select-all"></th> <!-- Master Checkbox -->
-                                                                <th>Customer Name</th>
-                                                                <th>Customer Code </th>
-                                                                <th>Pin Code</th>
-                                                                <th>City</th>
-                                                                <th>District</th>
-                                                                <th>Contact Number</th>
-                                                                <th>Country</th>
-                                                                <th>Zone</th>
-                                                                <th>State</th>
-                                                                <th>Population Strata 1
-                                                                </th>
-                                                                <th>Population Strata 2
-                                                                </th>
-                                                                <!-- <th>Country Group</th> -->
-                                                                <th>GTM TYPE</th>
-                                                                <th>Super Stockist</th>
-                                                                <th>Status</th>
-                                                                <th>Customer Type Name
-                                                                </th>
-                                                                <!-- <th>Customer Type Code
-                                                                </th> -->
-                                                                <th>Sales Name</th>
-                                                                <!-- <th>Sales Code</th> -->
-                                                                <th>Customer Group Name
-                                                                </th>
-                                                                <!-- <th>Customer Group Code
-                                                                </th> -->
-                                                                <th>Customer Creation Date
-                                                                </th>
-                                                                <th>Division Name</th>
-                                                                <th>Division Code</th>
-                                                                <th>Sector Name</th>
-                                                                <th>Sector Code</th>
-                                                                <!-- <th>State Code</th> -->
-                                                                <!-- <th>Zone Code</th> -->
-                                                                <th>Distribution Channel
-                                                                    Name</th>
-                                                                <th>Distribution Channel
-                                                                    Code</th>
-
-
-
-                                                            </tr>
-                                                        </thead>
-
-                                                        <tbody>
-                                                        </tbody>
-
 
                                                     </table>
 
 
-
-                                                    <div class="d-flex justify-content-between">
-                                                        <p id="current_page_total_items_items_per_page">
-                                                        </p>
-                                                        <nav aria-label="Page navigation example">
-                                                            <ul class="pagination" id="customPagination">
-                                                            </ul>
-                                                        </nav>
-                                                    </div>
                                                 </div>
 
                                             </div>
@@ -539,6 +479,276 @@
     });
 </script>
 
+
+
+
+<script>
+    function escapeHtml(unsafe) {
+        if (typeof unsafe !== 'string') return '';
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    $(document).ready(function() {
+        var table = $('#examplecsv').DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "autoWidth": true,
+            "pageLength": 20,
+            "lengthMenu": [20, 30, 60, 100],
+            "scrollY": "550px",
+            "scrollCollapse": true,
+            "fixedHeader": true,
+            "fixedFooter": true,
+            "processing": true,
+            "serverSide": true,
+
+            dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
+
+            "buttons": [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-download"></i> Download',
+                    titleAttr: 'Download as Excel',
+                    filename: 'distributor_data',
+                }
+
+            ],
+            order: [{
+                column: 0, // Sort by the first column
+                dir: "asc", // Ascending order
+            }], // Default sorting
+            ajax: {
+                url: "<?= site_url('admin/distributors_db') ?>",
+                type: "POST",
+                data: function(d) {
+                    d.search = $('#dt-search-0').val();
+                    d.Sales_Code = $('#Sales_Code').val() || null;
+                    d.Distribution_Channel_Code = $('#Distribution_Channel_Code').val() || null;
+                    d.Division_Code = $('#Division_Code').val() || null;
+                    d.Customer_Type_Code = $('#Customer_Type_Code').val() || null;
+                    d.Customer_Group_Code = $('#Customer_Group_Code').val() || null;
+                    d.Population_Strata_2 = $('#Population_Strata_2').val() || null;
+                    d.Zone = $('#Zone_Code').val() || null;
+
+                    console.log("Sent Data with filters: ", d);
+                    return d;
+                },
+                dataSrc: function(json) {
+                    console.log("Received Response: ", json);
+
+                    $('#hiddenFieldsContainer').empty();
+                    $('#select-all').prop('checked', false);
+                    return json.data;
+                },
+                error: function(xhr, error, code) {
+                    console.error("Ajax Error: ", {
+                        xhr,
+                        error,
+                        code
+                    });
+                    alert(`Error loading data: ${xhr.responseText || error}`);
+                }
+            },
+
+            language: {
+                processing: '<img class="spin-image" src="<?php echo base_url("admin/assets/Bloom_2.gif"); ?>" alt="Loading...">', // Custom loader
+            },
+            columnDefs: [{
+                    targets: '_all',
+                    orderable: true
+                },
+                {
+                    className: 'text-center',
+                    targets: '_all'
+                },
+            ],
+
+            columns: [{
+                    title: '<input type="checkbox" id="select-all">',
+                    data: null,
+                    render: function(data) {
+
+                        let obj = {
+                            Customer_Code: data[2],
+                            Sales_Code: data[18],
+                            Distribution_Channel_Code: data[29],
+                            Division_Code: data[23],
+                            Customer_Type_Code: data[16],
+                            Customer_Group_Code: data[20]
+                        };
+
+                        return `<input type="checkbox" 
+                class="row-checkbox" 
+                data-id="${obj.Customer_Code || ''}" 
+                data-sales="${obj.Sales_Code || ''}" 
+                data-distribution="${obj.Distribution_Channel_Code || ''}" 
+                data-division="${obj.Division_Code || ''}" 
+                data-customer-type="${obj.Customer_Type_Code || ''}" 
+                data-customer-group="${obj.Customer_Group_Code || ''}">`;
+                    },
+                    orderable: false
+                },
+                {
+                    column: 'Customer_Name',
+                    title: 'Customer Name',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Customer_Code',
+                    title: 'Customer Code',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Pin_Code',
+                    title: 'Pin Code',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'City',
+                    title: 'City',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'District',
+                    title: 'District',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Contact_Number',
+                    title: 'Contact Number',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Country',
+                    title: 'Country',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Zone',
+                    title: 'Zone',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'State',
+                    title: 'State',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Population_Strata_1',
+                    title: 'Population Strata 1',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Population_Strata_2',
+                    title: 'Population Strata 2',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Country_Group',
+                    title: 'Country_Group',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'GTM_TYPE',
+                    title: 'GTM_TYPE',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'STATUS',
+                    title: 'Status',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Customer_Type_Name',
+                    title: 'Customer Type Name',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Sales_Name',
+                    title: 'Sales Name',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Customer_Group_Name',
+                    title: 'Customer Group Name',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Customer_Type_Code',
+                    title: 'Customer Type Code',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Sales_Name',
+                    title: ' Sales_Name',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Customer_Group_Name',
+                    title: 'Customer_Group_Name ',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Customer_Group_Code',
+                    title: 'Customer_Group_Code ',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Customer_Creation_Date',
+                    title: 'Customer_Creation_Date ',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Division_Name',
+                    title: 'Division Name',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Division_Code',
+                    title: 'Division Code',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Sector_Name',
+                    title: 'Sector Name',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Sector_Code',
+                    title: 'Sector Code',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'State_Code',
+                    title: 'State Code',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Zone_Code',
+                    title: 'Zone Code',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Distribution_Channel_Code',
+                    title: 'Distribution Channel Code',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Distribution_Channel_Name',
+                    title: 'Distribution Channel Name',
+                    defaultContent: 'N/A'
+                }
+            ]
+        });
+    });
+</script>
+
 <script>
     $(document).ready(function() {
 
@@ -564,8 +774,8 @@
                 searching: true,
                 info: true,
                 autoWidth: true,
-                pageLength: 10,
-                lengthMenu: [10, 25, 50, 100],
+                pageLength: 20,
+                lengthMenu: [20, 30, 50, 100],
                 scrollY: "350px",
                 scrollCollapse: true,
                 fixedHeader: true,
@@ -659,7 +869,6 @@
                                     escapeHtml(item.designation_name || 'N/A'),
                                     escapeHtml(item.email || 'N/A'),
 
-
                                 ]).draw();
                             });
 
@@ -694,11 +903,6 @@
                     table.row.add(['Error fetching data', '', '', '']).draw();
                 }
             });
-
-
-
-
-
             const nextSibling = $(this).next('ul');
             if (nextSibling.length > 0) {
                 nextSibling.toggleClass('active');
@@ -732,66 +936,12 @@
 <script>
     $(document).ready(function() {
 
-        function escapeHtml(unsafe) {
-            if (typeof unsafe !== 'string') return '';
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        if ($.fn.DataTable.isDataTable('#example')) {
-            $('#example').DataTable().clear().destroy();
-        }
-
-        var table = $('#example').DataTable({
-            paging: false,
-            searching: true,
-            info: false,
-            autoWidth: true,
-            scrollY: "550px",
-            scrollCollapse: true,
-            fixedHeader: true,
-            fixedFooter: true,
-            dom: '<"d-flex bd-highlight" id="om"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
-            buttons: [{
-                extend: 'excelHtml5',
-                text: '<i class="fa fa-download"></i> Download',
-                filename: 'User_Dist.Mapping',
-                titleAttr: 'Download as Excel',
-                exportOptions: {}
-            }]
-
-        });
-
-        $('.flex-grow-1').append(`
-        <label class="ml-2">
-            
-            <select id="pageLengthSelect" class="form-select form-control-sm " aria-label="Select Page Length">
-                <option value="10">10</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-            </select> 
-      
-        </label>
-    `);
-
-        $('#pageLengthSelect').on('change', function() {
-            var selectedLength = parseInt($(this).val(), 10);
-            if (!isNaN(selectedLength)) {
-                table.page.len(selectedLength).draw();
-                fetchDataAndUpdate(getParams());
-            }
-        });
-
         $(document).on('change', '.row-checkbox', function() {
             var distributorId = $(this).data('id');
             if ($(this).is(':checked')) {
                 // Add hidden input if checkbox is checked
                 $('<input>').attr({
-                    type: 'hidden',
+                    type: 'text',
                     id: 'hidden_' + distributorId,
                     name: 'distributors_code[]',
                     value: distributorId
@@ -822,143 +972,44 @@
         });
 
 
-        function addRowToTable(item) {
-            table.row.add([
-                `<input type="checkbox" class="row-checkbox" data-id="${item.Customer_Code}"data-id="${item.Sales_Code}"data-id="${item.Distribution_Channel_Code}"data-id="${item.Division_Code}"data-id="${item.Customer_Type_Code}" data-id="${item.Customer_Group_Code}">`,
-                escapeHtml(item.Customer_Name || 'N/A'),
-                escapeHtml(item.Customer_Code || 'N/A'),
-                escapeHtml(item.Pin_Code || 'N/A'),
-                escapeHtml(item.City || 'N/A'),
-                escapeHtml(item.District || 'N/A'),
-                escapeHtml(item.Contact_Number || 'N/A'),
-                escapeHtml(item.Country || 'N/A'),
-                escapeHtml(item.Zone || 'N/A'),
-                escapeHtml(item.State || 'N/A'),
-                escapeHtml(item.Population_Strata_1 || 'N/A'),
-                escapeHtml(item.Population_Strata_2 || 'N/A'),
-                // escapeHtml(item.Country_Group || 'N/A'),
-                escapeHtml(item.GTM_TYPE || 'N/A'),
-                escapeHtml(item.SUPERSTOCKIST || 'N/A'),
-                escapeHtml(item.STATUS || 'N/A'),
-                escapeHtml(item.Customer_Type_Name || 'N/A'),
-                // escapeHtml(item.Customer_Type_Code || 'N/A'),
-                escapeHtml(item.Sales_Name || 'N/A'),
-                // escapeHtml(item.Sales_Code || 'N/A'),
-                escapeHtml(item.Customer_Group_Name || 'N/A'),
-                // escapeHtml(item.Customer_Group_Code || 'N/A'),
-                escapeHtml(item.Customer_Creation_Date || 'N/A'),
-                escapeHtml(item.Division_Name || 'N/A'),
-                escapeHtml(item.Division_Code || 'N/A'),
-                escapeHtml(item.Sector_Name || 'N/A'),
-                escapeHtml(item.Sector_Code || 'N/A'),
-                // escapeHtml(item.State_Code || 'N/A'),
-                // escapeHtml(item.Zone_Code || 'N/A'),
-                escapeHtml(item.Distribution_Channel_Name || 'N/A'),
-                escapeHtml(item.Distribution_Channel_Code || 'N/A'),
-                escapeHtml(item.Level_1 || 'N/A'),
-                escapeHtml(item.Level_1_Name || 'N/A'),
-                escapeHtml(item.Level_1_employer_code || 'N/A'),
-                escapeHtml(item.Level_1_designation_name || 'N/A'),
-                `<div class="d-flex">
-                    <a href="<?= site_url('admin/hierarchyedit') ?>?id=${item.id}&customer_name=${encodeURIComponent(item.Customer_Name || 'N/A')}" class="btn btn-primary">
-                        <i class="fa-solid fa-pencil fa-fw"></i>
-                    </a>
-                    <a href="javascript:void(0);" data-id="${item.id}" class="delete-btn">
-                        <button class="btn btn-primary">
-                            <i class="fa-solid fa-trash fa-fw"></i>
-                        </button>
-                    </a>
-                </div>`
-            ]).draw();
-        }
 
-        function fetchData(url, params = {}) {
-            $('#loader').show();
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: params,
-                dataType: 'json',
-                success: function(response) {
-                    updatePagination(response.pagination);
-                    $('#loader').hide();
-                    table.clear();
-                    if (response && response.Distributor) {
-                        $.each(response.Distributor, function(index, item) {
-                            addRowToTable(item);
-                        });
-                    } else {
-                        table.row.add(['', '', '', '', '', 'no data', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                            '', '', '', '', '', '', '', '', '', '', '', '', '', ''
-                        ]).draw();
-                    }
 
-                },
+        // function fetchData(url, params = {}) {
+        //     $('#loader').show();
+        //     $.ajax({
+        //         url: url,
+        //         method: 'POST',
+        //         data: params,
+        //         dataType: 'json',
+        //         success: function(response) {
+        //             $('#loader').hide();
+        //             table.clear();
+        //             if (response && response.Distributor) {
+        //                 $.each(response.Distributor, function(index, item) {
+        //                     addRowToTable(item);
+        //                 });
+        //             } else {
+        //                 table.row.add(['', '', '', '', '', 'no data', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+        //                     '', '', '', '', '', '', '', '', '', '', '', '', '', ''
+        //                 ]).draw();
+        //             }
 
-                error: function() {
-                    $('#loader').hide();
-                    table.row.add(['An error occurred', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                        '', '', '', '', '', '', '', '', '', '', '', '', '', ''
-                    ]).draw();
-                }
-            });
-        }
+        //         },
+
+        //         error: function() {
+        //             $('#loader').hide();
+        //             table.row.add(['An error occurred', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+        //                 '', '', '', '', '', '', '', '', '', '', '', '', '', ''
+        //             ]).draw();
+        //         }
+        //     });
+        // }
 
 
 
-        function updatePagination(pagination) {
-            var paginationContainer = $('#customPagination');
-            paginationContainer.empty();
 
-            var startItem = (pagination.current_page - 1) * pagination.items_per_page + 1;
-            var endItem = Math.min(pagination.current_page * pagination.items_per_page, pagination.total_items);
-            $('#current_page_total_items_items_per_page').html(
-                `Showing ${startItem} to ${endItem} of ${pagination.total_items} entries`
-            );
 
-            var currentPage = parseInt(pagination.current_page);
-            var totalPages = parseInt(pagination.total_pages);
-            var maxVisiblePages = 4;
 
-            if (currentPage > 1) {
-                paginationContainer.append(
-                    '<li class="page-item"><a class="page-link" href="#" data-page="1">First</a></li>');
-                paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (
-                    currentPage - 1) + '">Previous</a></li>');
-            }
-
-            var startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-            var endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-            if (endPage - startPage < maxVisiblePages - 1) {
-                startPage = Math.max(1, endPage - maxVisiblePages + 1);
-            }
-
-            for (var i = startPage; i <= endPage; i++) {
-                var activeClass = (i === currentPage) ? 'active' : '';
-                paginationContainer.append('<li class="page-item ' + activeClass +
-                    '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
-            }
-
-            if (currentPage < totalPages) {
-                paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (
-                    currentPage + 1) + '">Next</a></li>');
-                paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' +
-                    totalPages + '">Last</a></li>');
-            }
-
-            $('#customPagination .page-link').on('click', function(e) {
-                e.preventDefault();
-                var page = $(this).data('page');
-                var params = getParams();
-                params.page = page;
-
-                fetchDataAndUpdate(params);
-            });
-        }
-
-         fetchData('<?= site_url('admin/mapingajex'); ?>');
-      
         function getParams() {
             return {
                 Sales_Code: $('#Sales_Code').val() || null,
@@ -967,9 +1018,8 @@
                 Customer_Type_Code: $('#Customer_Type_Code').val() || null,
                 Customer_Group_Code: $('#Customer_Group_Code').val() || null,
                 Population_Strata_2: $('#Population_Strata_2').val() || null,
-                Zone: $('#Zone').val() || null,
-                page: parseInt($('#currentPage').val(), 10) || 1,
-                items_per_page: parseInt($('#pageLengthSelect').val(), 10) || 10
+                Zone: $('#Zone_Code').val() || null,
+      
             };
         }
 
@@ -1108,12 +1158,11 @@
                 }
             });
             Zone_CodeGroupDropdown.selectpicker('refresh');
-            console.log("Unique Zone Data:", uniqueZone);
 
         }
 
 
-        function fetchDataAndUpdate__(params) {
+        function fetchDataAndUpdate(params) {
             $.ajax({
                 url: "<?= site_url('admin/get-hierarchy-filter-options') ?>",
                 type: "GET",
@@ -1122,7 +1171,7 @@
                     updateSalesCodeDropdown(response);
 
                     console.log(response);
-                    
+
 
                 },
                 error: function(error) {
@@ -1132,30 +1181,108 @@
         }
 
 
-        fetchDataAndUpdate__(getParams());
-        function commonChangeHandler(triggerElement, affectedElements) {
-            $(triggerElement).change(function() {
-                affectedElements.forEach(function(element) {
-                   // $(element).empty();
-                });
+        fetchDataAndUpdate(getParams());
 
-                $('#hiddenFieldsContainer').empty();
-                $('#select-all').prop('checked', false);
-                fetchDataAndUpdate(getParams());
-                $('#example').show();
+        $('#Sales_Code').change(function() {
+            $('#Distribution_Channel_Code').empty();
+            $('#Division_Code').empty();
+            $('#Customer_Type_Code').empty();
+            $('#Customer_Group_Code').empty();
+            $('#Population_Strata_2').empty();
+            $('#Zone_Code').empty();
 
-                console.log(getParams());
-                
-            });
-        }
+            fetchDataAndUpdate(getParams());
 
-        commonChangeHandler('#Sales_Code', ['#Distribution_Channel_Code', '#Division_Code', '#Customer_Type_Code', '#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
-        commonChangeHandler('#Distribution_Channel_Code', ['#Division_Code', '#Customer_Type_Code', '#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
-        commonChangeHandler('#Division_Code', ['#Customer_Type_Code', '#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
-        commonChangeHandler('#Customer_Type_Code', ['#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
-        commonChangeHandler('#Customer_Group_Code', ['#Population_Strata_2', '#Zone_Code']);
-        commonChangeHandler('#Population_Strata_2', ['#Zone_Code']);
-        commonChangeHandler('#Zone_Code', []);
+            $('#examplecsv').DataTable().ajax.reload();
+
+            $('#hiddenFieldsContainer').empty();
+            $('#select-all').prop('checked', false);
+
+        });
+
+        $('#Distribution_Channel_Code').change(function() {
+            $('#Division_Code').empty();
+            $('#Customer_Type_Code').empty();
+            $('#Customer_Group_Code').empty();
+            $('#Population_Strata_2').empty();
+            $('#Zone_Code').empty();
+            fetchDataAndUpdate(getParams());
+            $('#examplecsv').DataTable().ajax.reload();
+            $('#hiddenFieldsContainer').empty();
+            $('#select-all').prop('checked', false);
+
+        });
+
+        $('#Division_Code').change(function() {
+            $('#Customer_Type_Code').empty();
+            $('#Customer_Group_Code').empty();
+            $('#Population_Strata_2').empty();
+            $('#Zone_Code').empty();
+            fetchDataAndUpdate(getParams());
+            $('#examplecsv').DataTable().ajax.reload();
+            $('#hiddenFieldsContainer').empty();
+            $('#select-all').prop('checked', false);
+        });
+
+        $('#Customer_Type_Code').change(function() {
+            $('#Customer_Group_Code').empty();
+            $('#Population_Strata_2').empty();
+            $('#Zone_Code').empty();
+            fetchDataAndUpdate(getParams());
+            $('#examplecsv').DataTable().ajax.reload();
+            $('#hiddenFieldsContainer').empty();
+            $('#select-all').prop('checked', false);
+        });
+
+        $('#Customer_Group_Code').change(function() {
+            $('#Population_Strata_2').empty();
+            $('#Zone_Code').empty();
+            fetchDataAndUpdate(getParams());
+            $('#examplecsv').DataTable().ajax.reload();
+            $('#hiddenFieldsContainer').empty();
+            $('#select-all').prop('checked', false);
+        });
+
+        $('#Population_Strata_2').change(function() {
+            $('#Zone_Code').empty();
+            fetchDataAndUpdate(getParams());
+            $('#examplecsv').DataTable().ajax.reload();
+            $('#hiddenFieldsContainer').empty();
+            $('#select-all').prop('checked', false);
+        });
+
+        $('#Zone_Code').change(function() {
+            fetchDataAndUpdate(getParams());
+            $('#examplecsv').DataTable().ajax.reload();
+            $('#hiddenFieldsContainer').empty();
+            $('#select-all').prop('checked', false);
+        });
+
+
+
+        // function commonChangeHandler(triggerElement, affectedElements) {
+        //     $(triggerElement).change(function() {
+        //         affectedElements.forEach(function(element) {
+        //             // $(element).empty();
+        //         });
+
+        //         $('#hiddenFieldsContainer').empty();
+        //         $('#select-all').prop('checked', false);
+        //         fetchDataAndUpdate(getParams());
+        //         $('#examplecsv').show();
+
+        //         console.log(getParams());
+
+        //     });
+        // }
+
+        // commonChangeHandler('#Sales_Code', ['#Distribution_Channel_Code', '#Division_Code', '#Customer_Type_Code', '#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
+        // commonChangeHandler('#Distribution_Channel_Code', ['#Division_Code', '#Customer_Type_Code', '#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
+        // commonChangeHandler('#Division_Code', ['#Customer_Type_Code', '#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
+        // commonChangeHandler('#Customer_Type_Code', ['#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
+        // commonChangeHandler('#Customer_Group_Code', ['#Population_Strata_2', '#Zone_Code']);
+        // commonChangeHandler('#Population_Strata_2', ['#Zone_Code']);
+        // commonChangeHandler('#Zone_Code', []);
 
 
     });

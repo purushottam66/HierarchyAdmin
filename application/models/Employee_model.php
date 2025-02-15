@@ -63,20 +63,24 @@ class Employee_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_Employee_by_level($level)
+    public function get_Employee_by_level($level, $limit, $offset)
     {
-        $this->db->select('id, name, email, mobile, designation, level,pjp_code,employer_code,district,state,designation_name');
+        $this->db->select('id, name, email, mobile, designation, level, pjp_code, employer_code, district, state, designation_name');
         $this->db->from('employee');
         $this->db->where('level', $level);
+        $this->db->limit($limit, $offset);  // Pagination applied
         $query = $this->db->get();
-
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
-        } else {
-            return [];
-        }
+    
+        return $query->result_array();
     }
-
+    
+    // Get total count of employees for pagination
+    public function get_total_employees_by_level($level)
+    {
+        $this->db->where('level', $level);
+        return $this->db->count_all_results('employee');
+    }
+    
     public function get_employees_by_Emp_id($Emp_id)
     {
 

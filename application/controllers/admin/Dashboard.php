@@ -695,8 +695,6 @@ class Dashboard extends CI_Controller
 
     public function distributors_db()
     {
-
-
         $user_id = $this->session->userdata('back_user_id');
 
         if (!$user_id) {
@@ -718,28 +716,47 @@ class Dashboard extends CI_Controller
 
         $zone_ids = array_unique($zone_ids);
 
+        // Get basic DataTables parameters
         $draw = $this->input->post('draw');
         $start = $this->input->post('start');
         $length = $this->input->post('length');
         $search = $this->input->post('search');
         $order = $this->input->post('order');
 
+        // Get filter parameters
+        $filters = array(
+            'Sales_Code' => $this->input->post('Sales_Code'),
+            'Distribution_Channel_Code' => $this->input->post('Distribution_Channel_Code'),
+            'Division_Code' => $this->input->post('Division_Code'),
+            'Customer_Type_Code' => $this->input->post('Customer_Type_Code'),
+            'Customer_Group_Code' => $this->input->post('Customer_Group_Code'),
+            'Population_Strata_2' => $this->input->post('Population_Strata_2'),
+            'Zone' => $this->input->post('Zone')
+        );
+
+        // Remove null/empty values from filters
+        $filters = array_filter($filters, function($value) {
+            return $value !== null && $value !== '';
+        });
+
         // Fetch dynamic sortable columns
         $sortable_columns = $this->get_table_columns('distributors');
 
         // Extract sorting information
         if (isset($order[0])) {
-            $order_column_index = isset($order[0]['column']) ? $order[0]['column'] : 0; // Default to 0
-            $order_direction = isset($order[0]['dir']) ? $order[0]['dir'] : 'asc'; // Default to 'asc'
+            $order_column_index = isset($order[0]['column']) ? $order[0]['column'] : 0;
+            $order_direction = isset($order[0]['dir']) ? $order[0]['dir'] : 'asc';
         } else {
             $order_column_index = 0;
             $order_direction = 'asc';
         }
         $order_column = isset($sortable_columns[$order_column_index]) ? $sortable_columns[$order_column_index] : '';
 
-        $total_get_distributors = $this->Distributor_model->getTotal_distributors($search, $zone_ids);
+        // Get total records with filters
+        $total_get_distributors = $this->Distributor_model->getTotal_distributors($search, $zone_ids, $filters);
 
-        $distributors_s = $this->Distributor_model->get_distributors($start, $length, $search, $zone_ids, $order_column, $order_direction);
+        // Get filtered records
+        $distributors_s = $this->Distributor_model->get_distributors($start, $length, $search, $zone_ids, $order_column, $order_direction, $filters);
 
         $data = array();
         foreach ($distributors_s->result() as $AS_distributors) {
@@ -748,6 +765,8 @@ class Dashboard extends CI_Controller
                 $row[] = isset($AS_distributors->$column) ? $AS_distributors->$column : '';
             }
             $data[] = array(
+                $AS_distributors->id,
+
                 $AS_distributors->Customer_Name,
                 $AS_distributors->Customer_Code,
                 $AS_distributors->Pin_Code,
@@ -757,6 +776,7 @@ class Dashboard extends CI_Controller
                 $AS_distributors->Country,
                 $AS_distributors->Zone,
                 $AS_distributors->State,
+
                 $AS_distributors->Population_Strata_1,
                 $AS_distributors->Population_Strata_2,
                 $AS_distributors->Country_Group,
@@ -780,16 +800,14 @@ class Dashboard extends CI_Controller
                 $AS_distributors->Distribution_Channel_Name,
             );
         }
+
         $output = array(
             'draw' => $draw,
             'recordsTotal' => $total_get_distributors,
             'recordsFiltered' => $total_get_distributors,
             'data' => $data,
             'columns' => $sortable_columns
-
         );
-
-
 
         echo json_encode($output);
         exit();
@@ -1106,7 +1124,6 @@ class Dashboard extends CI_Controller
             $data['user'] = $this->Role_model->get_user_by_id($user_id);
             if ($data['user']) {
 
-                $role_id = $data['user']['role_id'];
                 $data['permissions'] = $this->Role_model->get_permissions_by_role($user_id);
             } else {
                 $data['permissions'] = [];
@@ -2138,34 +2155,48 @@ class Dashboard extends CI_Controller
 
 
 
-    public function replacedataajex()
-    {
-        $user_id = $this->session->userdata('back_user_id');
-        if (!$user_id) {
-            redirect('admin/login');
-        }
-        $pjp_code = $this->input->get('pjp_code') ?? null;
-        $level = $this->input->get('employee_level') ?? null;
 
-        // Retrieve distributor data based on pjp_code and level
-        if ($pjp_code && $level) {
-            $data['Distributor_data'] = $this->Maping_model->get_db_code_by_pjp_and_level($pjp_code, $level);
-        } else {
-            $data['Distributor_data'] = null;
-        }
-
-        // Retrieve user and permissions
-        $data['user'] = $this->Role_model->get_user_by_id($user_id);
-        $data['permissions'] = $data['user'] ? $this->Role_model->get_permissions_by_role($data['user']['role_id']) : [];
-
-        // Prepare response
-        $response = [
-            'Distributor_data' => $data['Distributor_data'],  // Corrected variable
-
-        ];
-
-        echo json_encode($response);
+  public function replacedataajex()
+{
+    $user_id = $this->session->userdata('back_user_id');
+    if (!$user_id) {
+        redirect('admin/login');
     }
+
+    $pjp_code = $this->input->get('pjp_code') ?? null;
+    $level = $this->input->get('employee_level') ?? null;
+    $search = $this->input->get('search') ?? ''; // Search keyword
+    $limit = $this->input->get('limit') ?? 10; // Default 10 records per page
+    $page = $this->input->get('page') ?? 1; // Default first page
+    $offset = ($page - 1) * $limit;
+
+
+    log_message('debug', 'Search Keyword: ' . $search);
+
+
+    if ($pjp_code && $level) {
+        $result = $this->Maping_model->get_db_code_by_pjp_and_level($pjp_code, $level, $limit, $offset, $search);
+        $total_records = $this->Maping_model->get_total_records($pjp_code, $level, $search); 
+        $common_records = $this->Maping_model->get_common_records($pjp_code, $level); // Get total records
+
+    } else {
+        $result = [];
+        $total_records = 0;
+    }
+
+    $response = [
+        'Distributor_data' => $result,
+        'common_records' => $common_records,
+
+        'total_records' => $total_records,
+        'limit' => $limit,
+        'page' => $page,
+        'total_pages' => ceil($total_records / $limit)
+    ];
+
+    echo json_encode($response);
+}
+
 
 
 

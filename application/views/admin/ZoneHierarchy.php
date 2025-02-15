@@ -176,7 +176,7 @@
                     <div class="box shadow-2dp b-r-2">
                         <div class="box-body row">
                             <div class="col-md-3 sidetree">
-                                <aside class="app-side mt-5">
+                                <aside class="app-side mt-1">
                                     <div class="side-content">
                                         <?php
                                         function render_tree($tree, $level = 1)
@@ -188,11 +188,11 @@
                                                 $level_label = "Level $level";
                                                 $level_value = htmlspecialchars($key);
 
-                                                $html .= "<li class='$level_class'>";
+                                                $html .= "<li class='$level_class' style='width: -webkit-fill-available;'>";
 
                                                 $is_last_level = ($level == 7);
 
-                                                $html .= "<a href='javascript:void(0);' class='nav-item test' data-id='" . $level_value . "' data-level='" . $level . "'>";
+                                                $html .= "<a href='javascript:void(0);' class='nav-item test' style='font-size: 9px;' data-id='" . $level_value . "' data-level='" . $level . "'>";
                                                 $html .= "<span class='nav-title'>" . htmlspecialchars($level_label . ": " . " (" . $subTree['name'] . ")") . "</span>";
 
                                                 if (!$is_last_level) {
@@ -213,9 +213,9 @@
                                             return $html;
                                         }
                                         ?>
-                                        <nav class="side-nav dmvertical-menu" id="ooooo">
+                                        <nav class="side-nav dmvertical-menu" id="ooooo" >
                                             <ul class="metismenu nav nav-inverse nav-bordered"
-                                                data-plugin="dashboardmenu">
+                                                data-plugin="dashboardmenu" style="margin-left: -14px;">
                                                 <?php echo render_tree($maping); ?>
                                             </ul>
                                         </nav>

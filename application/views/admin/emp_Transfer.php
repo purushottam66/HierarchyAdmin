@@ -242,7 +242,12 @@
 
                                     </table>
 
+                                    <div id="pagination"></div>
+
+
                                 </div>
+
+
 
 
 
@@ -353,7 +358,7 @@
 
                             <div class="card mt-3">
                                 <div class="table-responsive p-3">
-                                <h5 class="text-center">
+                                    <h5 class="text-center">
                                         Distributor List of : <span id="selectedEmployeeName"></span>
 
                                     </h5>
@@ -436,7 +441,6 @@
 
             const form = this; // Reference to the form element
 
-            // Show confirmation dialog
             swal({
                     title: "Are you sure?",
                     text: "Do you want to proceed with the form submission?",
@@ -445,15 +449,21 @@
                     confirmButtonColor: '#DD6B55',
                     confirmButtonText: 'Yes, submit it!',
                     cancelButtonText: 'No, cancel!',
-                    closeOnConfirm: false,
+                    closeOnConfirm: true,
                     closeOnCancel: true
                 },
                 function(isConfirm) {
                     if (isConfirm) {
-                        //swal.close(); // Close the SweetAlert dialog
-                        submitForm(form); // Call the submitForm function
+
+                        toastr.success("Form submission wait.");
+
+                        $("#loader").show();
+
+
+
+                        submitForm(form);
                     } else {
-                        toastr.info("Form submission canceled."); // Optional cancellation message
+                        toastr.info("Form submission canceled.");
                     }
                 });
 
@@ -601,7 +611,7 @@
 
             var selected_text = selectedOption.text();
 
-$('#addname3_text').html(selected_text);
+            $('#addname3_text').html(selected_text);
 
             var pjpCode = selectedOption.data('pjp_code');
             $('#selectedEmployeesselectedValue').val(pjpCode);
@@ -631,10 +641,10 @@ $('#addname3_text').html(selected_text);
                                 table.row.add([
                                     '<input type="radio" name="employeeSelect_emp" class="employee-radio" data-emp_City="' +
                                     employee.City + '" data-level="' +
-                                   
+
                                     employee.level + '" data-pjp_code="' +
 
-                            
+
                                     employee.pjp_code + '" data-id="' +
                                     employee.designation_name + '" data-designation_name="' +
                                     employee.id + '" data-name="' + escapeHtml(
@@ -651,7 +661,7 @@ $('#addname3_text').html(selected_text);
                             }
                         });
                     } else {
-                        table.row.add(['', '', '', '', '', '', '', '',"",
+                        table.row.add(['', '', '', '', '', '', '', '', "",
                             'No employees available'
                         ]).draw();
                     }
@@ -677,7 +687,7 @@ $('#addname3_text').html(selected_text);
                 //$('#selectedEmployees').val(selectedData.name);
                 $('#selectedEmployeeName').html(selectedEmployeeName);
                 let mydata = `${selectedData.name}  (${selectedData.id}) (${selectedData.emp_city}) (${selectedData.level})`;
-              $('#selectedEmployees').val(mydata);
+                $('#selectedEmployees').val(mydata);
 
 
 
@@ -758,7 +768,7 @@ $('#addname3_text').html(selected_text);
 
                                     const jsonData = JSON.stringify({
                                         DB_Code: item.Customer_Code || 'N/A',
-                                        
+
                                         Sales_Code: item.Sales_Code || 'N/A',
                                         Distribution_Channel_Code: item.Distribution_Channel_Code || 'N/A',
                                         Division_Code: item.Division_Code || 'N/A',
@@ -767,37 +777,37 @@ $('#addname3_text').html(selected_text);
                                     });
 
                                     table.row.add([
-                                        `<input type="checkbox" class="row-checkbox"  data-json='${escapeHtml(jsonData)}' checked>`,
+                                        `<input type="hidden" class="row-checkbox"  data-json='${escapeHtml(jsonData)}' checked>`,
                                         escapeHtml(item.Customer_Name || 'N/A'),
-                                escapeHtml(item.Customer_Code || 'N/A'),
-                                escapeHtml(item.Pin_Code || 'N/A'),
-                                escapeHtml(item.City || 'N/A'),
-                                escapeHtml(item.District || 'N/A'),
-                                escapeHtml(item.Contact_Number || 'N/A'),
-                                escapeHtml(item.Country || 'N/A'),
-                                escapeHtml(item.Zone || 'N/A'),
-                                escapeHtml(item.State || 'N/A'),
-                                escapeHtml(item.Population_Strata_1 || 'N/A'),
-                                escapeHtml(item.Population_Strata_2 || 'N/A'),
-                                escapeHtml(item.Country_Group || 'N/A'),
-                                escapeHtml(item.GTM_TYPE || 'N/A'),
-                                escapeHtml(item.SUPERSTOCKIST || 'N/A'),
-                                escapeHtml(item.STATUS || 'N/A'),
-                                escapeHtml(item.Customer_Type_Code || 'N/A'),
-                                escapeHtml(item.Sales_Code || 'N/A'),
-                                escapeHtml(item.Customer_Type_Name || 'N/A'),
-                                escapeHtml(item.Customer_Group_Code || 'N/A'),
-                                escapeHtml(item.Customer_Creation_Date || 'N/A'),
-                                escapeHtml(item.Division_Code || 'N/A'),
-                                escapeHtml(item.Sector_Code || 'N/A'),
-                                escapeHtml(item.State_Code || 'N/A'),
-                                escapeHtml(item.Zone_Code || 'N/A'),
-                                escapeHtml(item.Distribution_Channel_Code || 'N/A'),
-                                escapeHtml(item.Distribution_Channel_Name || 'N/A'),
-                                escapeHtml(item.Customer_Group_Name || 'N/A'),
-                                escapeHtml(item.Sales_Name || 'N/A'),
-                                escapeHtml(item.Division_Name || 'N/A'),
-                                escapeHtml(item.Sector_Name || 'N/A'),
+                                        escapeHtml(item.Customer_Code || 'N/A'),
+                                        escapeHtml(item.Pin_Code || 'N/A'),
+                                        escapeHtml(item.City || 'N/A'),
+                                        escapeHtml(item.District || 'N/A'),
+                                        escapeHtml(item.Contact_Number || 'N/A'),
+                                        escapeHtml(item.Country || 'N/A'),
+                                        escapeHtml(item.Zone || 'N/A'),
+                                        escapeHtml(item.State || 'N/A'),
+                                        escapeHtml(item.Population_Strata_1 || 'N/A'),
+                                        escapeHtml(item.Population_Strata_2 || 'N/A'),
+                                        escapeHtml(item.Country_Group || 'N/A'),
+                                        escapeHtml(item.GTM_TYPE || 'N/A'),
+                                        escapeHtml(item.SUPERSTOCKIST || 'N/A'),
+                                        escapeHtml(item.STATUS || 'N/A'),
+                                        escapeHtml(item.Customer_Type_Code || 'N/A'),
+                                        escapeHtml(item.Sales_Code || 'N/A'),
+                                        escapeHtml(item.Customer_Type_Name || 'N/A'),
+                                        escapeHtml(item.Customer_Group_Code || 'N/A'),
+                                        escapeHtml(item.Customer_Creation_Date || 'N/A'),
+                                        escapeHtml(item.Division_Code || 'N/A'),
+                                        escapeHtml(item.Sector_Code || 'N/A'),
+                                        escapeHtml(item.State_Code || 'N/A'),
+                                        escapeHtml(item.Zone_Code || 'N/A'),
+                                        escapeHtml(item.Distribution_Channel_Code || 'N/A'),
+                                        escapeHtml(item.Distribution_Channel_Name || 'N/A'),
+                                        escapeHtml(item.Customer_Group_Name || 'N/A'),
+                                        escapeHtml(item.Sales_Name || 'N/A'),
+                                        escapeHtml(item.Division_Name || 'N/A'),
+                                        escapeHtml(item.Sector_Name || 'N/A'),
                                     ]).draw();
 
                                     $('<input>').attr({
@@ -810,7 +820,7 @@ $('#addname3_text').html(selected_text);
                             } else {
 
                                 $('#vacant-container').hide()
-                                table.row.add(['', '', '', 'No data found', '', '', '','', '', '', 'No data found', '', '', '','', '', '', 'No data found', '', '', '','', '', '', 'No data found', '', '', '','', '', '', 'No data found', '', '']).draw();
+                                table.row.add(['', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '']).draw();
                             }
 
                         } else {
@@ -1044,26 +1054,21 @@ $('#addname3_text').html(selected_text);
             $('#exampley').DataTable().clear().destroy();
         }
 
-        var table = $('#exampley').DataTable({
-            paging: true,
+        window.datatable = $('#exampley').DataTable({
+            paging: false,
             searching: true,
-            info: true,
+            info: false,
             autoWidth: true,
             pageLength: 10,
             lengthMenu: [10, 25, 50, 100],
-            scrollY: "350px",
+            scrollY: "550px",
             scrollCollapse: true,
             fixedHeader: true,
             fixedFooter: true,
-
-            columnDefs: [{
-                orderable: false,
-                targets: [0]
-            }]
         });
 
 
-        function fetchData(url, params = {}) {
+        window.fetchData = function(url, params = {}) {
             $('#loader').show();
             $.ajax({
                 url: url,
@@ -1072,7 +1077,32 @@ $('#addname3_text').html(selected_text);
                 dataType: 'json',
                 success: function(response) {
                     $('#loader').hide();
-                    table.clear();
+                    updatePagination(response);
+                    window.datatable.clear();
+
+                    // Assuming response.common_records is an array
+                    response.common_records.forEach(item => {
+                        const jsonData = JSON.stringify({
+                            Customer_Code: item.Customer_Code || 'N/A',
+                            Sales_Code: item.Sales_Code || 'N/A',
+                            Distribution_Channel_Code: item.Distribution_Channel_Code || 'N/A',
+                            Division_Code: item.Division_Code || 'N/A',
+                            Customer_Type_Code: item.Customer_Type_Code || 'N/A',
+                            Customer_Group_Code: item.Customer_Group_Code || 'N/A',
+                            distributors_id: item.distributors_id || 'N/A'
+                        });
+
+                        // Create hidden input elements dynamically and append them to the container
+                        $('<input>').attr({
+                            type: 'hidden', // Changed to 'hidden' to hide the input
+                            id: 'hidden_' + item.Customer_Code,
+                            name: 'DB_Code[]',
+                            style: 'width: 1200px !important;',
+                            value: jsonData // Set the JSON data as the value
+                        }).appendTo('#hiddenFieldsContainer'); // Append to the container
+                    });
+
+
                     if (response && response.Distributor_data) {
                         $.each(response.Distributor_data, function(index, item) {
 
@@ -1086,7 +1116,7 @@ $('#addname3_text').html(selected_text);
                                 distributors_id: item.distributors_id || 'N/A'
                             });
 
-                            table.row.add([
+                            window.datatable.row.add([
                                 `<input type="hidden" class="row-checkbox"
                                 data-id="${item.Customer_Code}" 
                                 data-Sales_Code="${escapeHtml(item.Sales_Code)}" 
@@ -1144,17 +1174,11 @@ $('#addname3_text').html(selected_text);
                             ]).draw();
 
 
-                            $('<input>').attr({
-                                type: 'hidden',
-                                id: 'hidden_' + item.Customer_Code,
-                                name: 'DB_Code[]',
-                                style: 'width: 1200px !important;',
-                                value: jsonData // Set JSON as value
-                            }).appendTo('#hiddenFieldsContainer');
+
 
                         });
                     } else {
-                        table.row.add(['No data found', '', '', '', '', '', '', '', '', '', '', '', '',
+                        window.datatable.row.add(['No data found', '', '', '', '', '', '', '', '', '', '', '', '',
                             '', '', '', '', '', '', '', '', '', '', '', '', '', ''
                         ]).draw();
                     }
@@ -1162,7 +1186,7 @@ $('#addname3_text').html(selected_text);
                 },
                 error: function() {
                     $('#loader').hide();
-                    table.row.add(['An error occurred', '', '', '', '', '', '', '', '', '', '', '', '',
+                    window.datatable.row.add(['An error occurred', '', '', '', '', '', '', '', '', '', '', '', '',
                         '', '', '', '', '', '', '', '', '', '', '', '', '', ''
                     ]).draw();
                 }
@@ -1171,26 +1195,146 @@ $('#addname3_text').html(selected_text);
 
 
 
-        function getParams() {
+        // function getParams() {
 
+        //     var selectedOption = $('#level option:selected');
+        //     var dataId = selectedOption.data('pjp_code');
+        //     return {
+        //         employee_level: selectedOption.val() || null,
+        //         pjp_code: dataId || null
+        //     };
+        // }
+        window.datatable.on('page.dt', function() {
+            var info = window.datatable.page.info();
+            var params = getParams();
+            params.page = info.page + 1;
+            params.limit = window.datatable.page.len();
+            fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
+        });
+
+        window.getParams = function() {
             var selectedOption = $('#level option:selected');
-            var dataId = selectedOption.data('pjp_code');
+            var searchValue = $('#dt-search-1').val() || '';
             return {
                 employee_level: selectedOption.val() || null,
-
-                pjp_code: dataId || null
+                pjp_code: selectedOption.data('pjp_code') || null,
+                City: selectedOption.data('city') || null,
+                search: searchValue,
+                page: 1 // Reset to first page on search
             };
         }
 
 
+        function updatePagination(response) {
+            console.log("updatePagination", response);
+            var currentPage = parseInt(response.page);
+            var totalPages = parseInt(response.total_pages);
+            var totalRecords = parseInt(response.total_records);
+            var limit = parseInt(response.limit);
+            var paginationHtml = '';
+
+            // Calculate current range
+            var start = ((currentPage - 1) * limit) + 1;
+            var end = Math.min(start + limit - 1, totalRecords);
+
+            // Add entries info and total records count
+            paginationHtml += '<div class="d-flex align-items-center justify-content-between mb-2">';
+            paginationHtml += '<div class="pagination-info">';
+            paginationHtml += 'Showing ' + start + ' to ' + end + ' of ' + totalRecords + ' entries';
+            paginationHtml += '</div>';
+
+            if (totalPages > 1) {
+                paginationHtml += '<ul class="pagination mb-0">';
+
+                // Previous Button
+                if (currentPage > 1) {
+                    paginationHtml += '<li class="page-item"><a class="page-link prev-page" href="#" data-page="1">First</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link prev-page" href="#" data-page="' + (currentPage - 1) + '">Previous</a></li>';
+                }
+
+                // Calculate page range to show exactly 5 numbers
+                var startPage, endPage;
+                if (totalPages <= 5) {
+                    startPage = 1;
+                    endPage = totalPages;
+                } else {
+                    if (currentPage <= 3) {
+                        startPage = 1;
+                        endPage = 5;
+                    } else if (currentPage + 2 >= totalPages) {
+                        startPage = totalPages - 4;
+                        endPage = totalPages;
+                    } else {
+                        startPage = currentPage - 2;
+                        endPage = currentPage + 2;
+                    }
+                }
+
+                // Add page numbers
+                for (var i = startPage; i <= endPage; i++) {
+                    if (i === currentPage) {
+                        paginationHtml += '<li class="page-item active"><a class="page-link" href="#">' + i + '</a></li>';
+                    } else {
+                        paginationHtml += '<li class="page-item"><a class="page-link page-number" href="#" data-page="' + i + '">' + i + '</a></li>';
+                    }
+                }
+
+                // Next Button
+                if (currentPage < totalPages) {
+                    paginationHtml += '<li class="page-item"><a class="page-link next-page" href="#" data-page="' + (currentPage + 1) + '">Next</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link next-page" href="#" data-page="' + totalPages + '">Last</a></li>';
+                }
+
+                paginationHtml += '</ul>';
+            }
+            paginationHtml += '</div>';
+
+            $('#pagination').html(paginationHtml);
+
+            // Add click handlers
+            $('.page-number, .prev-page, .next-page').on('click', function(e) {
+                e.preventDefault();
+                var pageNumber = $(this).data('page');
+                changePage(pageNumber);
+            });
+        }
+
+        function changePage(pageNumber) {
+            if (window.datatable) {
+                var params = getParams();
+                params.page = pageNumber;
+                params.limit = window.datatable.page.len();
+                fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
+            }
+        }
+
+
         function fetchDataAndUpdate() {
-            table.clear().draw();
+            window.datatable.clear().draw();
             var params = getParams();
             fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
         }
+
+
         $('#level').change(function() {
             $('#Target_DBS').empty();
             fetchDataAndUpdate();
+        });
+
+
+
+        $("#dt-search-1").keyup(function() {
+            var searchValue = $(this).val();
+            console.log('Search Value:', searchValue);
+
+            // Get all parameters and update search
+            var params = getParams();
+
+            // Debounce the search to avoid too many requests
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(function() {
+                fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
+            }, 500); // Wait 500ms after user stops typing
         });
 
     });
