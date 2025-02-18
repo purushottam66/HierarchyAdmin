@@ -137,7 +137,7 @@
 
 
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group p-b-10 ">
                                             <label for="customer-group-code-filter">Replace with Employee
                                                 :</label>
@@ -153,7 +153,7 @@
 
 
 
-                                    <div class="col-md-3" id="vacant-container">
+                                    <div class="col-md-4" id="vacant-container">
                                         <div class="form-group p-b-10">
                                             <label for="Vacant" id="v_cent">:</label>
                                             <select class="selectpicker form-control" data-actions-box="true"
@@ -290,6 +290,10 @@
 
                                     </table>
 
+
+                                    <div id="updatePagination_Replace"></div>
+
+
                                 </div>
 
                             </div>
@@ -358,6 +362,13 @@
                                         </tbody>
 
                                     </table>
+
+
+
+                                    <div class="id" id="pagination_emp">
+
+
+                                    </div>
 
                                 </div>
                             </div>
@@ -508,9 +519,9 @@
 
 
         var table = $('#employeeTable').DataTable({
-            paging: true,
+            paging: false,
             searching: true,
-            info: true,
+            info: false,
             autoWidth: true,
             pageLength: 10,
             lengthMenu: [10, 25, 50, 100],
@@ -518,10 +529,6 @@
             scrollCollapse: true,
             fixedHeader: true,
             fixedFooter: true,
-            columnDefs: [{
-                orderable: false,
-                targets: [0]
-            }]
         });
 
 
@@ -562,6 +569,18 @@
             var pjpCode = selectedOption.data('pjp_code');
             $('#selectedEmployeesselectedValue').val(pjpCode);
 
+            fetchEmployees(selectedValue, pjpCode, 1); // Default Page 1 पर लोड करें
+
+        });
+
+
+
+
+
+        function fetchEmployees(selectedValue, pjpCode, pageNumber) {
+
+
+
             $.ajax({
                 url: '<?= site_url('admin/empreplace_level'); ?>',
                 type: 'POST',
@@ -574,6 +593,7 @@
                     var response = JSON.parse(response);
                     empresponse = response;
                     table.clear();
+                    updatePagination_Replace(response);
 
                     if (response.employees_level_Promoted && response.employees_level_Promoted.length > 0) {
                         $.each(response.employees_level_Promoted, function(index, employee) {
@@ -613,42 +633,143 @@
                     console.error('Error:', error);
                 }
             });
-        });
+
+        }
+
+
+
+
+
+
+        function updatePagination_Replace(response) {
+            console.log("updatePagination", response);
+            var currentPage = parseInt(response.page);
+            var totalPages = parseInt(response.total_pages);
+            var totalRecords = parseInt(response.total_records);
+            var limit = parseInt(response.limit);
+            var paginationHtml = '';
+
+            var start = ((currentPage - 1) * limit) + 1;
+            var end = Math.min(start + limit - 1, totalRecords);
+
+            paginationHtml += '<div class="d-flex align-items-center justify-content-between mb-2">';
+            paginationHtml += '<div class="pagination-info">';
+            paginationHtml += 'Showing ' + start + ' to ' + end + ' of ' + totalRecords + ' entries';
+            paginationHtml += '</div>';
+
+            if (totalPages > 1) {
+                paginationHtml += '<ul class="pagination mb-0">';
+
+                if (currentPage > 1) {
+                    paginationHtml += '<li class="page-item"><a class="page-link prev-page__2" href="#" data-page="1">First</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link prev-page__2" href="#" data-page="' + (currentPage - 1) + '">Previous</a></li>';
+                }
+
+                var startPage, endPage;
+                if (totalPages <= 5) {
+                    startPage = 1;
+                    endPage = totalPages;
+                } else {
+                    if (currentPage <= 3) {
+                        startPage = 1;
+                        endPage = 5;
+                    } else if (currentPage + 2 >= totalPages) {
+                        startPage = totalPages - 4;
+                        endPage = totalPages;
+                    } else {
+                        startPage = currentPage - 2;
+                        endPage = currentPage + 2;
+                    }
+                }
+
+                for (var i = startPage; i <= endPage; i++) {
+                    if (i === currentPage) {
+                        paginationHtml += '<li class="page-item active"><a class="page-link" href="#">' + i + '</a></li>';
+                    } else {
+                        paginationHtml += '<li class="page-item"><a class="page-link page-number__2" href="#" data-page="' + i + '">' + i + '</a></li>';
+                    }
+                }
+
+                if (currentPage < totalPages) {
+                    paginationHtml += '<li class="page-item"><a class="page-link next-page__2" href="#" data-page="' + (currentPage + 1) + '">Next</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link next-page__2" href="#" data-page="' + totalPages + '">Last</a></li>';
+                }
+
+                paginationHtml += '</ul>';
+            }
+            paginationHtml += '</div>';
+
+            $('#updatePagination_Replace').html(paginationHtml);
+
+            $('.page-number__2, .prev-page__2, .next-page__2').off('click').on('click', function(e) {
+                e.preventDefault();
+                var pageNumber = $(this).data('page');
+                fetchEmployees($('#level').val(), $('#selectedEmployeesselectedValue').val(), pageNumber);
+            });
+        }
+
+        function escapeHtml(text) {
+            return $('<div/>').text(text).html();
+        }
 
         function addRadioEventListeners() {
             $('.employee-radio').on('change', function() {
+                var selectedName = $(this).data('name');
+                var selectedID = $(this).data('id');
+                console.log("Selected Employee:", selectedName, selectedID);
+            });
+        }
+
+
+
+
+
+
+
+
+
+        function addRadioEventListeners() {
+            let selectedLevel;
+            let selectedPjpCode;
+
+            $('.employee-radio').on('change', function() {
                 var selectedData = $(this).data();
-                selectedEmployeeName = selectedData.name;
-                selectedEmployeepjp_code = selectedData.pjp_code;
-                //  $('#selectedEmployees').val(selectedData.name);
-                $('#selectedEmployeeName').html(selectedEmployeeName);
+                selectedLevel = selectedData.level;
+                selectedPjpCode = selectedData.pjp_code;
+
+                var city__ = $(this).attr('data-emp_city');
+                var level = $(this).attr('data-level');
+                var pjpCode = $(this).attr('data-pjp_code');
+                var id = $(this).attr('data-id');
+                var designationName = $(this).attr('data-designation_name');
+                var name = $(this).attr('data-name');
+
                 let mydata = `${selectedData.name}  (${selectedData.id}) (${selectedData.emp_city}) (${selectedData.level})`;
                 $('#selectedEmployees').val(mydata);
 
-
+                selectedEmployeeName = selectedData.name;
+                selectedEmployeepjp_code = selectedData.pjp_code;
+                $('#selectedEmployeeName').html(selectedEmployeeName);
 
                 $('#v_cent').html("Replacement User for - " + selectedData.name);
 
                 $('#selectedEmployeespjp_code').val(selectedData.pjp_code);
-
-
                 let city = selectedData.emp_city
                 if (city === left_emp_city) {
                     console.log("City matches!");
                     $('#vacant-container').hide()
-
                 } else {
                     console.log("City does not match.");
-                    //  $('#vacant-container').show()
-
                 }
+
                 if ($.fn.DataTable.isDataTable('#employeedb')) {
                     $('#employeedb').DataTable().clear().destroy();
                 }
+
                 var table = $('#employeedb').DataTable({
-                    paging: true,
-                    searching: true,
-                    info: true,
+                    paging: false,
+                    searching: false,
+                    info: false,
                     autoWidth: true,
                     pageLength: 10,
                     lengthMenu: [10, 25, 50, 100],
@@ -656,117 +777,215 @@
                     scrollCollapse: true,
                     fixedHeader: true,
                     fixedFooter: true,
-                    columnDefs: [{
-                        orderable: false,
-                        targets: [0]
-                    }]
                 });
-                $.ajax({
-                    url: '<?= site_url('admin/pjp_code_emp_Left'); ?>',
-                    type: 'POST',
-                    data: {
-                        level: selectedData.level,
-                        pjp_code: selectedData.pjp_code
-                    },
-                    success: function(response) {
-                        if (response) {
-                            var response = JSON.parse(response);
 
-                            $('#Vacant').empty();
-                            $('#Vacant').append('<option selected>Select</option>');
+                // Load initial data with page 1
+                loadTableData(1);
 
-                            if (empresponse.employees_level_Promoted && empresponse.employees_level_Promoted.length > 0) {
-                                $.each(empresponse.employees_level_Promoted, function(index, employee) {
-                                    if (employee.vacant_status == 1 || employee.pjp_code === selectedEmployeepjp_code) {
-                                        let option = '<option value="' + escapeHtml(employee.pjp_code) + '" data-id="' + escapeHtml(employee.level) + '">' +
-                                            escapeHtml(employee.name) + ' (Level: ' + escapeHtml(employee.level) + ')</option>';
-                                        $('#Vacant').append(option);
-                                    }
-                                });
+                function loadTableData(page) {
+                    $.ajax({
+                        url: '<?= site_url('admin/pjp_code_emp_Left'); ?>',
+                        type: 'POST',
+                        data: {
+                            level: selectedLevel,
+                            pjp_code: selectedPjpCode,
+                            page: page,
+                            limit: 20
+                        },
+                        success: function(response) {
+                            if (response) {
+                                var response = JSON.parse(response);
+                                console.log("response", response);
 
-                                if ($('#Vacant option').length === 1) {
-                                    $('#Vacant').append('<option value="N/A">No employees available</option>');
-                                }
-                            } else {
-                                $('#Vacant').append('<option value="N/A">No employees available</option>');
-                            }
+                                let pagination = response.pagination;
+                                updatePagination_emp(pagination);
 
-                            $('#Vacant').selectpicker('refresh');
-                            $('#hiddenDB_Code').empty();
-                            table.clear();
-                            if (response && response.pjp_codes && response.pjp_codes.length >
-                                0) {
+                                $('#Vacant').empty();
+                                $('#Vacant').append('<option selected>Select</option>');
 
-                                $('#vacant-container').show()
-                                $.each(response.pjp_codes, function(index, item) {
-
-                                    const jsonData = JSON.stringify({
-                                        DB_Code: item.Customer_Code || 'N/A',
-                                        Sales_Code: item.Sales_Code || 'N/A',
-                                        Distribution_Channel_Code: item.Distribution_Channel_Code || 'N/A',
-                                        Division_Code: item.Division_Code || 'N/A',
-                                        Customer_Type_Code: item.Customer_Type_Code || 'N/A',
-                                        Customer_Group_Code: item.Customer_Group_Code || 'N/A',
+                                if (empresponse.employees && empresponse.employees.length > 0) {
+                                    $.each(empresponse.employees, function(index, employee) {
+                                        if (employee.vacant_status == 1 || employee.pjp_code === selectedEmployeepjp_code) {
+                                            let option = '<option value="' + escapeHtml(employee.pjp_code) + '" data-id="' + escapeHtml(employee.level) + '">' +
+                                                escapeHtml(employee.name) + ' (Level: ' + escapeHtml(employee.level) + ')</option>';
+                                            $('#Vacant').append(option);
+                                        }
                                     });
 
-                                    table.row.add([
-                                        `<input type="hidden" class="row-checkbox" data-json='${escapeHtml(jsonData)}' checked>`,
-                                        escapeHtml(item.Customer_Name || 'N/A'),
-                                        escapeHtml(item.Customer_Code || 'N/A'),
-                                        escapeHtml(item.Pin_Code || 'N/A'),
-                                        escapeHtml(item.City || 'N/A'),
-                                        escapeHtml(item.District || 'N/A'),
-                                        escapeHtml(item.Contact_Number || 'N/A'),
-                                        escapeHtml(item.Country || 'N/A'),
-                                        escapeHtml(item.Zone || 'N/A'),
-                                        escapeHtml(item.State || 'N/A'),
-                                        escapeHtml(item.Population_Strata_1 || 'N/A'),
-                                        escapeHtml(item.Population_Strata_2 || 'N/A'),
-                                        escapeHtml(item.Country_Group || 'N/A'),
-                                        escapeHtml(item.GTM_TYPE || 'N/A'),
-                                        escapeHtml(item.SUPERSTOCKIST || 'N/A'),
-                                        escapeHtml(item.STATUS || 'N/A'),
-                                        escapeHtml(item.Customer_Type_Code || 'N/A'),
-                                        escapeHtml(item.Sales_Code || 'N/A'),
-                                        escapeHtml(item.Customer_Type_Name || 'N/A'),
-                                        escapeHtml(item.Customer_Group_Code || 'N/A'),
-                                        escapeHtml(item.Customer_Creation_Date || 'N/A'),
-                                        escapeHtml(item.Division_Code || 'N/A'),
-                                        escapeHtml(item.Sector_Code || 'N/A'),
-                                        escapeHtml(item.State_Code || 'N/A'),
-                                        escapeHtml(item.Zone_Code || 'N/A'),
-                                        escapeHtml(item.Distribution_Channel_Code || 'N/A'),
-                                        escapeHtml(item.Distribution_Channel_Name || 'N/A'),
-                                        escapeHtml(item.Customer_Group_Name || 'N/A'),
-                                        escapeHtml(item.Sales_Name || 'N/A'),
-                                        escapeHtml(item.Division_Name || 'N/A'),
-                                        escapeHtml(item.Sector_Name || 'N/A'),
-                                    ]).draw();
+                                    if ($('#Vacant option').length === 1) {
+                                        $('#Vacant').append('<option value="N/A">No employees available</option>');
+                                    }
+                                } else {
+                                    $('#Vacant').append('<option value="N/A">No employees available</option>');
+                                }
 
-                                    $('<input>').attr({
-                                        type: 'hidden',
-                                        id: 'hidden_' + item.DB_Code,
-                                        name: 'Replace_DB_Code[]',
-                                        value: jsonData
-                                    }).appendTo('#hiddenDB_Code');
-                                });
+                                $('#Vacant').selectpicker('refresh');
+
+                                $('#hiddenDB_Code').empty();
+                                table.clear();
+
+                                if (response && response.data && response.data.length > 0) {
+                                    $('#vacant-container').show();
+
+                                    $.each(response.data, function(index, item) {
+                                        const jsonData = JSON.stringify({
+                                            DB_Code: item.Customer_Code || 'N/A',
+                                            Sales_Code: item.Sales_Code || 'N/A',
+                                            Distribution_Channel_Code: item.Distribution_Channel_Code || 'N/A',
+                                            Division_Code: item.Division_Code || 'N/A',
+                                            Customer_Type_Code: item.Customer_Type_Code || 'N/A',
+                                            Customer_Group_Code: item.Customer_Group_Code || 'N/A'
+                                        });
+
+                                        table.row.add([
+                                            `<input type="hidden" class="row-checkbox" data-json='${escapeHtml(jsonData)}' checked>`,
+                                            escapeHtml(item.Customer_Name || 'N/A'),
+                                            escapeHtml(item.Customer_Code || 'N/A'),
+                                            escapeHtml(item.Pin_Code || 'N/A'),
+                                            escapeHtml(item.City || 'N/A'),
+                                            escapeHtml(item.District || 'N/A'),
+                                            escapeHtml(item.Contact_Number || 'N/A'),
+                                            escapeHtml(item.Country || 'N/A'),
+                                            escapeHtml(item.Zone || 'N/A'),
+                                            escapeHtml(item.State || 'N/A'),
+                                            escapeHtml(item.Population_Strata_1 || 'N/A'),
+                                            escapeHtml(item.Population_Strata_2 || 'N/A'),
+                                            escapeHtml(item.Country_Group || 'N/A'),
+                                            escapeHtml(item.GTM_TYPE || 'N/A'),
+                                            escapeHtml(item.SUPERSTOCKIST || 'N/A'),
+                                            escapeHtml(item.STATUS || 'N/A'),
+                                            escapeHtml(item.Customer_Type_Code || 'N/A'),
+                                            escapeHtml(item.Sales_Code || 'N/A'),
+                                            escapeHtml(item.Customer_Type_Name || 'N/A'),
+                                            escapeHtml(item.Customer_Group_Code || 'N/A'),
+                                            escapeHtml(item.Customer_Creation_Date || 'N/A'),
+                                            escapeHtml(item.Division_Code || 'N/A'),
+                                            escapeHtml(item.Sector_Code || 'N/A'),
+                                            escapeHtml(item.State_Code || 'N/A'),
+                                            escapeHtml(item.Zone_Code || 'N/A'),
+                                            escapeHtml(item.Distribution_Channel_Code || 'N/A'),
+                                            escapeHtml(item.Distribution_Channel_Name || 'N/A'),
+                                            escapeHtml(item.Customer_Group_Name || 'N/A'),
+                                            escapeHtml(item.Sales_Name || 'N/A'),
+                                            escapeHtml(item.Division_Name || 'N/A'),
+                                            escapeHtml(item.Sector_Name || 'N/A'),
+                                        ]).draw();
+
+                                        $('<input>').attr({
+                                            type: 'hidden',
+                                            id: 'hidden_' + item.Customer_Code,
+                                            name: 'DB_Code[]',
+                                            style: 'width: 1200px !important;',
+                                            value: jsonData
+                                        }).appendTo('#hiddenDB_Code');
+                                    });
+                                } else {
+                                    $('#vacant-container').hide();
+                                    table.row.add(['', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '']).draw();
+                                }
                             } else {
-                                $('#vacant-container').hide()
-                                table.row.add(['', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '', '', '', '', '', 'No data found', '', '']).draw();
+                                console.log("PJP Code does not exist at this level.");
                             }
-
-                        } else {
-                            console.log("PJP Code does not exist at this level.");
+                        },
+                        error: function() {
+                            console.log("Error occurred during AJAX call.");
                         }
-                    },
-                    error: function() {
-                        console.log("Error occurred during AJAX call.");
-                    }
-                });
+                    });
+                }
 
+                function updatePagination_emp(response) {
+                    console.log("updatePagination", response);
+                    var currentPage = parseInt(response.page);
+                    var totalPages = parseInt(response.total_pages);
+                    var totalRecords = parseInt(response.total);
+                    var limit = parseInt(response.limit);
+                    var paginationHtml = '';
+
+                    // Calculate current range
+                    var start = ((currentPage - 1) * limit) + 1;
+                    var end = Math.min(start + limit - 1, totalRecords);
+
+                    // Add entries info and total records count
+                    paginationHtml += '<div class="d-flex align-items-center justify-content-between mb-2">';
+                    paginationHtml += '<div class="pagination-info">';
+                    paginationHtml += 'Showing ' + start + ' to ' + end + ' of ' + totalRecords + ' entries';
+                    paginationHtml += '</div>';
+
+                    if (totalPages > 1) {
+                        paginationHtml += '<ul class="pagination mb-0">';
+
+                        // Previous Button
+                        if (currentPage > 1) {
+                            paginationHtml += '<li class="page-item"><a class="page-link prev-page__1" href="#" data-page="1">First</a></li>';
+                            paginationHtml += '<li class="page-item"><a class="page-link prev-page__1" href="#" data-page="' + (currentPage - 1) + '">Previous</a></li>';
+                        }
+
+                        // Calculate page range to show exactly 5 numbers
+                        var startPage, endPage;
+                        if (totalPages <= 5) {
+                            startPage = 1;
+                            endPage = totalPages;
+                        } else {
+                            if (currentPage <= 3) {
+                                startPage = 1;
+                                endPage = 5;
+                            } else if (currentPage + 2 >= totalPages) {
+                                startPage = totalPages - 4;
+                                endPage = totalPages;
+                            } else {
+                                startPage = currentPage - 2;
+                                endPage = currentPage + 2;
+                            }
+                        }
+
+                        // Add page numbers
+                        for (var i = startPage; i <= endPage; i++) {
+                            if (i === currentPage) {
+                                paginationHtml += '<li class="page-item active"><a class="page-link" href="#">' + i + '</a></li>';
+                            } else {
+                                paginationHtml += '<li class="page-item"><a class="page-link page-numbe__1r" href="#" data-page="' + i + '">' + i + '</a></li>';
+                            }
+                        }
+
+                        // Next Button
+                        if (currentPage < totalPages) {
+                            paginationHtml += '<li class="page-item"><a class="page-link next-page__1" href="#" data-page="' + (currentPage + 1) + '">Next</a></li>';
+                            paginationHtml += '<li class="page-item"><a class="page-link next-page__1" href="#" data-page="' + totalPages + '">Last</a></li>';
+                        }
+
+                        paginationHtml += '</ul>';
+                    }
+                    paginationHtml += '</div>';
+
+                    $('#pagination_emp').html(paginationHtml);
+
+                    // Add click handlers
+                    $('.page-numbe__1r, .prev-page__1, .next-page__1').on('click', function(e) {
+                        e.preventDefault();
+                        var pageNumber = $(this).data('page');
+                        loadTableData(pageNumber);
+                    });
+                }
+
+                $("#dt-search-2").keyup(function() {
+                    var searchValue = $(this).val();
+
+                    // Get all parameters and update search
+                    var params = getParams();
+
+                    console.log(params);
+
+
+                    // Debounce the search to avoid too many requests
+                    clearTimeout(window.searchTimeout);
+                    window.searchTimeout = setTimeout(function() {
+                        // Include search value in parameters
+                        params.search = searchValue;
+                        fetchData('<?= site_url('admin/pjp_code_emp_Left'); ?>', params);
+                    }, 500); // Wait 500ms after user stops typing
+                });
             });
         }
-
 
 
 
@@ -897,11 +1116,11 @@
                 dataType: 'json',
                 success: function(response) {
                     $('#loader').hide();
-                    
+
                     updatePagination(response);
                     window.datatable.clear();
-                   // Assuming response.common_records is an array
-                   response.common_records.forEach(item => {
+                    // Assuming response.common_records is an array
+                    response.common_records.forEach(item => {
                         const jsonData = JSON.stringify({
                             Customer_Code: item.Customer_Code || 'N/A',
                             Sales_Code: item.Sales_Code || 'N/A',
@@ -981,7 +1200,7 @@
                 </div>`
                             ]).draw();
 
-                
+
 
                         });
                     } else {
@@ -1118,10 +1337,10 @@
         $("#dt-search-1").keyup(function() {
             var searchValue = $(this).val();
             console.log('Search Value:', searchValue);
-            
+
             // Get all parameters and update search
             var params = getParams();
-            
+
             // Debounce the search to avoid too many requests
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(function() {

@@ -46,7 +46,7 @@ class Employee extends CI_Controller
             $data['permissions'] = [];
         }
 
-        
+
 
 
         $has_view_permission = false;
@@ -80,9 +80,6 @@ class Employee extends CI_Controller
             redirect('admin/login');
         }
 
-
-
-
         $Emp_ids = [];
         for ($i = 1; $i <= 7; $i++) {
             $Emp_ids[$i] = $this->input->get('id' . $i);
@@ -95,12 +92,33 @@ class Employee extends CI_Controller
             }
         }
 
-        // Debugging output
+
+
+//         $Emp_id1 = $this->input->get('id1');
+// $Emp_id2 = $this->input->get('id2');
+// $Emp_id3 = $this->input->get('id3');
+// $Emp_id4 = $this->input->get('id4');
+// $Emp_id5 = $this->input->get('id5');
+// $Emp_id6 = $this->input->get('id6');
+// $Emp_id7 = $this->input->get('id7');
+// $customer_name = $this->input->get('customer_name');
+
+// echo "Emp ID 1: " . $Emp_id1 . "<br>";
+// echo "Emp ID 2: " . $Emp_id2 . "<br>";
+// echo "Emp ID 3: " . $Emp_id3 . "<br>";
+// echo "Emp ID 4: " . $Emp_id4 . "<br>";
+// echo "Emp ID 5: " . $Emp_id5 . "<br>";
+// echo "Emp ID 6: " . $Emp_id6 . "<br>";
+// echo "Emp ID 7: " . $Emp_id7 . "<br>";
+// echo "Customer Name: " . $customer_name . "<br>";
+
+
+
         // echo '<pre>';
         // print_r($data['employees']);
         // echo '</pre>';
 
-        //  die;
+        // die;
 
 
         $data['level'] = $this->Employee_model->get_all_levels();
@@ -129,255 +147,257 @@ class Employee extends CI_Controller
         $this->load->view('admin/footer', $data);
     }
 
-   public function Save_Replace()
-   {
-       $back_user_id = $this->session->userdata('back_user_id');
-   
-       if (!$back_user_id) {
-           redirect('admin/login');
-       }
-   
-       $postData = $this->input->post();
-       if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
-           echo json_encode(["status" => "error", "message" => "Required fields are missing (set_pjp_code or selectedEmployeesselectedValue)."]);
-           return;
-       }
-   
-       if (!empty($postData['DB_Code'])) {
-           foreach ($postData['DB_Code'] as $db_code_json) {
-               $db_code_data = json_decode($db_code_json, true);
-               if ($db_code_data) {
-                   // Add null coalescing to provide default values
-                   $updateConditions = [
-                       'DB_Code' => $db_code_data['Customer_Code'] ?? null,
-                       'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
-                       'Distribution_Channel_Code' => $db_code_data['Distribution_Channel_Code'] ?? null,
-                       'Division_Code' => $db_code_data['Division_Code'] ?? null,
-                       'Customer_Type_Code' => $db_code_data['Customer_Type_Code'] ?? null,
-                       'Customer_Group_Code' => $db_code_data['Customer_Group_Code'] ?? null,
-                       'distributors_id' => $db_code_data['distributors_id'] ?? null
-                   ];
-   
-                   // Remove null values
-                   $updateConditions = array_filter($updateConditions, function($value) {
-                       return $value !== null;
-                   });
-   
-                   if (!empty($updateConditions)) {
-                       $this->db->where($updateConditions);
-                       $this->db->update('maping', [
-                           "Level_{$postData['level']}" => $postData['set_pjp_code']
-                       ]);
-                   }
-               }
-           }
-       }
-   
-       if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
-           foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
-               $replace_db_code_data = json_decode($replace_db_code_json, true);
-               if ($replace_db_code_data) {
-                   // Add null coalescing to provide default values
-                   $updateConditions = [
-                       'DB_Code' => $replace_db_code_data['DB_Code'] ?? null,
-                       'Sales_Code' => $replace_db_code_data['Sales_Code'] ?? null,
-                       'Distribution_Channel_Code' => $replace_db_code_data['Distribution_Channel_Code'] ?? null,
-                       'Division_Code' => $replace_db_code_data['Division_Code'] ?? null,
-                       'Customer_Type_Code' => $replace_db_code_data['Customer_Type_Code'] ?? null,
-                       'Customer_Group_Code' => $replace_db_code_data['Customer_Group_Code'] ?? null,
-                       'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
-                   ];
-   
-                   // Remove null values
-                   $updateConditions = array_filter($updateConditions, function($value) {
-                       return $value !== null;
-                   });
-   
-                   if (!empty($updateConditions)) {
-                       $this->db->where($updateConditions);
-                       $this->db->update('maping', [
-                           "Level_{$postData['level']}" => $postData['Vacant']
-                       ]);
-                   }
-               }
-           }
-       } else {
-           log_message('info', 'Vacant data is empty or Replace_DB_Code is not provided. No updates made.');
-       }
-   
-       if ($this->db->trans_status() === FALSE) {
-           echo json_encode(["status" => "error", "message" => "Failed to update mapping table."]);
-       } else {
-           echo json_encode(["status" => "success", "message" => "Mapping table updated successfully."]);
-       }
-   }
+    public function Save_Replace()
+    {
+        $back_user_id = $this->session->userdata('back_user_id');
+
+        if (!$back_user_id) {
+            redirect('admin/login');
+        }
+
+        $postData = $this->input->post();
+        if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
+            echo json_encode(["status" => "error", "message" => "Required fields are missing (set_pjp_code or selectedEmployeesselectedValue)."]);
+            return;
+        }
+
+        // Handle DB_Code and set_pjp_code updates
+        if (!empty($postData['DB_Code'])) {
+            foreach ($postData['DB_Code'] as $db_code_json) {
+                $db_code_data = json_decode($db_code_json, true);
+                if ($db_code_data) {
+                    $updateConditions = [
+                        'DB_Code' => $db_code_data['Customer_Code'] ?? null,
+                        'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
+                        'Distribution_Channel_Code' => $db_code_data['Distribution_Channel_Code'] ?? null,
+                        'Division_Code' => $db_code_data['Division_Code'] ?? null,
+                        'Customer_Type_Code' => $db_code_data['Customer_Type_Code'] ?? null,
+                        'Customer_Group_Code' => $db_code_data['Customer_Group_Code'] ?? null,
+                        'distributors_id' => $db_code_data['distributors_id'] ?? null
+                    ];
+
+                    // Filter null values in the conditions
+                    $updateConditions = array_filter($updateConditions, function ($value) {
+                        return $value !== null;
+                    });
+
+                    if (count($updateConditions) === 7) { // Check if all fields are present
+                        $this->db->where($updateConditions);
+                        $this->db->update('maping', [
+                            "Level_{$postData['level']}" => $postData['set_pjp_code']
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // Handle Vacant replacement
+        if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
+            foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
+                $replace_db_code_data = json_decode($replace_db_code_json, true);
+                if ($replace_db_code_data) {
+                    $updateConditions = [
+                        'DB_Code' => $replace_db_code_data['DB_Code'] ?? null,
+                        'Sales_Code' => $replace_db_code_data['Sales_Code'] ?? null,
+                        'Distribution_Channel_Code' => $replace_db_code_data['Distribution_Channel_Code'] ?? null,
+                        'Division_Code' => $replace_db_code_data['Division_Code'] ?? null,
+                        'Customer_Type_Code' => $replace_db_code_data['Customer_Type_Code'] ?? null,
+                        'Customer_Group_Code' => $replace_db_code_data['Customer_Group_Code'] ?? null,
+                        'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
+                    ];
+
+                    // Filter null values
+                    $updateConditions = array_filter($updateConditions, function ($value) {
+                        return $value !== null;
+                    });
+
+                    if (!empty($updateConditions)) {
+                        // Update the vacant level with the new value
+                        $this->db->where($updateConditions);
+                        $this->db->update('maping', [
+                            "Level_{$postData['level']}" => $postData['Vacant']
+                        ]);
+                    }
+                }
+            }
+        } else {
+            log_message('info', 'Vacant data is empty or Replace_DB_Code is not provided. No updates made.');
+        }
+
+        // Check if transaction was successful
+        if ($this->db->trans_status() === FALSE) {
+            echo json_encode(["status" => "error", "message" => "Failed to update mapping table."]);
+        } else {
+            echo json_encode(["status" => "success", "message" => "Mapping table updated successfully."]);
+        }
+    }
 
 
 
 
-   public function Save_Replace_emp_Promoted()
-   {
-       $back_user_id = $this->session->userdata('back_user_id');
-       if (!$back_user_id) {
-           redirect('admin/login');
-       }
-       $postData = $this->input->post();
-   
-       // Validate required fields
-       if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
-           echo json_encode([
-               "status" => "error",
-               "message" => "Required fields are missing: set_pjp_code or selectedEmployeesselectedValue."
-           ]);
-           return;
-       }
-   
-       $this->db->trans_start();
-   
-       // Process updates for DB_Code and Mapping Table
-       if (!empty($postData['DB_Code'])) {
-           foreach ($postData['DB_Code'] as $db_code_json) {
-               $db_code_data = json_decode($db_code_json, true);
-               if ($db_code_data) {
-                   // Use null coalescing and array_filter for robust condition building
-                   $updateConditions = [
-                       'DB_Code' => $db_code_data['Customer_Code'] ?? null,
-                       'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
-                       'Distribution_Channel_Code' => $db_code_data['Distribution_Channel_Code'] ?? null,
-                       'Division_Code' => $db_code_data['Division_Code'] ?? null,
-                       'Customer_Type_Code' => $db_code_data['Customer_Type_Code'] ?? null,
-                       'Customer_Group_Code' => $db_code_data['Customer_Group_Code'] ?? null,
-                       'distributors_id' => $db_code_data['distributors_id'] ?? null
-                   ];
-   
-                   // Remove null values
-                   $updateConditions = array_filter($updateConditions, function($value) {
-                       return $value !== null;
-                   });
-   
-                   if (!empty($updateConditions)) {
-                       $this->db->where($updateConditions);
-                       $this->db->update('maping', [
-                           "Level_{$postData['level']}" => $postData['set_pjp_code']
-                       ]);
-                   }
-               }
-           }
-       }
-   
-       // Prepare variables with null coalescing
-       $pjp_code = $postData['selectedEmployeesselectedValue'] ?? null;
-       $level = $postData['level'] ?? null;
-       $state = $postData['state'] ?? null;
-       $city = $postData['city'] ?? null;
-       $region = $postData['Zone'] ?? null;
-   
-       // Calculate new level
-       $new_level = ($level > 1) ? max(2, $level - 1) : $level;
-   
-       // Find and update employee
-       if ($pjp_code && $level) {
-           $employee = $this->db->where([
-               'pjp_code' => $pjp_code, 
-               'level' => $level
-           ])->get('employee')->row();
-   
-           if ($employee) {
-               $update_data = [
-                   'state' => $state, 
-                   'city' => $city, 
-                   'level' => $new_level, 
-                   'region' => $region
-               ];
-               $this->db->where('id', $employee->id)->update('employee', $update_data);
-           }
-       }
-   
-       // Process employee data
-       if (!empty($postData['employee_data'])) {
-           foreach ($postData['employee_data'] as $employee_data_json) {
-               $employee_data = json_decode($employee_data_json, true);
-   
-               if ($employee_data) {
-                   // Calculate level with null coalescing
-                   $current_level = $postData['level'] ?? 1;
-                   $level = ($current_level > 1) ? max(2, $current_level - 1) : $current_level;
-   
-                   // Prepare update conditions
-                   $updateConditions = [
-                       'DB_Code' => $employee_data['Customer_Code'] ?? null,
-                       'Sales_Code' => $employee_data['Sales_Code'] ?? null,
-                       'Distribution_Channel_Code' => $employee_data['Distribution_Channel_Code'] ?? null,
-                       'Division_Code' => $employee_data['Division_Code'] ?? null,
-                       'Customer_Type_Code' => $employee_data['Customer_Type_Code'] ?? null,
-                       'Customer_Group_Code' => $employee_data['Customer_Group_Code'] ?? null,
-                       'distributors_id' => $employee_data['distributors_id'] ?? null
-                   ];
-   
-                   // Remove null values
-                   $updateConditions = array_filter($updateConditions, function($value) {
-                       return $value !== null;
-                   });
-   
-                   if (!empty($updateConditions)) {
-                       $this->db->where($updateConditions);
-                       $this->db->update('maping', [
-                           "Level_{$level}" => $postData['selectedEmployeesselectedValue'] ?? null
-                       ]);
-                   }
-               }
-           }
-       }
-   
-       // Process Replace DB Code
-       if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
-           foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
-               $replace_db_code_data = json_decode($replace_db_code_json, true);
-   
-               if ($replace_db_code_data) {
-                   $updateConditions = [
-                       'DB_Code' => $replace_db_code_data['DB_Code'] ?? null,
-                       'Sales_Code' => $replace_db_code_data['Sales_Code'] ?? null,
-                       'Distribution_Channel_Code' => $replace_db_code_data['Distribution_Channel_Code'] ?? null,
-                       'Division_Code' => $replace_db_code_data['Division_Code'] ?? null,
-                       'Customer_Type_Code' => $replace_db_code_data['Customer_Type_Code'] ?? null,
-                       'Customer_Group_Code' => $replace_db_code_data['Customer_Group_Code'] ?? null,
-                       'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
-                   ];
-   
-                   // Remove null values
-                   $updateConditions = array_filter($updateConditions, function($value) {
-                       return $value !== null;
-                   });
-   
-                   if (!empty($updateConditions)) {
-                       $this->db->where($updateConditions);
-                       $this->db->update('maping', [
-                           "Level_{$postData['level']}" => $postData['Vacant'] ?? null
-                       ]);
-                   }
-               }
-           }
-       } else {
-           log_message('info', 'Vacant data is empty or Replace_DB_Code is not provided. No updates made.');
-       }
-   
-       $this->db->trans_complete();
-   
-       if ($this->db->trans_status() === FALSE) {
-           log_message('error', 'Transaction failed during Save_Replace_emp_Promoted.');
-           echo json_encode([
-               "status" => "error",
-               "message" => "Failed to update data."
-           ]);
-       } else {
-           log_message('info', 'Transaction succeeded during Save_Replace_emp_Promoted.');
-           echo json_encode([
-               "status" => "success",
-               "message" => "Employee details updated successfully."
-           ]);
-       }
-   }
+    public function Save_Replace_emp_Promoted()
+    {
+        $back_user_id = $this->session->userdata('back_user_id');
+        if (!$back_user_id) {
+            redirect('admin/login');
+        }
+        $postData = $this->input->post();
+
+        // Validate required fields
+        if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
+            echo json_encode([
+                "status" => "error",
+                "message" => "Required fields are missing: set_pjp_code or selectedEmployeesselectedValue."
+            ]);
+            return;
+        }
+
+        $this->db->trans_start();
+
+        // Process updates for DB_Code and Mapping Table
+        if (!empty($postData['DB_Code'])) {
+            foreach ($postData['DB_Code'] as $db_code_json) {
+                $db_code_data = json_decode($db_code_json, true);
+                if ($db_code_data) {
+                    // Use null coalescing and array_filter for robust condition building
+                    $updateConditions = [
+                        'DB_Code' => $db_code_data['Customer_Code'] ?? null,
+                        'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
+                        'Distribution_Channel_Code' => $db_code_data['Distribution_Channel_Code'] ?? null,
+                        'Division_Code' => $db_code_data['Division_Code'] ?? null,
+                        'Customer_Type_Code' => $db_code_data['Customer_Type_Code'] ?? null,
+                        'Customer_Group_Code' => $db_code_data['Customer_Group_Code'] ?? null,
+                        'distributors_id' => $db_code_data['distributors_id'] ?? null
+                    ];
+
+                    // Remove null values
+                    $updateConditions = array_filter($updateConditions, function ($value) {
+                        return $value !== null;
+                    });
+
+                    if (count($updateConditions) === 7) { // Check if all fields are present
+                        $this->db->where($updateConditions);
+                        $this->db->update('maping', [
+                            "Level_{$postData['level']}" => $postData['set_pjp_code']
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // Prepare variables with null coalescing
+        $pjp_code = $postData['selectedEmployeesselectedValue'] ?? null;
+        $level = $postData['level'] ?? null;
+        $state = $postData['state'] ?? null;
+        $city = $postData['city'] ?? null;
+        $region = $postData['Zone'] ?? null;
+
+        // Calculate new level
+        $new_level = ($level > 1) ? max(2, $level - 1) : $level;
+
+        // Find and update employee
+        if ($pjp_code && $level) {
+            $employee = $this->db->where([
+                'pjp_code' => $pjp_code,
+                'level' => $level
+            ])->get('employee')->row();
+
+            if ($employee) {
+                $update_data = [
+                    'state' => $state,
+                    'city' => $city,
+                    'level' => $new_level,
+                    'region' => $region
+                ];
+                $this->db->where('id', $employee->id)->update('employee', $update_data);
+            }
+        }
+
+        // Process employee data
+        if (!empty($postData['employee_data'])) {
+            foreach ($postData['employee_data'] as $employee_data_json) {
+                $employee_data = json_decode($employee_data_json, true);
+
+                if ($employee_data) {
+                    // Calculate level with null coalescing
+                    $current_level = $postData['level'] ?? 1;
+                    $level = ($current_level > 1) ? max(2, $current_level - 1) : $current_level;
+
+                    // Prepare update conditions
+                    $updateConditions = [
+                        'DB_Code' => $employee_data['Customer_Code'] ?? null,
+                        'Sales_Code' => $employee_data['Sales_Code'] ?? null,
+                        'Distribution_Channel_Code' => $employee_data['Distribution_Channel_Code'] ?? null,
+                        'Division_Code' => $employee_data['Division_Code'] ?? null,
+                        'Customer_Type_Code' => $employee_data['Customer_Type_Code'] ?? null,
+                        'Customer_Group_Code' => $employee_data['Customer_Group_Code'] ?? null,
+                        'distributors_id' => $employee_data['distributors_id'] ?? null
+                    ];
+
+                    // Remove null values
+                    $updateConditions = array_filter($updateConditions, function ($value) {
+                        return $value !== null;
+                    });
+
+                    if (!empty($updateConditions)) {
+                        $this->db->where($updateConditions);
+                        $this->db->update('maping', [
+                            "Level_{$level}" => $postData['selectedEmployeesselectedValue'] ?? null
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // Process Replace DB Code
+        if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
+            foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
+                $replace_db_code_data = json_decode($replace_db_code_json, true);
+
+                if ($replace_db_code_data) {
+                    $updateConditions = [
+                        'DB_Code' => $replace_db_code_data['DB_Code'] ?? null,
+                        'Sales_Code' => $replace_db_code_data['Sales_Code'] ?? null,
+                        'Distribution_Channel_Code' => $replace_db_code_data['Distribution_Channel_Code'] ?? null,
+                        'Division_Code' => $replace_db_code_data['Division_Code'] ?? null,
+                        'Customer_Type_Code' => $replace_db_code_data['Customer_Type_Code'] ?? null,
+                        'Customer_Group_Code' => $replace_db_code_data['Customer_Group_Code'] ?? null,
+                        'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
+                    ];
+
+                    // Remove null values
+                    $updateConditions = array_filter($updateConditions, function ($value) {
+                        return $value !== null;
+                    });
+
+                    if (!empty($updateConditions)) {
+                        $this->db->where($updateConditions);
+                        $this->db->update('maping', [
+                            "Level_{$postData['level']}" => $postData['Vacant'] ?? null
+                        ]);
+                    }
+                }
+            }
+        } else {
+            log_message('info', 'Vacant data is empty or Replace_DB_Code is not provided. No updates made.');
+        }
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+            log_message('error', 'Transaction failed during Save_Replace_emp_Promoted.');
+            echo json_encode([
+                "status" => "error",
+                "message" => "Failed to update data."
+            ]);
+        } else {
+            log_message('info', 'Transaction succeeded during Save_Replace_emp_Promoted.');
+            echo json_encode([
+                "status" => "success",
+                "message" => "Employee details updated successfully."
+            ]);
+        }
+    }
 
     public function dummmymaping__()
     {
@@ -647,133 +667,133 @@ class Employee extends CI_Controller
     }
 
 
-   public function Save_Replace_emp_Transfer()
-   {
-       $back_user_id = $this->session->userdata('back_user_id');
-       if (!$back_user_id) {
-           redirect('admin/login');
-       }
-       $postData = $this->input->post();
-   
-       // Validate required fields
-       if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
-           echo json_encode([
-               "status" => "error",
-               "message" => "Required fields are missing: set_pjp_code or selectedEmployeesselectedValue."
-           ]);
-           return;
-       }
-   
-       // Start a database transaction
-       $this->db->trans_start();
-   
-       // Process updates for DB_Code and Mapping Table
-       if (!empty($postData['DB_Code'])) {
-           foreach ($postData['DB_Code'] as $db_code_json) {
-               $db_code_data = json_decode($db_code_json, true);
-   
-               if ($db_code_data) {
-                   // Use null coalescing and array_filter for robust condition building
-                   $updateConditions = [
-                       'DB_Code' => $db_code_data['Customer_Code'] ?? null,
-                       'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
-                       'Distribution_Channel_Code' => $db_code_data['Distribution_Channel_Code'] ?? null,
-                       'Division_Code' => $db_code_data['Division_Code'] ?? null,
-                       'Customer_Type_Code' => $db_code_data['Customer_Type_Code'] ?? null,
-                       'Customer_Group_Code' => $db_code_data['Customer_Group_Code'] ?? null,
-                       'distributors_id' => $db_code_data['distributors_id'] ?? null
-                   ];
-   
-                   // Remove null values
-                   $updateConditions = array_filter($updateConditions, function($value) {
-                       return $value !== null;
-                   });
-   
-                   if (!empty($updateConditions)) {
-                       $this->db->where($updateConditions);
-                       $this->db->update('maping', [
-                           "Level_{$postData['level']}" => $postData['set_pjp_code']
-                       ]);
-                   }
-               }
-           }
-       }
-   
-       // Similar approach for employee_data processing
-       if (!empty($postData['employee_data'])) {
-           foreach ($postData['employee_data'] as $employee_data_json) {
-               $employee_data = json_decode($employee_data_json, true);
-   
-               if ($employee_data) {
-                   $updateConditions = [
-                       'DB_Code' => $employee_data['Customer_Code'] ?? null,
-                       'Sales_Code' => $employee_data['Sales_Code'] ?? null,
-                       'Distribution_Channel_Code' => $employee_data['Distribution_Channel_Code'] ?? null,
-                       'Division_Code' => $employee_data['Division_Code'] ?? null,
-                       'Customer_Type_Code' => $employee_data['Customer_Type_Code'] ?? null,
-                       'Customer_Group_Code' => $employee_data['Customer_Group_Code'] ?? null,
-                       'distributors_id' => $employee_data['distributors_id'] ?? null
-                   ];
-   
-                   $updateConditions = array_filter($updateConditions, function($value) {
-                       return $value !== null;
-                   });
-   
-                   if (!empty($updateConditions)) {
-                       $this->db->where($updateConditions);
-                       $this->db->update('maping', [
-                           "Level_{$postData['level']}" => $postData['selectedEmployeesselectedValue']
-                       ]);
-                   }
-               }
-           }
-       }
-   
-       // Similar approach for Replace_DB_Code processing
-       if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
-           foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
-               $replace_db_code_data = json_decode($replace_db_code_json, true);
-   
-               if ($replace_db_code_data) {
-                   $updateConditions = [
-                       'DB_Code' => $replace_db_code_data['DB_Code'] ?? null,
-                       'Sales_Code' => $replace_db_code_data['Sales_Code'] ?? null,
-                       'Distribution_Channel_Code' => $replace_db_code_data['Distribution_Channel_Code'] ?? null,
-                       'Division_Code' => $replace_db_code_data['Division_Code'] ?? null,
-                       'Customer_Type_Code' => $replace_db_code_data['Customer_Type_Code'] ?? null,
-                       'Customer_Group_Code' => $replace_db_code_data['Customer_Group_Code'] ?? null,
-                       'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
-                   ];
-   
-                   $updateConditions = array_filter($updateConditions, function($value) {
-                       return $value !== null;
-                   });
-   
-                   if (!empty($updateConditions)) {
-                       $this->db->where($updateConditions);
-                       $this->db->update('maping', [
-                           "Level_{$postData['level']}" => $postData['Vacant']
-                       ]);
-                   }
-               }
-           }
-       }
-   
-       // Commit or rollback transaction
-       $this->db->trans_complete();
-   
-       if ($this->db->trans_status() === FALSE) {
-           echo json_encode([
-               "status" => "error",
-               "message" => "Failed to update data."
-           ]);
-       } else {
-           echo json_encode([
-               "status" => "success",
-               "message" => "Employee details updated successfully."
-           ]);
-       }
-   }
+    public function Save_Replace_emp_Transfer()
+    {
+        $back_user_id = $this->session->userdata('back_user_id');
+        if (!$back_user_id) {
+            redirect('admin/login');
+        }
+        $postData = $this->input->post();
+
+        // Validate required fields
+        if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
+            echo json_encode([
+                "status" => "error",
+                "message" => "Required fields are missing: set_pjp_code or selectedEmployeesselectedValue."
+            ]);
+            return;
+        }
+
+        // Start a database transaction
+        $this->db->trans_start();
+
+        // Process updates for DB_Code and Mapping Table
+        if (!empty($postData['DB_Code'])) {
+            foreach ($postData['DB_Code'] as $db_code_json) {
+                $db_code_data = json_decode($db_code_json, true);
+
+                if ($db_code_data) {
+                    // Use null coalescing and array_filter for robust condition building
+                    $updateConditions = [
+                        'DB_Code' => $db_code_data['Customer_Code'] ?? null,
+                        'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
+                        'Distribution_Channel_Code' => $db_code_data['Distribution_Channel_Code'] ?? null,
+                        'Division_Code' => $db_code_data['Division_Code'] ?? null,
+                        'Customer_Type_Code' => $db_code_data['Customer_Type_Code'] ?? null,
+                        'Customer_Group_Code' => $db_code_data['Customer_Group_Code'] ?? null,
+                        'distributors_id' => $db_code_data['distributors_id'] ?? null
+                    ];
+
+                    // Remove null values
+                    $updateConditions = array_filter($updateConditions, function ($value) {
+                        return $value !== null;
+                    });
+
+                    if (count($updateConditions) === 7) { // Check if all fields are present
+                        $this->db->where($updateConditions);
+                        $this->db->update('maping', [
+                            "Level_{$postData['level']}" => $postData['set_pjp_code']
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // Similar approach for employee_data processing
+        if (!empty($postData['employee_data'])) {
+            foreach ($postData['employee_data'] as $employee_data_json) {
+                $employee_data = json_decode($employee_data_json, true);
+
+                if ($employee_data) {
+                    $updateConditions = [
+                        'DB_Code' => $employee_data['Customer_Code'] ?? null,
+                        'Sales_Code' => $employee_data['Sales_Code'] ?? null,
+                        'Distribution_Channel_Code' => $employee_data['Distribution_Channel_Code'] ?? null,
+                        'Division_Code' => $employee_data['Division_Code'] ?? null,
+                        'Customer_Type_Code' => $employee_data['Customer_Type_Code'] ?? null,
+                        'Customer_Group_Code' => $employee_data['Customer_Group_Code'] ?? null,
+                        'distributors_id' => $employee_data['distributors_id'] ?? null
+                    ];
+
+                    $updateConditions = array_filter($updateConditions, function ($value) {
+                        return $value !== null;
+                    });
+
+                    if (!empty($updateConditions)) {
+                        $this->db->where($updateConditions);
+                        $this->db->update('maping', [
+                            "Level_{$postData['level']}" => $postData['selectedEmployeesselectedValue']
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // Similar approach for Replace_DB_Code processing
+        if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
+            foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
+                $replace_db_code_data = json_decode($replace_db_code_json, true);
+
+                if ($replace_db_code_data) {
+                    $updateConditions = [
+                        'DB_Code' => $replace_db_code_data['DB_Code'] ?? null,
+                        'Sales_Code' => $replace_db_code_data['Sales_Code'] ?? null,
+                        'Distribution_Channel_Code' => $replace_db_code_data['Distribution_Channel_Code'] ?? null,
+                        'Division_Code' => $replace_db_code_data['Division_Code'] ?? null,
+                        'Customer_Type_Code' => $replace_db_code_data['Customer_Type_Code'] ?? null,
+                        'Customer_Group_Code' => $replace_db_code_data['Customer_Group_Code'] ?? null,
+                        'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
+                    ];
+
+                    $updateConditions = array_filter($updateConditions, function ($value) {
+                        return $value !== null;
+                    });
+
+                    if (!empty($updateConditions)) {
+                        $this->db->where($updateConditions);
+                        $this->db->update('maping', [
+                            "Level_{$postData['level']}" => $postData['Vacant']
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // Commit or rollback transaction
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+            echo json_encode([
+                "status" => "error",
+                "message" => "Failed to update data."
+            ]);
+        } else {
+            echo json_encode([
+                "status" => "success",
+                "message" => "Employee details updated successfully."
+            ]);
+        }
+    }
 
 
 
@@ -783,21 +803,36 @@ class Employee extends CI_Controller
 
 
 
+    public function pjp_code_emp_Left()
+    {
+        $level = $this->input->post('level');
+        $pjp_code = $this->input->post('pjp_code');
+        $search = $this->input->post('search');  // Search Query
+        $limit = $this->input->post('limit') ?? 20; // Default 20 records
+        $page = $this->input->post('page') ?? 1; // Default page 1
+        $offset = ($page - 1) * $limit; // Calculate offset
 
-   public function pjp_code_emp_Left()
-   {
-       $level = $this->input->post('level'); 
-       $pjp_code = $this->input->post('pjp_code'); 
-   
-       $pjp_codes = $this->Maping_model->get_pjp_code_by_level($level, $pjp_code); 
-       
-       if (empty($pjp_codes)) {
-           echo json_encode(['status' => 'failure', 'message' => 'No data found']);
-       } else {
-           echo json_encode(['status' => 'success', 'pjp_codes' => $pjp_codes]);
-       }
-   }
-   
+        $result = $this->Maping_model->get_pjp_code_by_level($level, $pjp_code, $limit, $offset, $search);
+
+        if (empty($result['data'])) {
+            echo json_encode([
+                'status' => 'failure',
+                'message' => 'No data found'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'success',
+                'data' => $result['data'],
+                'pagination' => [
+                    'page' => (int)$page,
+                    'limit' => (int)$limit,
+                    'total' => (int)$result['total_count'],
+                    'total_pages' => ceil($result['total_count'] / $limit)
+                ]
+            ]);
+        }
+    }
+
 
 
 
@@ -978,9 +1013,6 @@ class Employee extends CI_Controller
 
 
 
-
-
-
     public function empreplace_level()
     {
         $back_user_id = $this->session->userdata('back_user_id');
@@ -994,22 +1026,35 @@ class Employee extends CI_Controller
 
         $level = isset($data['level']) ? $data['level'] : null;
         $pjpCode = isset($data['pjpCode']) ? $data['pjpCode'] : null;
+        $search = isset($data['search']) ? $data['search'] : '';
+        $limit = isset($data['limit']) ? intval($data['limit']) : 50;
+        $page = isset($data['page']) ? intval($data['page']) : 1;
 
         if (empty($level)) {
             echo json_encode(['error' => 'No level provided']);
             return;
         }
 
-        $data['employees_level'] = $this->Employee_model->get_employees_by_Emp_level($level, $pjpCode);
-        $data['employees_level_Promoted'] = $this->Employee_model->get_employees_by_Emp_level_emp_Promoted($level, $pjpCode);
+        $offset = ($page - 1) * $limit;  // Offset Calculation
+
+        // Get Employees Data
+        $employees = $this->Employee_model->get_employees_by_Emp_level($level, $pjpCode, $search, $limit, $offset);
+        $employeesPromoted = $this->Employee_model->get_employees_by_Emp_level_emp_Promoted($level, $pjpCode, $search, $limit, $offset);
+
+        // Get Total Records Count
+        $totalRecords = $this->Employee_model->get_employees_count($level, $pjpCode, $search);
+
+        // Calculate Total Pages
+        $totalPages = ($limit > 0) ? ceil($totalRecords / $limit) : 1;
 
         $response = [
-            'employees' => $data['employees_level'],
-            'employees_level_Promoted' => $data['employees_level_Promoted'],
-
-            'level' => $level,
+            'employees' => $employees,
+            'employees_level_Promoted' => $employeesPromoted,
+            'total_records' => $totalRecords,
+            'limit' => $limit,
+            'page' => $page,
+            'total_pages' => $totalPages
         ];
-
 
         echo json_encode($response);
     }
@@ -1026,30 +1071,32 @@ class Employee extends CI_Controller
 
 
 
+
+
     public function employeedata()
     {
         $back_user_id = $this->session->userdata('back_user_id');
-    
+
         if (!$back_user_id) {
             redirect('admin/login');
         }
-    
+
         $level = $this->input->post('level');
         $page = $this->input->post('page') ?? 1;  // Default page 1
         $limit = $this->input->post('limit') ?? 500; // Default 10 records per page
         $offset = ($page - 1) * $limit;  // Offset calculation
-    
+
         if (!isset($level) || !is_numeric($level)) {
             echo json_encode(['status' => 'error', 'message' => 'Invalid level']);
             return;
         }
-    
+
         // Get total count
         $total_records = $this->Employee_model->get_total_employees_by_level($level);
-        
+
         // Fetch paginated data
         $data['emp'] = $this->Employee_model->get_Employee_by_level($level, $limit, $offset);
-    
+
         if (!empty($data['emp'])) {
             echo json_encode([
                 'status' => 'success',
@@ -1062,7 +1109,7 @@ class Employee extends CI_Controller
             echo json_encode(['status' => 'error', 'message' => 'No data found']);
         }
     }
-    
+
 
 
 
@@ -1410,6 +1457,7 @@ class Employee extends CI_Controller
 
 
         $has_view_permission = false;
+
         foreach ($data['permissions'] as $permission) {
             if ($permission['module_name'] === 'userdetails' && $permission['view'] === 'yes') {
                 $has_view_permission = true;

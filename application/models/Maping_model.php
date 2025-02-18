@@ -14,6 +14,7 @@ class Maping_model extends CI_Model
     public function get_all_Maping()
     {
         $query = $this->db->get('employee');
+        log_message('debug', 'Fetched Data: ' . print_r($query->result_array(), true));
         return $query->result_array();
     }
 
@@ -21,6 +22,7 @@ class Maping_model extends CI_Model
     public function get_all_Maping____()
     {
         $query = $this->db->get('maping');
+        log_message('debug', 'Fetched Data: ' . print_r($query->result_array(), true));
         return $query->result_array();
     }
 
@@ -36,6 +38,7 @@ class Maping_model extends CI_Model
         $this->db->distinct();
         $query = $this->db->get('maping');
         $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
         $tree = [];
         foreach ($result as $row) {
             $current_level = &$tree;
@@ -64,78 +67,71 @@ class Maping_model extends CI_Model
 
     public function get_all_Maping_table_zone()
     {
-
         $zone_query = $this->db->get('zone_permissions');
         $zone_permissions_result = $zone_query->result_array();
-
         $zone_ids = [];
+    
         foreach ($zone_permissions_result as $permission) {
             $decoded_ids = json_decode($permission['zone_id'], true);
             if (is_array($decoded_ids)) {
                 $zone_ids = array_merge($zone_ids, $decoded_ids);
             }
         }
-
-
+    
         if (empty($zone_ids)) {
             return [];
         }
-
+    
+        
         $this->db->select('d.Customer_Code, z.zone_id, d.Zone_Code');
         $this->db->from('zone_permissions z');
         $this->db->join('distributors d', 'd.Zone_Code IN (' . implode(',', array_map([$this->db, 'escape'], $zone_ids)) . ')', 'inner');
-
         $query = $this->db->get();
+        log_message('debug', 'SQL Query (Distributors): ' . $this->db->last_query());
+        
         $distributors_result = $query->result_array();
-
         $customer_codes = array_column($distributors_result, 'Customer_Code');
-
-        $mapping_result = [];
-        if (!empty($customer_codes)) {
-
-            $chunks = array_chunk($customer_codes, 1000);
-            foreach ($chunks as $chunk) {
-                $this->db->where_in('DB_Code', $chunk);
-                $mapping_query = $this->db->get('maping');
-                $mapping_result = array_merge($mapping_result, $mapping_query->result_array());
-            }
-
-
-            $tree = [];
-            foreach ($mapping_result as $row) {
-                $current_level = &$tree;
-
-                for ($i = 1; $i <= 7; $i++) {
-
-                    $level_value = !empty($row["Level_$i"]) ? $row["Level_$i"] : "NULL";
-
-
-                    $employee_name = ($level_value === "NULL") ? "NULL" : $this->get_employee_name($level_value);
-
-
-                    if (!isset($current_level[$level_value])) {
-                        $current_level[$level_value] = [
-                            'name' => $employee_name,
-                            'children' => [],
-                            'level' => $i
-                        ];
-                    }
-
-
-                    $current_level = &$current_level[$level_value]['children'];
-                }
-
-
-                unset($current_level);
-            }
-
-
-
-            return $tree;
+    
+        if (empty($customer_codes)) {
+            return [];
         }
-
-        return [];
+    
+        $tree = [];
+    
+        
+        $chunks = array_chunk($customer_codes, 1000);
+        foreach ($chunks as $chunk) {
+            $this->db->where_in('DB_Code', $chunk);
+            $mapping_query = $this->db->get('maping m');
+            log_message('debug', 'SQL Query (Mapping): ' . $this->db->last_query());
+            $mapping_result = $mapping_query->result_array();
+    
+  
+            $mapping_chunks = array_chunk($mapping_result, 500); 
+            foreach ($mapping_chunks as $mapping_data) {
+                foreach ($mapping_data as $row) {
+                    $current_level = &$tree;
+                    for ($i = 1; $i <= 7; $i++) {
+                        $level_value = !empty($row["Level_$i"]) ? $row["Level_$i"] : "NULL";
+                        $employee_name = ($level_value === "NULL") ? "NULL" : $this->get_employee_name($level_value);
+                        
+                        if (!isset($current_level[$level_value])) {
+                            $current_level[$level_value] = [
+                                'name' => $employee_name,
+                                'children' => [],
+                                'level' => $i
+                            ];
+                        }
+                        $current_level = &$current_level[$level_value]['children'];
+                    }
+                    unset($current_level);
+                }
+            }
+        }
+    
+        return $tree;
     }
+    
 
 
 
@@ -143,10 +139,13 @@ class Maping_model extends CI_Model
 
     private function get_employee_name($pjp_code)
     {
-
+        $employee_query = $this->db->get('employee');
+        log_message('debug', 'Employee Data: ' . print_r($employee_query->result_array(), true));
         $this->db->where('pjp_code', $pjp_code);
         $query = $this->db->get('employee');
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
         $result = $query->row_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
         return isset($result['name']) ? $result['name'] : '';
     }
 
@@ -157,7 +156,9 @@ class Maping_model extends CI_Model
         $this->db->distinct();
         $this->db->select('DB_Code, Level_1, Level_2, Level_3, Level_4, Level_5, Level_6, Level_7');
         $query = $this->db->get('maping');
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
         $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
         return $result;
     }
 
@@ -168,7 +169,10 @@ class Maping_model extends CI_Model
         $this->db->where('user_id', $user_id);
 
         $query = $this->db->get();
-        return $query->result_array();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result;
     }
 
 
@@ -176,6 +180,7 @@ class Maping_model extends CI_Model
     public function get_all_Maping_table_ajex_zone($level = null, $id = null, $levels = [])
     {
         $zone_query = $this->db->get('zone_permissions');
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
         $zone_permissions_result = $zone_query->result_array();
 
         $zone_ids = [];
@@ -197,6 +202,7 @@ class Maping_model extends CI_Model
         $this->db->join('distributors d', 'd.Zone_Code IN (' . implode(',', array_map([$this->db, 'escape'], $chunked_zone_ids[0])) . ')', 'inner'); // Start with first chunk
 
         $query = $this->db->get();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
         $distributors_result = $query->result_array();
 
         $customer_codes = array_column($distributors_result, 'Customer_Code');
@@ -234,8 +240,9 @@ class Maping_model extends CI_Model
             }
 
             $query = $this->db->get('maping');
+            log_message('debug', 'SQL Query: ' . $this->db->last_query());
             $result = $query->result_array();
-
+            log_message('debug', 'Fetched Data: ' . print_r($result, true));
             $final_result = array_merge($final_result, $result);
         }
 
@@ -254,19 +261,28 @@ class Maping_model extends CI_Model
     {
         $this->db->where_in('DB_Code', $customerCodes);
         $query = $this->db->get('maping');
-        return $query->result_array();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result;
     }
 
     public function editmaping($id)
     {
         $this->db->where('id', $id);
-        return $this->db->get('maping')->row_array();
+        $query = $this->db->get('maping');
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        $result = $query->row_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result;
     }
 
     public function update_mapping($id, $data)
     {
         $this->db->where('id', $id);
-        return $this->db->update('maping', $data);
+        $result = $this->db->update('maping', $data);
+        log_message('debug', 'Updated Data: ' . print_r($result, true));
+        return $result;
     }
 
 
@@ -276,7 +292,9 @@ class Maping_model extends CI_Model
     public function hierarchydelete($id)
     {
         $this->db->where('id', $id);
-        return $this->db->delete('maping');
+        $result = $this->db->delete('maping');
+        log_message('debug', 'Deleted Data: ' . print_r($result, true));
+        return $result;
     }
 
 
@@ -312,7 +330,9 @@ class Maping_model extends CI_Model
             return false;
         }
 
-        return $query->result_array();
+        $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result;
     }
 
 
@@ -336,7 +356,7 @@ class Maping_model extends CI_Model
         if (is_array($filters) && !empty($filters)) {
             foreach ($filters as $key => $values) {
                 if (!empty($values)) {
-                  
+
                     $this->db->group_start();
                     $this->db->where_in("ds.$key", $values);
                     $this->db->or_where("ds.$key IS NULL");
@@ -392,8 +412,14 @@ class Maping_model extends CI_Model
 
 
         $query = $this->db->get();
-        return $query->result_array();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result;
     }
+
+
+
 
     public function get_maping_d($start, $length, $search = '', $filters = [], $order_column = 'Sales_Code', $order_dir = 'asc')
     {
@@ -486,11 +512,29 @@ class Maping_model extends CI_Model
                     AND mp.Division_Code = ds.Division_Code 
                     AND mp.Customer_Type_Code = ds.Customer_Type_Code 
                     AND mp.Customer_Group_Code = ds.Customer_Group_Code', 'left');
+                    $this->db->join('employee emp1', 'emp1.pjp_code = mp.Level_1 AND emp1.level = 1', 'left');
 
-        for ($i = 1; $i <= 7; $i++) {
-            $this->db->join('employee emp' . $i, 'emp' . $i . '.pjp_code = mp.Level_' . $i, 'left');
-        }
+                    // For Level_2
+                    $this->db->join('employee emp2', 'emp2.pjp_code = mp.Level_2 AND emp2.level = 2', 'left');
+                    
+                    // For Level_3
+                    $this->db->join('employee emp3', 'emp3.pjp_code = mp.Level_3 AND emp3.level = 3', 'left');
+                    
+                    // For Level_4
+                    $this->db->join('employee emp4', 'emp4.pjp_code = mp.Level_4 AND emp4.level = 4', 'left');
+                    
+                    // For Level_5
+                    $this->db->join('employee emp5', 'emp5.pjp_code = mp.Level_5 AND emp5.level = 5', 'left');
+                    
+                    // For Level_6
+                    $this->db->join('employee emp6', 'emp6.pjp_code = mp.Level_6 AND emp6.level = 6', 'left');
+                    
+                    // For Level_7
+                    $this->db->join('employee emp7', 'emp7.pjp_code = mp.Level_7 AND emp7.level = 7', 'left');
 
+        // Check if the pjp_code in the employee table matches the levels
+
+        // After the joins
         // Apply filters - modify to work with LEFT JOIN
         if (is_array($filters) && !empty($filters)) {
             foreach ($filters as $key => $values) {
@@ -505,45 +549,55 @@ class Maping_model extends CI_Model
         }
 
 
-
         if (!empty($search)) {
             $search = $this->db->escape_like_str($search);
-            
+
             log_message('debug', 'Search applied with escaped term: ' . $search);
             log_message('debug', 'Building search query...');
 
-            $this->db->group_start()
-                ->like('ds.Customer_Code', $search)
-                ->or_like('ds.Customer_Name', $search)
-                ->or_like('ds.Pin_Code', $search)
-                ->or_like('ds.City', $search)
-                ->or_like('ds.District', $search)
-                ->or_like('ds.Contact_Number', $search)
-                ->or_like('ds.Country', $search)
-                ->or_like('ds.Zone', $search)
-                ->or_like('ds.State', $search)
-                ->or_like('ds.Population_Strata_1', $search)
-                ->or_like('ds.Population_Strata_2', $search)
-                ->or_like('ds.Country_Group', $search)
-                ->or_like('ds.GTM_TYPE', $search)
-                ->or_like('ds.SUPERSTOCKIST', $search)
-                ->or_like('ds.STATUS', $search)
-                ->or_like('ds.Customer_Type_Code', $search)
-                ->or_like('ds.Sales_Code', $search)
-                ->or_like('ds.Customer_Type_Name', $search)
-                ->or_like('ds.Customer_Group_Code', $search)
-                ->or_like('ds.Customer_Creation_Date', $search)
-                ->or_like('ds.Division_Code', $search)
-                ->or_like('ds.Sector_Code', $search)
-                ->or_like('ds.State_Code', $search)
-                ->or_like('ds.Zone_Code', $search)
-                ->or_like('ds.Distribution_Channel_Code', $search)
-                ->or_like('ds.Distribution_Channel_Name', $search)
-                ->or_like('ds.Customer_Group_Name', $search)
-                ->or_like('ds.Sales_Name', $search)
-                ->or_like('ds.Division_Name', $search)
-                ->or_like('ds.Sector_Name', $search)
-                ->group_end();
+            $escaped_search = $this->db->escape_like_str($search);
+            $this->db->group_start();
+            $this->db->like('ds.Customer_Code', $escaped_search);
+            $this->db->or_like('ds.Customer_Name', $escaped_search);
+            $this->db->or_like('ds.Pin_Code', $escaped_search);
+            $this->db->or_like('ds.City', $escaped_search);
+            $this->db->or_like('ds.District', $escaped_search);
+            $this->db->or_like('ds.Contact_Number', $escaped_search);
+            $this->db->or_like('ds.Country', $escaped_search);
+            $this->db->or_like('ds.Zone', $escaped_search);
+            $this->db->or_like('ds.State', $escaped_search);
+            $this->db->or_like('ds.Population_Strata_1', $escaped_search);
+            $this->db->or_like('ds.Population_Strata_2', $escaped_search);
+            $this->db->or_like('ds.Country_Group', $escaped_search);
+            $this->db->or_like('ds.GTM_TYPE', $escaped_search);
+            $this->db->or_like('ds.SUPERSTOCKIST', $escaped_search);
+            $this->db->or_like('ds.STATUS', $escaped_search);
+            $this->db->or_like('ds.Customer_Type_Code', $escaped_search);
+            $this->db->or_like('ds.Sales_Code', $escaped_search);
+            $this->db->or_like('ds.Customer_Type_Name', $escaped_search);
+            $this->db->or_like('ds.Customer_Group_Code', $escaped_search);
+            $this->db->or_like('ds.Customer_Creation_Date', $escaped_search);
+            $this->db->or_like('ds.Division_Code', $escaped_search);
+            $this->db->or_like('ds.Sector_Code', $escaped_search);
+            $this->db->or_like('ds.State_Code', $escaped_search);
+            $this->db->or_like('ds.Zone_Code', $escaped_search);
+            $this->db->or_like('ds.Distribution_Channel_Code', $escaped_search);
+            $this->db->or_like('ds.Distribution_Channel_Name', $escaped_search);
+            $this->db->or_like('ds.Customer_Group_Name', $escaped_search);
+            $this->db->or_like('ds.Sales_Name', $escaped_search);
+            $this->db->or_like('ds.Division_Name', $escaped_search);
+            $this->db->or_like('ds.Sector_Name', $escaped_search);
+
+
+            $this->db->or_like('emp1.name', $escaped_search);
+            $this->db->or_like('emp2.name', $escaped_search);
+            $this->db->or_like('emp3.name', $escaped_search);
+            $this->db->or_like('emp4.name', $escaped_search);
+            $this->db->or_like('emp5.name', $escaped_search);
+            $this->db->or_like('emp6.name', $escaped_search);
+            $this->db->or_like('emp7.name', $escaped_search);
+
+            $this->db->group_end();
         }
 
 
@@ -567,7 +621,10 @@ class Maping_model extends CI_Model
 
         $this->db->limit($length, $start);
         $query = $this->db->get();
-        return $query->result_array();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result;
     }
 
 
@@ -699,7 +756,10 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
 
 
         $query = $this->db->query($sql);
-        return $query->result_array();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result;
     }
 
 
@@ -713,7 +773,7 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
         $level_column = 'Level_' . $level;
         log_message('debug', "Level Column: " . $level_column); // Level column ko log karo
 
-        
+
         // Convert parameters to integers
         $limit = (int)$limit;
         $offset = (int)$offset;
@@ -721,21 +781,23 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
         // Start building the query
         $this->db->select('maping.*, distributors.*')
             ->from('maping')
-            ->join('distributors', 
+            ->join(
+                'distributors',
                 'distributors.Customer_Code = maping.DB_Code AND 
                 distributors.Sales_Code = maping.Sales_Code AND 
                 distributors.Distribution_Channel_Code = maping.Distribution_Channel_Code AND 
                 distributors.Division_Code = maping.Division_Code AND 
                 distributors.Customer_Type_Code = maping.Customer_Type_Code AND 
-                distributors.Customer_Group_Code = maping.Customer_Group_Code', 
-                'inner')
+                distributors.Customer_Group_Code = maping.Customer_Group_Code',
+                'inner'
+            )
             ->where("maping.$level_column", $pjp_code);
 
         // Add search conditions if search term is provided
         if (!empty($search)) {
             // Escape the search term to prevent SQL injection
             $search = $this->db->escape_like_str($search);
-            
+
             log_message('debug', 'Search applied with escaped term: ' . $search);
             log_message('debug', 'Building search query...');
 
@@ -773,8 +835,8 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
                 ->group_end();
         }
 
-        
-       
+
+
         $this->db->group_by([
             'distributors.Customer_Code',
             'distributors.Sales_Code',
@@ -786,8 +848,10 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
         ]);
         $this->db->limit($limit, $offset);
         $query = $this->db->get();
-        log_message('debug', 'get_db_code_by_pjp_and_level query: ' . $this->db->last_query());
-        return $query->result_array();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result;
     }
 
     public function get_total_records($pjp_code, $level, $search = '')
@@ -800,19 +864,21 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
 
         $this->db->select('COUNT( distributors.Customer_Code) as total')
             ->from('maping')
-            ->join('distributors', 
+            ->join(
+                'distributors',
                 'distributors.Customer_Code = maping.DB_Code AND 
                 distributors.Sales_Code = maping.Sales_Code AND 
                 distributors.Distribution_Channel_Code = maping.Distribution_Channel_Code AND 
                 distributors.Division_Code = maping.Division_Code AND 
                 distributors.Customer_Type_Code = maping.Customer_Type_Code AND 
-                distributors.Customer_Group_Code = maping.Customer_Group_Code', 
-                'inner')
+                distributors.Customer_Group_Code = maping.Customer_Group_Code',
+                'inner'
+            )
             ->where("maping.$level_column", $pjp_code);
 
         if (!empty($search)) {
             $search = $this->db->escape_like_str($search);
-            
+
             log_message('debug', 'Search applied with escaped term: ' . $search);
             log_message('debug', 'Building search query...');
 
@@ -851,6 +917,8 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
         }
 
         $result = $this->db->get()->row();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
         return $result ? $result->total : 0;
     }
 
@@ -864,25 +932,27 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
             log_message('error', 'Invalid level provided: ' . $level);
             return [];
         }
-    
+
         $level_column = 'Level_' . $level;
         log_message('debug', "Level Column: " . $level_column); // Log level column
-    
+
         // Start building the query to fetch all data without pagination or search
         $this->db->select('maping.*, distributors.*')
             ->from('maping')
-            ->join('distributors', 
+            ->join(
+                'distributors',
                 'distributors.Customer_Code = maping.DB_Code AND 
                 distributors.Sales_Code = maping.Sales_Code AND 
                 distributors.Distribution_Channel_Code = maping.Distribution_Channel_Code AND 
                 distributors.Division_Code = maping.Division_Code AND 
                 distributors.Customer_Type_Code = maping.Customer_Type_Code AND 
-                distributors.Customer_Group_Code = maping.Customer_Group_Code', 
-                'inner')
+                distributors.Customer_Group_Code = maping.Customer_Group_Code',
+                'inner'
+            )
             ->where("maping.$level_column", $pjp_code); // Fetch records based on level and pjp_code
-    
+
         // No search conditions applied now
-    
+
         // Group by the necessary fields to avoid duplicates
         $this->db->group_by([
             'distributors.Customer_Code',
@@ -893,15 +963,17 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
             'distributors.Customer_Group_Code',
             'maping.distributors_id'
         ]);
-    
+
         // Fetch all records without any limit
         $query = $this->db->get();
-        log_message('debug', 'get_common_records query: ' . $this->db->last_query());  // Log the query for debugging
-        return $query->result_array(); // Return all matching records
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());  // Log the query for debugging
+        $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result; // Return all matching records
     }
-    
-    
-    
+
+
+
 
 
 
@@ -912,12 +984,12 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
         $this->db->from('zone_permissions z');
         $this->db->where('z.user_id', $empid);
         $query = $this->db->get();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
 
 
 
         $zone_permissions = $query->result_array();
-
-
+        log_message('debug', 'Fetched Data: ' . print_r($zone_permissions, true));
         if (empty($zone_permissions)) {
 
             return [];
@@ -933,10 +1005,11 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
         $this->db->from('zone_permissions z');
         $this->db->where('z.user_id', "12");
         $query = $this->db->get();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
 
 
         $zone_permissions = $query->result_array();
-
+        log_message('debug', 'Fetched Data: ' . print_r($zone_permissions, true));
         if (empty($zone_permissions)) {
 
             return [];
@@ -953,10 +1026,11 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
         $this->db->from('distributors d');
         $this->db->where_in('d.Zone_Code', $zone_ids);
         $query = $this->db->get();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
 
 
         $customer_codes = $query->result_array();
-
+        log_message('debug', 'Fetched Data: ' . print_r($customer_codes, true));
         if (empty($customer_codes)) {
 
             return [];
@@ -969,10 +1043,11 @@ LEFT JOIN distributors ds ON mp.DB_Code = ds.Customer_Code
         $this->db->join('distributors d', 'm.DB_Code = d.Customer_Code', 'inner');
         $this->db->where_in('m.DB_Code', $customer_codes_list);
         $query = $this->db->get();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
 
 
         $mapping_data = $query->result_array();
-
+        log_message('debug', 'Fetched Data: ' . print_r($mapping_data, true));
         if (empty($mapping_data)) {
 
             return [];
@@ -1105,7 +1180,10 @@ GROUP BY
 
 
         $query = $this->db->query($sql);
-        return $query->result_array();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        $result = $query->result_array();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result;
     }
 
 
@@ -1121,13 +1199,18 @@ GROUP BY
         $this->db->where('Customer_Group_Code', $data['Customer_Group_Code']);
 
         $query = $this->db->get('maping');
-        return $query->num_rows() > 0;
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        $result = $query->num_rows();
+        log_message('debug', 'Fetched Data: ' . print_r($result, true));
+        return $result > 0;
     }
 
 
     public function insert_mapping($data)
     {
-        return $this->db->insert('maping', $data);
+        $result = $this->db->insert('maping', $data);
+        log_message('debug', 'Inserted Data: ' . print_r($result, true));
+        return $result;
     }
 
     public function update_pjp_code($level, $pjp_code_old, $DB_Code, $set_pjp_code, $Replace_DB_Code = null, $Vacant = null)
@@ -1173,124 +1256,91 @@ GROUP BY
         $this->db->from('employee');
         $this->db->where('PJP_Code', $pjp_code);
         $query = $this->db->get();
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
 
         if ($query->num_rows() > 0) {
-            return $query->row()->city;
+            $result = $query->row()->city;
+            log_message('debug', 'Fetched Data: ' . print_r($result, true));
+            return $result;
         }
 
         return null;
     }
 
-    public function get_pjp_code_by_level($level, $pjp_code, $limit = 20, $offset = 0)
+    public function get_pjp_code_by_level($level, $pjp_code, $limit = 20, $offset = 0, $search = '')
     {
         $level_column = 'Level_' . intval($level);
-    
+
         try {
-            // Fetch mapping data
-            $this->db->where($level_column, $pjp_code);
-            $mapping_query = $this->db->get('maping');
-            $mapping_data = $mapping_query->result_array();
-    
-            log_message('info', 'Mapping Query Data: ' . json_encode($mapping_data));
-    
-            if (empty($mapping_data)) {
-                log_message('info', 'No data found in mapping table for the given Level and PJP Code.');
-                return [];
+            // Initialize the query builder
+            $this->db->select('m.*, d.Customer_Name, d.Customer_Code, d.City, d.Pin_Code, d.District, d.Contact_Number, d.Country, d.Zone, d.State, d.Population_Strata_1, d.Population_Strata_2, d.Country_Group, d.GTM_TYPE, d.SUPERSTOCKIST, d.STATUS, d.Customer_Type_Code, d.Sales_Code, d.Customer_Type_Name, d.Customer_Group_Code, d.Customer_Creation_Date, d.Division_Code, d.Sector_Code, d.State_Code, d.Zone_Code, d.Distribution_Channel_Code, d.Distribution_Channel_Name, d.Customer_Group_Name, d.Sales_Name, d.Division_Name, d.Sector_Name');
+            $this->db->from('maping m');
+            $this->db->join('distributors d', 'm.DB_Code = d.Customer_Code AND m.Sales_Code = d.Sales_Code AND m.Distribution_Channel_Code = d.Distribution_Channel_Code AND m.Division_Code = d.Division_Code AND m.Customer_Type_Code = d.Customer_Type_Code AND m.Customer_Group_Code = d.Customer_Group_Code', 'left');
+            $this->db->where("m.$level_column", $pjp_code);
+
+            // Apply search if provided
+            if (!empty($search)) {
+                $this->db->group_start();
+                $this->db->like('d.Customer_Name', $search);
+                $this->db->or_like('d.Customer_Code', $search);
+                $this->db->or_like('d.City', $search);
+                $this->db->or_like('d.Pin_Code', $search);
+                $this->db->or_like('d.District', $search);
+                $this->db->or_like('d.Contact_Number', $search);
+                $this->db->or_like('d.Country', $search);
+                $this->db->or_like('d.Zone', $search);
+                $this->db->or_like('d.State', $search);
+                $this->db->or_like('d.Population_Strata_1', $search);
+                $this->db->or_like('d.Population_Strata_2', $search);
+                $this->db->or_like('d.Country_Group', $search);
+                $this->db->or_like('d.GTM_TYPE', $search);
+                $this->db->or_like('d.SUPERSTOCKIST', $search);
+                $this->db->or_like('d.STATUS', $search);
+                $this->db->or_like('d.Customer_Type_Code', $search);
+                $this->db->or_like('d.Sales_Code', $search);
+                $this->db->or_like('d.Customer_Type_Name', $search);
+                $this->db->or_like('d.Customer_Group_Code', $search);
+                $this->db->or_like('d.Customer_Creation_Date', $search);
+                $this->db->or_like('d.Division_Code', $search);
+                $this->db->or_like('d.Sector_Code', $search);
+                $this->db->or_like('d.State_Code', $search);
+                $this->db->or_like('d.Zone_Code', $search);
+                $this->db->or_like('d.Distribution_Channel_Code', $search);
+                $this->db->or_like('d.Distribution_Channel_Name', $search);
+                $this->db->or_like('d.Customer_Group_Name', $search);
+                $this->db->or_like('d.Sales_Name', $search);
+                $this->db->or_like('d.Division_Name', $search);
+                $this->db->or_like('d.Sector_Name', $search)
+                    ->group_end();
             }
-    
-            // Initialize result array
-            $result = [];
-    
-            // Loop through mapping data
-            foreach ($mapping_data as $mapping_row) {
-                // Check if necessary columns exist
-                if (!isset($mapping_row['Sales_Code']) || !isset($mapping_row['Distribution_Channel_Code'])) {
-                    log_message('info', 'Missing columns in mapping row: ' . json_encode($mapping_row));
-                    continue; // Skip this row if necessary columns are missing
-                }
-    
-                // Set filters for distributors query
-                $filters = [
-                    'Customer_Code' => $mapping_row['DB_Code'],
-                    'Sales_Code' => $mapping_row['Sales_Code'],
-                    'Distribution_Channel_Code' => $mapping_row['Distribution_Channel_Code'],
-                    'Division_Code' => $mapping_row['Division_Code'],
-                    'Customer_Type_Code' => $mapping_row['Customer_Type_Code'],
-                    'Customer_Group_Code' => $mapping_row['Customer_Group_Code']
-                ];
-    
-                // Apply filters to distributors table
-                $this->db->where($filters);
-                $this->db->limit($limit, $offset);
-                $distributors_query = $this->db->get('distributors');
-                
-                // Log the SQL query
-                log_message('info', 'Distributors SQL Query: ' . $this->db->last_query());
-    
-                // Fetch distributors data
-                $distributors_data = $distributors_query->result_array();
-                log_message('info', 'Distributors Query Result: ' . json_encode($distributors_data));
-    
-                // Prepare result with specific columns
-                $prepared_data = [];
-                foreach ($distributors_data as $distributor) {
-                    $prepared_entry = [
-                        'distributors_id' => $mapping_row['distributors_id'] ?? 'N/A',
-                        'Customer_Code' => $distributor['Customer_Code'] ?? 'N/A',
-                        'Customer_Name' => $distributor['Customer_Name'] ?? 'N/A',
-                        'Pin_Code' => $distributor['Pin_Code'] ?? 'N/A',
-                        'City' => $distributor['City'] ?? 'N/A',
-                        'District' => $distributor['District'] ?? 'N/A',
-                        'Contact_Number' => $distributor['Contact_Number'] ?? 'N/A',
-                        'Country' => $distributor['Country'] ?? 'N/A',
-                        'Zone' => $distributor['Zone'] ?? 'N/A',
-                        'State' => $distributor['State'] ?? 'N/A',
-                        'Population_Strata_1' => $distributor['Population_Strata_1'] ?? 'N/A',
-                        'Population_Strata_2' => $distributor['Population_Strata_2'] ?? 'N/A',
-                        'Country_Group' => $distributor['Country_Group'] ?? 'N/A',
-                        'GTM_TYPE' => $distributor['GTM_TYPE'] ?? 'N/A',
-                        'SUPERSTOCKIST' => $distributor['SUPERSTOCKIST'] ?? 'N/A',
-                        'STATUS' => $distributor['STATUS'] ?? 'N/A',
-                        'Customer_Type_Code' => $distributor['Customer_Type_Code'] ?? 'N/A',
-                        'Sales_Code' => $distributor['Sales_Code'] ?? 'N/A',
-                        'Customer_Type_Name' => $distributor['Customer_Type_Name'] ?? 'N/A',
-                        'Customer_Group_Code' => $distributor['Customer_Group_Code'] ?? 'N/A',
-                        'Customer_Creation_Date' => $distributor['Customer_Creation_Date'] ?? 'N/A',
-                        'Division_Code' => $distributor['Division_Code'] ?? 'N/A',
-                        'Sector_Code' => $distributor['Sector_Code'] ?? 'N/A',
-                        'State_Code' => $distributor['State_Code'] ?? 'N/A',
-                        'Zone_Code' => $distributor['Zone_Code'] ?? 'N/A',
-                        'Distribution_Channel_Code' => $distributor['Distribution_Channel_Code'] ?? 'N/A',
-                        'Distribution_Channel_Name' => $distributor['Distribution_Channel_Name'] ?? 'N/A',
-                        'Customer_Group_Name' => $distributor['Customer_Group_Name'] ?? 'N/A',
-                        'Sales_Name' => $distributor['Sales_Name'] ?? 'N/A',
-                        'Division_Name' => $distributor['Division_Name'] ?? 'N/A',
-                        'Sector_Name' => $distributor['Sector_Name'] ?? 'N/A'
-                    ];
-                    $prepared_data[] = $prepared_entry;
-                }
-    
-                // Merge results and limit to max 10 records
-                $result = array_merge($result, array_slice($prepared_data, 0, $limit - count($result)));
-    
-                // Stop once 10 records are added
-                if (count($result) >= $limit) {
-                    break;
-                }
-            }
-    
-            log_message('info', 'Final Prepared Result: ' . json_encode($result));
-            return $result;
-    
+
+            // Get total count before applying limit
+            $total_count = $this->db->count_all_results('', false);
+
+            // Apply pagination
+            $this->db->limit($limit, $offset);
+
+            // Execute the query
+            $query = $this->db->get();
+            log_message('debug', 'SQL Query: ' . $this->db->last_query());
+            $result = $query->result_array();
+            log_message('debug', 'Fetched Data: ' . print_r($result, true));
+            return [
+                'data' => $result,
+                'total_count' => $total_count
+            ];
         } catch (Exception $e) {
-            log_message('error', 'Exception occurred: ' . $e->getMessage());
-            return [];
+            log_message('error', 'Error in get_pjp_code_by_level: ' . $e->getMessage());
+            return [
+                'data' => [],
+                'total_count' => 0
+            ];
         }
     }
-    
-    
-    
-    
+
+
+
+
 
 
 
@@ -1360,6 +1410,7 @@ GROUP BY
         $this->db->order_by('distributors_id', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get('maping');
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
 
         if ($query->num_rows() > 0) {
             // Extract the sequence number from the last distributors_id
@@ -1378,6 +1429,7 @@ GROUP BY
         // Get the maximum existing sequence number
         $this->db->select_max('CAST(SUBSTRING_INDEX(distributors_id, "_", -1) AS UNSIGNED)', 'max_sequence');
         $query = $this->db->get('maping');
+        log_message('debug', 'SQL Query: ' . $this->db->last_query());
         $result = $query->row();
 
         // Increment the sequence

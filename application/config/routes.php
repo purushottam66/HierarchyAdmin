@@ -69,6 +69,9 @@ $route['admin/gcpdata'] = 'admin/dashboard/gcpdata';
 $route['admin/hierarchydata'] = 'admin/dashboard/hierarchydata';
 $route['admin/UserMovement'] = 'admin/dashboard/hierarchydata__';
 
+$route['admin/ZoneHierarchy_ajex_tree'] = 'admin/dashboard/ZoneHierarchy_ajex_tree';
+
+
 
 $route['admin/designation-save'] = 'admin/dashboard/designation_save';
 $route['admin/designation-create'] = 'admin/dashboard/designation_create';

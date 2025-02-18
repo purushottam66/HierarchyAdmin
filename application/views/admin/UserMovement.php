@@ -151,27 +151,19 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
-
 <script>
-
-
-function escapeHtml(unsafe) {
-            if (typeof unsafe !== 'string') {
-                return '';
-            }
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+    function escapeHtml(unsafe) {
+        if (typeof unsafe !== 'string') {
+            return '';
         }
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
-
-
-
-    // The DataTable initialization
     $(document).ready(function() {
         var table = $('#exampley').DataTable({
             paging: true,
@@ -196,8 +188,8 @@ function escapeHtml(unsafe) {
                 url: "<?= site_url('admin/hierarchydata_ajex') ?>",
                 type: "POST",
                 data: function(d) {
-                    $.extend(d, getParams()); // This calls getParams
-                    d.search = $('#dt-search-0').val(); // Include search term
+                    $.extend(d, getParams()); 
+                    d.search = $('#dt-search-0').val(); 
                 },
                 dataSrc: function(json) {
 
@@ -223,8 +215,6 @@ function escapeHtml(unsafe) {
                     title: "ID",
                     visible: false
                 },
-
-   
 
                 {
                     data: "Customer_Code",
@@ -338,23 +328,15 @@ function escapeHtml(unsafe) {
             ],
         });
 
-
-
-
-        // Custom search functionality
         $('#dt-search-0').on('keyup', function() {
 
             table.ajax.reload();
         });
 
     });
-
-    // Function to fetch data and update DataTable
     function fetchDataAndUpdate(params) {
         $('#exampley').DataTable().ajax.reload();
     }
-
-    // Dropdown change handlers to reset and reload table
     function getParams() {
         return {
             Sales_Code: $('#Sales_Code').val() || null,
@@ -494,7 +476,7 @@ function escapeHtml(unsafe) {
             data: params,
             success: function(response) {
                 updateSalesCodeDropdown(response);
-             
+
             },
             error: function(error) {
                 console.error("AJAX Error:", error);
@@ -502,7 +484,7 @@ function escapeHtml(unsafe) {
         });
     }
 
-  
+
     fetchDataAndUpdate(getParams());
 
 
@@ -569,7 +551,6 @@ function escapeHtml(unsafe) {
         document.body.addEventListener('click', function(event) {
             if (event.target.closest('.delete-btn')) {
                 var id = event.target.closest('.delete-btn').getAttribute('data-id');
-
                 swal({
                         title: "Are you sure?",
                         text: "You won't be able to undo this action!",

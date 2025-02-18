@@ -625,3 +625,41 @@
         });
     }
 </script>
+
+
+
+
+
+<script>
+        $(document).ready(function() {
+
+            $("#loader").show();
+
+            console.log("Fetching data...");
+            $.ajax({
+                url: '<?php echo base_url("admin/ZoneHierarchy_ajex_tree"); ?> ', 
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+
+                    console.log(response);
+                    
+
+                    console.log("Data fetched successfully.");
+
+                    $("#loader").hide();
+                    if (response && response.length > 0) {
+                        var treeHtml = generateTree(response); 
+                        $('#zone-hierarchy').html(treeHtml); 
+                    } else {
+                        $('#zone-hierarchy').html('No Data Available.');
+                    }
+                },
+                error: function() {
+                    $('#zone-hierarchy').html('Error fetching data.');
+                }
+            });
+
+
+        });
+    </script>

@@ -65,7 +65,7 @@ class Employee_model extends CI_Model
 
     public function get_Employee_by_level($level, $limit, $offset)
     {
-        $this->db->select('id, name, email, mobile, designation, level, pjp_code, employer_code, district, state, designation_name');
+        $this->db->select('id, name, email, mobile, designation, level, pjp_code, employer_code, district, state, designation_name, city');
         $this->db->from('employee');
         $this->db->where('level', $level);
         $this->db->limit($limit, $offset);  // Pagination applied
@@ -161,46 +161,68 @@ class Employee_model extends CI_Model
 
 
 
-    public function get_employees_by_Emp_level($level, $pjpCode)
+    public function get_employees_by_Emp_level($level, $pjpCode, $search, $limit, $offset)
     {
-
-        $this->db->select('id, name, vacant_status, email, pjp_code,employer_code, employee_id, designation_name, designation_label_name, employee_status, state, level, City');
+        $this->db->select('id, name, vacant_status, email, pjp_code, employer_code, employee_id, designation_name, designation_label_name, employee_status, state, level, City');
         $this->db->from('employee');
         $this->db->where('level', $level);
-
+    
         if (!empty($pjpCode)) {
             $this->db->where('pjp_code !=', $pjpCode);
         }
-
+    
+        if (!empty($search)) {
+            $this->db->like('name', $search);
+            $this->db->or_like('email', $search);
+            $this->db->or_like('designation_name', $search);
+        }
+    
+        $this->db->limit($limit, $offset);
+        
         $query = $this->db->get();
-
-
-        $employees = $query->result_array();
-
-        return $employees;
+        return $query->result_array();
     }
-
-    public function get_employees_by_Emp_level_emp_Promoted($level, $pjpCode)
+    
+    public function get_employees_by_Emp_level_emp_Promoted($level, $pjpCode, $search, $limit, $offset)
     {
-
-        $this->db->select('id, name, vacant_status, email, pjp_code,employer_code, employee_id, designation_name, designation_label_name, employee_status, state, level, City');
+        $this->db->select('id, name, vacant_status, email, pjp_code, employer_code, employee_id, designation_name, designation_label_name, employee_status, state, level, City');
         $this->db->from('employee');
-
-
         $this->db->where_in('level', [$level, $level + 1]);
-
-
+    
         if (!empty($pjpCode)) {
             $this->db->where('pjp_code !=', $pjpCode);
         }
-
+    
+        if (!empty($search)) {
+            $this->db->like('name', $search);
+            $this->db->or_like('email', $search);
+            $this->db->or_like('designation_name', $search);
+        }
+    
+        $this->db->limit($limit, $offset);
+        
         $query = $this->db->get();
-
-
-        $employees = $query->result_array();
-
-        return $employees;
+        return $query->result_array();
     }
+    
+    public function get_employees_count($level, $pjpCode, $search)
+    {
+        $this->db->from('employee');
+        $this->db->where('level', $level);
+    
+        if (!empty($pjpCode)) {
+            $this->db->where('pjp_code !=', $pjpCode);
+        }
+    
+        if (!empty($search)) {
+            $this->db->like('name', $search);
+            $this->db->or_like('email', $search);
+            $this->db->or_like('designation_name', $search);
+        }
+    
+        return $this->db->count_all_results();
+    }
+    
 
 
 

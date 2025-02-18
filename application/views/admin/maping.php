@@ -427,6 +427,8 @@
                                                                     <th>Employee Name</th>
                                                                     <th>Mobile Number</th>
                                                                     <th>State</th>
+                                                                    <th>city</th>
+
                                                                     <th>Designation</th>
                                                                     <th>Email ID </th>
                                                                 </tr>
@@ -823,6 +825,9 @@
                 },
                 success: function(response) {
 
+                    console.log(response);
+                    
+
                     $("#loader").hide();
                     try {
 
@@ -866,6 +871,8 @@
                                     escapeHtml(item.name || 'N/A'),
                                     escapeHtml(item.mobile || 'N/A'),
                                     escapeHtml(item.state || 'N/A'),
+                                    escapeHtml(item.city || 'N/A'),
+
                                     escapeHtml(item.designation_name || 'N/A'),
                                     escapeHtml(item.email || 'N/A'),
 
