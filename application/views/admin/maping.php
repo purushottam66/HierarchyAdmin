@@ -207,7 +207,7 @@
                                             <div class="row">
                                                 <div class="col-md-3 mt-2">
                                                     <div class="form-group">
-                                                        <label for="Sales_Code">Sales Code
+                                                        <label for="Sales_Code">Sales Name
                                                         </label>
                                                         <select class="selectpicker form-control"
                                                             data-actions-box="true" aria-label="Default select example"
@@ -229,7 +229,7 @@
                                                 <div class="col-md-3 mt-2">
                                                     <div class="form-group">
                                                         <label for="Distribution_Channel_Code">
-                                                            Distribution Channel Code </label>
+                                                            Distribution Channel Name </label>
                                                         <select class="selectpicker form-control"
                                                             data-actions-box="true" aria-label="Default select example"
                                                             title="Please Select" data-size="5" data-live-search="true"
@@ -246,7 +246,7 @@
                                                 <div class="col-md-3 mt-2">
                                                     <div class="form-group">
                                                         <label for="Division_Code">
-                                                            Division Code
+                                                            Division Name
                                                         </label>
                                                         <select class="selectpicker form-control"
                                                             data-actions-box="true" aria-label="Default select example"
@@ -263,7 +263,7 @@
                                                 <div class="col-md-3 mt-2">
                                                     <div class="form-group">
                                                         <label for="Customer_Type_Code">
-                                                            Customer Type Code </label>
+                                                            Customer Type Name </label>
                                                         <select class="selectpicker form-control"
                                                             data-actions-box="true" aria-label="Default select example"
                                                             title="Please Select" data-size="5" data-live-search="true"
@@ -279,7 +279,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="Customer_Group_Code">
-                                                            Customer Group Code </label>
+                                                            Customer Group Name </label>
                                                         <select class="selectpicker form-control"
                                                             data-actions-box="true" aria-label="Default select example"
                                                             title="Please Select" data-size="5" data-live-search="true"
@@ -661,24 +661,23 @@
                     title: 'GTM_TYPE',
                     defaultContent: 'N/A'
                 },
+
+                {
+                    column: 'SUPERSTOCKIST',
+                    title: 'SUPERSTOCKIST',
+                    defaultContent: 'N/A'
+                },
                 {
                     column: 'STATUS',
                     title: 'Status',
                     defaultContent: 'N/A'
                 },
+  
+       
+           
                 {
                     column: 'Customer_Type_Name',
                     title: 'Customer Type Name',
-                    defaultContent: 'N/A'
-                },
-                {
-                    column: 'Sales_Name',
-                    title: 'Sales Name',
-                    defaultContent: 'N/A'
-                },
-                {
-                    column: 'Customer_Group_Name',
-                    title: 'Customer Group Name',
                     defaultContent: 'N/A'
                 },
                 {
@@ -688,7 +687,12 @@
                 },
                 {
                     column: 'Sales_Name',
-                    title: ' Sales_Name',
+                    title: 'Sales Name',
+                    defaultContent: 'N/A'
+                },
+                {
+                    column: 'Sales_Code',
+                    title: ' Sales Code',
                     defaultContent: 'N/A'
                 },
                 {
@@ -756,185 +760,113 @@
 
         $('#treeView').on('click', 'span', function(event) {
             event.stopPropagation();
+            let level = $(this).data('level');
+            
+            $('#treeView').find('li').removeClass('active');
+            $(this).parent().addClass('active');
 
-            function escapeHtml(unsafe) {
-                if (typeof unsafe !== 'string') {
-                    return '';
-                }
-                return unsafe
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-            }
             if ($.fn.DataTable.isDataTable('#levelbase')) {
-                $('#levelbase').DataTable().clear().destroy();
+                $('#levelbase').DataTable().destroy();
             }
+
             var table = $('#levelbase').DataTable({
-                paging: true,
-                searching: true,
-                info: true,
-                autoWidth: true,
-                pageLength: 20,
-                lengthMenu: [20, 30, 50, 100],
-                scrollY: "350px",
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '<?php echo base_url("admin/employeedata"); ?>',
+                    type: 'POST',
+                    data: function(d) {
+                        d.level = level;
+                        return d;
+                    },
+                    dataSrc: function(json) {
+                        // Get unique designation names from the data
+                        let uniqueDesignationNames = [...new Set(json.data.map(item => item.designation_name))].join(', ');
+                        
+                        // Update the unicnme element with level and designation names
+                        $('#unicnme').html(
+                            `For level <strong>(${level})</strong><br>Select <strong>(${uniqueDesignationNames})</strong>`
+                        );
+                        return json.data;
+                    }
+                },
+                columns: [
+                    { 
+                        data: null,
+                        render: function(data, type, row) {
+                            return '<input type="checkbox" class="row-checkbox_" id="' + 
+                                   row.level + '" data-designation_name="' + 
+                                   row.designation_name + '" data-name="' + 
+                                   row.name + '" data-id="' + row.pjp_code + '">';
+                        }
+                    },
+                    { data: 'employer_code' },
+                    { data: 'name' },
+                    { data: 'mobile' },
+                    { data: 'state' },
+                    { data: 'city' },
+                    { data: 'designation_name' },
+                    { data: 'email' }
+                ],
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                scrollY: "450px",
                 scrollCollapse: true,
                 fixedHeader: true,
                 fixedFooter: true,
+                // dom: 'Blfrtip',
+                // buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
             });
 
-
-
-            $('#treeView').find('li').removeClass('active');
-            $(this).parent().addClass('active');
-            let level = $(this).data('level');
-
-            function setCheckedLevel(level, id, name, selecteddesignation_name) {
-                localStorage.setItem('selectedLevel', level);
-                localStorage.setItem('selectedId', id);
-                localStorage.setItem('selectedName', name);
-                localStorage.setItem('selecteddesignation_name', selecteddesignation_name);
-
-                $('#level_' + level).val(id);
-                $('#level_name_' + level).html(`Level ${level} ->  ` + name + ` -> ` +
-                    selecteddesignation_name);
-
-            }
-
-            function restoreCheckedLevel() {
-                var storedLevel = localStorage.getItem('selectedLevel');
-                var storedId = localStorage.getItem('selectedId');
-
-                if (storedLevel && storedId) {
-                    $('#' + storedLevel).prop('checked', true);
-                    $('#level_' + storedLevel).val(storedId);
-                }
-            }
-
-            restoreCheckedLevel();
-
-
-            $("#loader").show();
-
-            $.ajax({
-                url: '<?php echo base_url("admin/employeedata"); ?>',
-                type: 'POST',
-                data: {
-                    level: level
-                },
-                success: function(response) {
-
-                    console.log(response);
-                    
-
-                    $("#loader").hide();
-                    try {
-
-                        var data = JSON.parse(response);
-
-                        if (data && data.status === "success" && Array.isArray(data.data)) {
-                            const uniqueDesignationsWithLevel = [...new Set(data.data.map(
-                                item => `${item.designation_name}-${item.level}`))];
-
-                            const uniqueDesignationsArray = uniqueDesignationsWithLevel.map(
-                                item => {
-                                    const [designation_name, level] = item.split('-');
-                                    return {
-                                        designation_name,
-                                        level
-                                    };
-                                });
-
-                            const uniqueDesignationNames = uniqueDesignationsArray.map(item =>
-                                item.designation_name).join(', ');
-
-                            let uniname = $('#unicnme').html(
-                                `For level  <strong> (${level})</strong> <br>  Select <strong> (${uniqueDesignationNames}) </strong>`
-                            );
-
-                        } else {
-                            console.error("Data is not in the expected format.");
-
-                        }
-
-                        if (data.status === 'success' && data.data) {
-                            table.clear();
-                            $.each(data.data, function(index, item) {
-                                table.row.add([
-                                    '<input type="checkbox" class="row-checkbox_" id="' +
-                                    item.level + '" data-designation_name="' +
-                                    item.designation_name + '"   data-name="' +
-                                    item.name + '" data-id="' + item.pjp_code +
-                                    '">',
-                                    escapeHtml(item.employer_code || 'N/A'),
-                                    escapeHtml(item.name || 'N/A'),
-                                    escapeHtml(item.mobile || 'N/A'),
-                                    escapeHtml(item.state || 'N/A'),
-                                    escapeHtml(item.city || 'N/A'),
-
-                                    escapeHtml(item.designation_name || 'N/A'),
-                                    escapeHtml(item.email || 'N/A'),
-
-                                ]).draw();
-                            });
-
-                            $('.row-checkbox_').on('change', function() {
-                                if ($(this).is(':checked')) {
-                                    $('.row-checkbox_').not(this).prop('checked',
-                                        false);
-
-                                    var selectedLevel = $(this).attr('id');
-                                    var selectedId = $(this).data('id');
-                                    var selectedName = $(this).data('name');
-                                    var selecteddesignation_name = $(this).data(
-                                        'designation_name');
-
-
-                                    setCheckedLevel(selectedLevel, selectedId,
-                                        selectedName, selecteddesignation_name);
-
-                                }
-                            });
-
-                        } else {
-                            table.row.add(['No data found', '', '', '']).draw();
-                        }
-                    } catch (e) {
-                        console.error('Error parsing JSON response:', e);
-                        table.row.add(['Error loading data', '', '', '']).draw();
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX error for Level ' + level + ':', error);
-                    table.row.add(['Error fetching data', '', '', '']).draw();
+            // Handle checkbox changes
+            $('#levelbase').on('change', '.row-checkbox_', function() {
+                if ($(this).is(':checked')) {
+                    $('.row-checkbox_').not(this).prop('checked', false);
+                    var selectedLevel = $(this).attr('id');
+                    var selectedId = $(this).data('id');
+                    var selectedName = $(this).data('name');
+                    var selecteddesignation_name = $(this).data('designation_name');
+                    setCheckedLevel(selectedLevel, selectedId, selectedName, selecteddesignation_name);
+                } else {
+                    var selectedLevel = $(this).attr('id');
+                    localStorage.removeItem('selectedLevel');
+                    localStorage.removeItem('selectedId');
+                    localStorage.removeItem('selectedName');
+                    $('#level_' + selectedLevel).val('');
+                    $('#level_name_' + selectedLevel).html(`Level ${selectedLevel}`);
                 }
             });
+
             const nextSibling = $(this).next('ul');
             if (nextSibling.length > 0) {
                 nextSibling.toggleClass('active');
             }
         });
 
-        $(document).on('change', '.row-checkbox_', function() {
-            if (!$(this).is(':checked')) {
-                var selectedLevel = $(this).attr('id');
-                var selectedName = $(this).data('name');
+        function setCheckedLevel(level, id, name, selecteddesignation_name) {
+            localStorage.setItem('selectedLevel', level);
+            localStorage.setItem('selectedId', id);
+            localStorage.setItem('selectedName', name);
+            localStorage.setItem('selecteddesignation_name', selecteddesignation_name);
+            $('#level_' + level).val(id);
+            $('#level_name_' + level).html(`Level ${level} ->  ` + name + ` -> ` + selecteddesignation_name);
+        }
 
-                localStorage.removeItem('selectedLevel');
-                localStorage.removeItem('selectedId');
-                localStorage.removeItem('selectedName');
-
-                $('#level_' + selectedLevel).val('');
-
-                $('#level_name_' + selectedLevel).html(
-                    `Level ${selectedLevel}`);
+        function restoreCheckedLevel() {
+            var storedLevel = localStorage.getItem('selectedLevel');
+            var storedId = localStorage.getItem('selectedId');
+            if (storedLevel && storedId) {
+                $('#' + storedLevel).prop('checked', true);
+                $('#level_' + storedLevel).val(storedId);
             }
-        });
+        }
+
+
+        
+
+        restoreCheckedLevel();
     });
 </script>
-
-
 
 
 
@@ -977,43 +909,6 @@
                 }
             });
         });
-
-
-
-
-        // function fetchData(url, params = {}) {
-        //     $('#loader').show();
-        //     $.ajax({
-        //         url: url,
-        //         method: 'POST',
-        //         data: params,
-        //         dataType: 'json',
-        //         success: function(response) {
-        //             $('#loader').hide();
-        //             table.clear();
-        //             if (response && response.Distributor) {
-        //                 $.each(response.Distributor, function(index, item) {
-        //                     addRowToTable(item);
-        //                 });
-        //             } else {
-        //                 table.row.add(['', '', '', '', '', 'no data', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-        //                     '', '', '', '', '', '', '', '', '', '', '', '', '', ''
-        //                 ]).draw();
-        //             }
-
-        //         },
-
-        //         error: function() {
-        //             $('#loader').hide();
-        //             table.row.add(['An error occurred', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-        //                 '', '', '', '', '', '', '', '', '', '', '', '', '', ''
-        //             ]).draw();
-        //         }
-        //     });
-        // }
-
-
-
 
 
 
@@ -1267,29 +1162,7 @@
 
 
 
-        // function commonChangeHandler(triggerElement, affectedElements) {
-        //     $(triggerElement).change(function() {
-        //         affectedElements.forEach(function(element) {
-        //             // $(element).empty();
-        //         });
-
-        //         $('#hiddenFieldsContainer').empty();
-        //         $('#select-all').prop('checked', false);
-        //         fetchDataAndUpdate(getParams());
-        //         $('#examplecsv').show();
-
-        //         console.log(getParams());
-
-        //     });
-        // }
-
-        // commonChangeHandler('#Sales_Code', ['#Distribution_Channel_Code', '#Division_Code', '#Customer_Type_Code', '#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
-        // commonChangeHandler('#Distribution_Channel_Code', ['#Division_Code', '#Customer_Type_Code', '#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
-        // commonChangeHandler('#Division_Code', ['#Customer_Type_Code', '#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
-        // commonChangeHandler('#Customer_Type_Code', ['#Customer_Group_Code', '#Population_Strata_2', '#Zone_Code']);
-        // commonChangeHandler('#Customer_Group_Code', ['#Population_Strata_2', '#Zone_Code']);
-        // commonChangeHandler('#Population_Strata_2', ['#Zone_Code']);
-        // commonChangeHandler('#Zone_Code', []);
+     
 
 
     });

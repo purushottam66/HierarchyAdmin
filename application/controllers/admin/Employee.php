@@ -397,6 +397,56 @@ class Employee extends CI_Controller
                 "message" => "Employee details updated successfully."
             ]);
         }
+
+
+    }
+
+    public function employeedata()
+    {
+        $level = $this->input->post('level');
+        $draw = $this->input->post('draw');
+        $start = $this->input->post('start');
+        $length = $this->input->post('length');
+        $search = $this->input->post('search')['value'];
+        $order_column = $this->input->post('order')[0]['column'];
+        $order_dir = $this->input->post('order')[0]['dir'];
+
+        // Map DataTables column index to database column names
+        $columns = array(
+            0 => 'id', // checkbox column
+            1 => 'employer_code',
+            2 => 'name',
+            3 => 'mobile',
+            4 => 'state',
+            5 => 'city',
+            6 => 'designation_name',
+            7 => 'email'
+        );
+
+        $sort_by = isset($columns[$order_column]) ? $columns[$order_column] : 'id';
+
+        // Get paginated data
+        $employees = $this->Employee_model->get_Employee_by_level(
+            $level,
+            $length,
+            $start,
+            $search,
+            $sort_by,
+            $order_dir
+        );
+
+        // Get total count for pagination
+        $total_records = $this->Employee_model->get_total_employees_by_level($level, $search);
+
+        $response = array(
+            "draw" => intval($draw),
+            "recordsTotal" => $total_records,
+            "recordsFiltered" => $total_records,
+            "data" => $employees,
+            "status" => "success"
+        );
+
+        echo json_encode($response);
     }
 
     public function dummmymaping__()
@@ -795,13 +845,7 @@ class Employee extends CI_Controller
         }
     }
 
-
-
-
-
-
-
-
+    // ... rest of your code remains the same ...
 
     public function pjp_code_emp_Left()
     {
@@ -1073,42 +1117,42 @@ class Employee extends CI_Controller
 
 
 
-    public function employeedata()
-    {
-        $back_user_id = $this->session->userdata('back_user_id');
+    // public function employeedata()
+    // {
+    //     $back_user_id = $this->session->userdata('back_user_id');
 
-        if (!$back_user_id) {
-            redirect('admin/login');
-        }
+    //     if (!$back_user_id) {
+    //         redirect('admin/login');
+    //     }
 
-        $level = $this->input->post('level');
-        $page = $this->input->post('page') ?? 1;  // Default page 1
-        $limit = $this->input->post('limit') ?? 500; // Default 10 records per page
-        $offset = ($page - 1) * $limit;  // Offset calculation
+    //     $level = $this->input->post('level');
+    //     $page = $this->input->post('page') ?? 1;  // Default page 1
+    //     $limit = $this->input->post('limit') ?? 500; // Default 10 records per page
+    //     $offset = ($page - 1) * $limit;  // Offset calculation
 
-        if (!isset($level) || !is_numeric($level)) {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid level']);
-            return;
-        }
+    //     if (!isset($level) || !is_numeric($level)) {
+    //         echo json_encode(['status' => 'error', 'message' => 'Invalid level']);
+    //         return;
+    //     }
 
-        // Get total count
-        $total_records = $this->Employee_model->get_total_employees_by_level($level);
+    //     // Get total count
+    //     $total_records = $this->Employee_model->get_total_employees_by_level($level);
 
-        // Fetch paginated data
-        $data['emp'] = $this->Employee_model->get_Employee_by_level($level, $limit, $offset);
+    //     // Fetch paginated data
+    //     $data['emp'] = $this->Employee_model->get_Employee_by_level($level, $limit, $offset);
 
-        if (!empty($data['emp'])) {
-            echo json_encode([
-                'status' => 'success',
-                'data' => $data['emp'],
-                'total_records' => $total_records,
-                'total_pages' => ceil($total_records / $limit),
-                'current_page' => $page
-            ]);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'No data found']);
-        }
-    }
+    //     if (!empty($data['emp'])) {
+    //         echo json_encode([
+    //             'status' => 'success',
+    //             'data' => $data['emp'],
+    //             'total_records' => $total_records,
+    //             'total_pages' => ceil($total_records / $limit),
+    //             'current_page' => $page
+    //         ]);
+    //     } else {
+    //         echo json_encode(['status' => 'error', 'message' => 'No data found']);
+    //     }
+    // }
 
 
 
@@ -1389,7 +1433,7 @@ class Employee extends CI_Controller
                 $AS_employee->employer_name,
                 $AS_employee->email,
                 $AS_employee->mobile,
-                $AS_employee->pjp_code,
+                // $AS_employee->pjp_code,
                 $AS_employee->employee_id,
                 $AS_employee->level,
                 $AS_employee->state,
@@ -1660,4 +1704,5 @@ class Employee extends CI_Controller
         $this->Employee_model->delete_employee($id);
         redirect('admin/userdetails');
     }
+
 }

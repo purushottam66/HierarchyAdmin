@@ -63,23 +63,55 @@ class Employee_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_Employee_by_level($level, $limit, $offset)
+    public function get_Employee_by_level($level, $limit, $offset, $search = null, $sort_by = 'id', $sort_order = 'ASC')
     {
         $this->db->select('id, name, email, mobile, designation, level, pjp_code, employer_code, district, state, designation_name, city');
         $this->db->from('employee');
         $this->db->where('level', $level);
-        $this->db->limit($limit, $offset);  // Pagination applied
-        $query = $this->db->get();
     
+        // Apply search filter
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('name', $search);
+            $this->db->or_like('email', $search);
+            $this->db->or_like('mobile', $search);
+            $this->db->or_like('employer_code', $search);
+            $this->db->or_like('designation_name', $search);
+            $this->db->or_like('state', $search);
+            $this->db->or_like('city', $search);
+            $this->db->group_end();
+        }
+    
+        // Apply sorting
+        $this->db->order_by($sort_by, $sort_order);
+    
+        // Apply pagination
+        $this->db->limit($limit, $offset);
+    
+        $query = $this->db->get();
         return $query->result_array();
     }
     
-    // Get total count of employees for pagination
-    public function get_total_employees_by_level($level)
+    public function get_total_employees_by_level($level, $search = null)
     {
+        $this->db->from('employee');
         $this->db->where('level', $level);
-        return $this->db->count_all_results('employee');
+    
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('name', $search);
+            $this->db->or_like('email', $search);
+            $this->db->or_like('mobile', $search);
+            $this->db->or_like('employer_code', $search);
+            $this->db->or_like('designation_name', $search);
+            $this->db->or_like('state', $search);
+            $this->db->or_like('city', $search);
+            $this->db->group_end();
+        }
+    
+        return $this->db->count_all_results();
     }
+    
     
     public function get_employees_by_Emp_id($Emp_id)
     {

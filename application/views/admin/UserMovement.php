@@ -41,7 +41,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group p-b-10">
-                                            <label for="sales-code-filter">Sales Code:</label>
+                                            <label for="sales-code-filter">Sales Name:</label>
                                             <select class="selectpicker form-control" data-actions-box="true" multiple
                                                 aria-label="Default select example" title="Please Select" data-size="5"
                                                 data-live-search="true" multiple data-selected-text-format="count"
@@ -56,7 +56,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group p-b-10">
                                             <label for="distribution-channel-filter">Distribution
-                                                Channel Code:</label>
+                                                Channel Name:</label>
                                             <select class="selectpicker form-control" data-actions-box="true" multiple
                                                 aria-label="Default select example" title="Please Select" data-size="5"
                                                 data-live-search="true" multiple data-selected-text-format="count"
@@ -70,7 +70,7 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group p-b-10">
-                                            <label for="division-code-filter">Division Code:</label>
+                                            <label for="division-code-filter">Division Name:</label>
                                             <select class="selectpicker form-control" data-actions-box="true" multiple
                                                 aria-label="Default select example" title="Please Select" data-size="5"
                                                 data-live-search="true" multiple data-selected-text-format="count"
@@ -84,7 +84,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group p-b-10">
                                             <label for="customer-type-code-filter">Customer Type
-                                                Code:</label>
+                                                Name:</label>
                                             <select class="selectpicker form-control" data-actions-box="true" multiple
                                                 aria-label="Default select example" title="Please Select" data-size="5"
                                                 data-live-search="true" multiple data-selected-text-format="count"
@@ -98,7 +98,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group p-b-10">
                                             <label for="customer-group-code-filter">Customer Group
-                                                Code:</label>
+                                                Name:</label>
                                             <select class="selectpicker form-control" data-actions-box="true" multiple
                                                 aria-label="Default select example" title="Please Select" data-size="5"
                                                 data-live-search="true" multiple data-selected-text-format="count"
@@ -126,11 +126,6 @@
                                     </div>
                                 </div>
                             </form>
-
-
-
-
-
 
                             <div class="table-responsive">
                                 <table id="exampley" class="display nowrap table table-bordered table-hover text-center"
@@ -177,6 +172,10 @@
             fixedHeader: true,
             processing: true,
             serverSide: true,
+
+            order: [
+                [0, 'asc'] // Default sorting by the first column
+            ],
             dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
             buttons: [{
                 extend: 'excelHtml5',
@@ -223,31 +222,31 @@
 
 
                 {
-                    data: "Sales_Code",
-                    title: "Sales Code"
+                    data: "Sales_Name",
+                    title: "Sales Name"
                 },
 
 
                 {
-                    data: "Distribution_Channel_Code",
-                    title: "Distribution Channel Code"
+                    data: "Distribution_Channel_Name",
+                    title: "Distribution Channel Name"
                 },
 
 
                 {
-                    data: "Division_Code",
-                    title: "Division Code"
+                    data: "Division_Name",
+                    title: "Division Name"
                 },
 
 
                 {
-                    data: "Customer_Type_Code",
-                    title: "Customer Type Code"
+                    data: "Customer_Type_Name",
+                    title: "Customer Type Name"
                 },
 
                 {
-                    data: "Customer_Group_Code",
-                    title: "Customer Group Code"
+                    data: "Customer_Group_Name",
+                    title: "Customer Group Name"
                 },
                 {
                     data: "Level_1_Name",
@@ -334,6 +333,11 @@
         });
 
     });
+
+
+
+
+
     function fetchDataAndUpdate(params) {
         $('#exampley').DataTable().ajax.reload();
     }

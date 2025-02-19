@@ -15,6 +15,7 @@
 # Increase max input vars
 php_value max_input_vars 10000
 
+
 # Disable Directory Browsing
 Options -Indexes
 
