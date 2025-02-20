@@ -258,16 +258,7 @@
 
 
 
-                                        <div class="col-md-4">
-                                            <div class="form-group ">
-                                                <label for="city"> city:</label>
-                                                <select class="selectpicker  form-control" data-actions-box="true"
-                                                    title="Select City" data-size="5" data-live-search="true" id="city"
-                                                    name="city">
-                                                    <option value="N/A">Select </option>
-                                                </select>
-                                            </div>
-                                        </div>
+              
 
 
 
@@ -293,7 +284,16 @@
                                         </div>
 
 
-
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label for="city"> city:</label>
+                                                <select class="selectpicker  form-control" data-actions-box="true"
+                                                    title="Select City" data-size="5" data-live-search="true" id="city"
+                                                    name="city">
+                                                    <option value="N/A">Select </option>
+                                                </select>
+                                            </div>
+                                        </div>
 
 
 

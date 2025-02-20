@@ -595,7 +595,9 @@
                     var response = JSON.parse(response);
                     empresponse = response;
 
-                    console.log("empresponse",empresponse);
+                    console.log("empresponse dfhgn",empresponse);
+                    
+              
                     
                     table.clear();
                     updatePagination_Replace(response);
@@ -725,17 +727,14 @@
             });
         }
 
-
-
-
         $("#dt-search-0").keyup(function() {
             var search = $(this).val();
-            var selectedValue = $('#level').val(); // लेवल का वैल्यू
-            var pjpCode = $('#selectedEmployeesselectedValue').val(); // PJP Code
+            var selectedValue = $('#level').val(); 
+            var pjpCode = $('#selectedEmployeesselectedValue').val(); 
 
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(function() {
-                fetchEmployees(selectedValue, pjpCode, 1, search); // सर्च वैल्यू भेजें
+                fetchEmployees(selectedValue, pjpCode, 1, search); 
             }, 500);
         });
 
@@ -815,8 +814,8 @@
                                 $('#Vacant').empty();
                                 $('#Vacant').append('<option selected>Select</option>');
 
-                                if (empresponse.employees && empresponse.employees.length > 0) {
-                                    $.each(empresponse.employees, function(index, employee) {
+                                if (empresponse.employees_level_Promoted && empresponse.employees_level_Promoted.length > 0) {
+                                    $.each(empresponse.employees_level_Promoted, function(index, employee) {
                                         if (employee.vacant_status == 1 || employee.pjp_code === selectedEmployeepjp_code) {
                                             let option = '<option value="' + escapeHtml(employee.pjp_code) + '" data-id="' + escapeHtml(employee.level) + '">' +
                                                 escapeHtml(employee.name) + ' (Level: ' + escapeHtml(employee.level) + ')</option>';
