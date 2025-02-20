@@ -204,9 +204,21 @@ class Employee_model extends CI_Model
         }
     
         if (!empty($search)) {
-            $this->db->like('name', $search);
+            $this->db->group_start();
+            $this->db->like('id', $search);
+            $this->db->or_like('name', $search);
+            $this->db->or_like('vacant_status', $search);
             $this->db->or_like('email', $search);
+            $this->db->or_like('pjp_code', $search);
+            $this->db->or_like('employer_code', $search);
+            $this->db->or_like('employee_id', $search);
             $this->db->or_like('designation_name', $search);
+            $this->db->or_like('designation_label_name', $search);
+            $this->db->or_like('employee_status', $search);
+            $this->db->or_like('state', $search);
+            $this->db->or_like('level', $search);
+            $this->db->or_like('City', $search);
+            $this->db->group_end();
         }
     
         $this->db->limit($limit, $offset);
@@ -226,9 +238,21 @@ class Employee_model extends CI_Model
         }
     
         if (!empty($search)) {
-            $this->db->like('name', $search);
+            $this->db->group_start();
+            $this->db->like('id', $search);
+            $this->db->or_like('name', $search);
+            $this->db->or_like('vacant_status', $search);
             $this->db->or_like('email', $search);
+            $this->db->or_like('pjp_code', $search);
+            $this->db->or_like('employer_code', $search);
+            $this->db->or_like('employee_id', $search);
             $this->db->or_like('designation_name', $search);
+            $this->db->or_like('designation_label_name', $search);
+            $this->db->or_like('employee_status', $search);
+            $this->db->or_like('state', $search);
+            $this->db->or_like('level', $search);
+            $this->db->or_like('City', $search);
+            $this->db->group_end();
         }
     
         $this->db->limit($limit, $offset);
@@ -247,13 +271,26 @@ class Employee_model extends CI_Model
         }
     
         if (!empty($search)) {
-            $this->db->like('name', $search);
+            $this->db->group_start();
+            $this->db->like('id', $search);
+            $this->db->or_like('name', $search);
+            $this->db->or_like('vacant_status', $search);
             $this->db->or_like('email', $search);
+            $this->db->or_like('pjp_code', $search);
+            $this->db->or_like('employer_code', $search);
+            $this->db->or_like('employee_id', $search);
             $this->db->or_like('designation_name', $search);
+            $this->db->or_like('designation_label_name', $search);
+            $this->db->or_like('employee_status', $search);
+            $this->db->or_like('state', $search);
+            $this->db->or_like('level', $search);
+            $this->db->or_like('City', $search);
+            $this->db->group_end();
         }
     
         return $this->db->count_all_results();
     }
+    
     
 
 
@@ -547,6 +584,7 @@ class Employee_model extends CI_Model
 
         if ($search) {
             $this->db->group_start();
+            $this->db->like('e.name', $search);
             $this->db->or_like('e.email', $search);
             $this->db->or_like('e.mobile', $search);
             $this->db->or_like('e.pjp_code', $search);

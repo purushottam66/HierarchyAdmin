@@ -539,7 +539,7 @@
         }
 
 
-        
+
 
 
         $('#level').change(function() {
@@ -575,15 +575,17 @@
 
 
 
-        function fetchEmployees(selectedValue, pjpCode, pageNumber) {
+        function fetchEmployees(selectedValue, pjpCode, pageNumber,search ) {
 
-        $.ajax({
+            $.ajax({
                 url: '<?= site_url('admin/empreplace_level'); ?>',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     level: selectedValue,
-                    pjpCode: pjpCode
+                    pjpCode: pjpCode,
+                    page: pageNumber,
+                    search: search
                 }),
                 success: function(response) {
                     var response = JSON.parse(response);
@@ -656,8 +658,8 @@
                 paginationHtml += '<ul class="pagination mb-0">';
 
                 if (currentPage > 1) {
-                    paginationHtml += '<li class="page-item"><a class="page-link prev-page" href="#" data-page="1">First</a></li>';
-                    paginationHtml += '<li class="page-item"><a class="page-link prev-page" href="#" data-page="' + (currentPage - 1) + '">Previous</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link prev-page__prev" href="#" data-page="1">First</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link prev-page__prev" href="#" data-page="' + (currentPage - 1) + '">Previous</a></li>';
                 }
 
                 var startPage, endPage;
@@ -681,13 +683,13 @@
                     if (i === currentPage) {
                         paginationHtml += '<li class="page-item active"><a class="page-link" href="#">' + i + '</a></li>';
                     } else {
-                        paginationHtml += '<li class="page-item"><a class="page-link page-number" href="#" data-page="' + i + '">' + i + '</a></li>';
+                        paginationHtml += '<li class="page-item"><a class="page-link page-number_next" href="#" data-page="' + i + '">' + i + '</a></li>';
                     }
                 }
 
                 if (currentPage < totalPages) {
-                    paginationHtml += '<li class="page-item"><a class="page-link next-page" href="#" data-page="' + (currentPage + 1) + '">Next</a></li>';
-                    paginationHtml += '<li class="page-item"><a class="page-link next-page" href="#" data-page="' + totalPages + '">Last</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link next-page__next" href="#" data-page="' + (currentPage + 1) + '">Next</a></li>';
+                    paginationHtml += '<li class="page-item"><a class="page-link next-page__next" href="#" data-page="' + totalPages + '">Last</a></li>';
                 }
 
                 paginationHtml += '</ul>';
@@ -696,7 +698,7 @@
 
             $('#updatePagination_Replace').html(paginationHtml);
 
-            $('.page-number, .prev-page, .next-page').off('click').on('click', function(e) {
+            $('.page-number_next, .prev-page__prev, .next-page__next').off('click').on('click', function(e) {
                 e.preventDefault();
                 var pageNumber = $(this).data('page');
                 fetchEmployees($('#level').val(), $('#selectedEmployeesselectedValue').val(), pageNumber);
@@ -711,13 +713,22 @@
             $('.employee-radio').on('change', function() {
                 var selectedName = $(this).data('name');
                 var selectedID = $(this).data('id');
-                console.log("Selected Employee:", selectedName, selectedID);
+
             });
         }
 
 
 
+        $("#dt-search-0").keyup(function() {
+            var search = $(this).val();
+            var selectedValue = $('#level').val(); // लेवल का वैल्यू
+            var pjpCode = $('#selectedEmployeesselectedValue').val(); // PJP Code
 
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(function() {
+                fetchEmployees(selectedValue, pjpCode, 1, search); // सर्च वैल्यू भेजें
+            }, 500);
+        });
 
 
         function addRadioEventListeners() {
@@ -1050,7 +1061,7 @@
         });
 
 
-    
+
 
     });
 </script>
@@ -1222,15 +1233,7 @@
 
 
 
-        // function getParams() {
 
-        //     var selectedOption = $('#level option:selected');
-        //     var dataId = selectedOption.data('pjp_code');
-        //     return {
-        //         employee_level: selectedOption.val() || null,
-        //         pjp_code: dataId || null
-        //     };
-        // }
         window.datatable.on('page.dt', function() {
             var info = window.datatable.page.info();
             var params = getParams();
@@ -1352,16 +1355,11 @@
 
         $("#dt-search-1").keyup(function() {
             var searchValue = $(this).val();
-            console.log('Search Value:', searchValue);
-
-            // Get all parameters and update search
             var params = getParams();
-
-            // Debounce the search to avoid too many requests
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(function() {
                 fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
-            }, 500); // Wait 500ms after user stops typing
+            }, 500);
         });
 
     });

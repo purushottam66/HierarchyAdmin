@@ -136,7 +136,7 @@ $route['admin/get_cities_by_state'] = 'admin/Employee/get_cities_by_state';
 $route['admin/Employee'] = 'admin/Employee/Employee';
 $route['admin/empreplace'] = 'admin/Employee/empreplace';
 $route['admin/empreplace_level'] = 'admin/Employee/empreplace_level';
-
+$route['admin/empreplace_level_Promoted'] = 'admin/Employee/empreplace_level_Promoted';
 
 $route['admin/get_employees_by_city'] = 'admin/Employee/get_employees_by_city';
 $route['admin/get_employees_by_city_t'] = 'admin/Employee/get_employees_by_city_t';

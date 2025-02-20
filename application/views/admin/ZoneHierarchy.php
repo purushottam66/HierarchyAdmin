@@ -174,7 +174,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="box shadow-2dp b-r-2">
-                        <div class="box-body row">
+                    <h1 class="text-center">coming soon</h1>
+                        <div class="box-body row"  style="display: none;">
                             <div class="col-md-3 sidetree">
                                 <aside class="app-side mt-1">
                                     <div class="side-content">

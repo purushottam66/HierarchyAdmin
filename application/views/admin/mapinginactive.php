@@ -50,7 +50,7 @@
                     extend: 'excelHtml5',
                     text: '<i class="fa fa-download"></i> Download',
                     titleAttr: 'Download as Excel',
-                    filename: 'distributor_data',
+                    filename: 'Maping_Inactive',
                 }
 
             ],

@@ -155,12 +155,6 @@ class Distributor_model extends CI_Model
     }
 
 
-
-
-
-
-
-
     public function get_data_by_level($dbCode)
     {
         $this->db->select('*');
@@ -170,6 +164,9 @@ class Distributor_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+
+    
     public function get_sales_hierarchy($dbCode, $id)
     {
 

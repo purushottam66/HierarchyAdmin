@@ -501,9 +501,9 @@
             "searching": true,
             "info": true,
             "autoWidth": true,
-            "pageLength": 20,
-            "lengthMenu": [20, 30, 60, 100],
-            "scrollY": "550px",
+            "pageLength": 400,
+            "lengthMenu": [400, 500,  600],
+            "scrollY": "350px",
             "scrollCollapse": true,
             "fixedHeader": true,
             "fixedFooter": true,
@@ -880,7 +880,7 @@
             if ($(this).is(':checked')) {
                 // Add hidden input if checkbox is checked
                 $('<input>').attr({
-                    type: 'text',
+                    type: 'hidden',
                     id: 'hidden_' + distributorId,
                     name: 'distributors_code[]',
                     value: distributorId
@@ -899,7 +899,7 @@
                 var distributorId = $(this).data('id');
                 if (isChecked) {
                     $('<input>').attr({
-                        type: 'text',
+                        type: 'hidden',
                         id: 'hidden_' + distributorId,
                         name: 'distributors_code[]',
                         value: distributorId

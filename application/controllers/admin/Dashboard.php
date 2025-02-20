@@ -1093,9 +1093,12 @@ class Dashboard extends CI_Controller
 
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
+        // print_r($data);
+        // die();
+
 
         $this->load->view('admin/header', $data);
-        $this->load->view('admin/division');
+        $this->load->view('admin/division', $data);
         $this->load->view('admin/footer', $data);
     }
 

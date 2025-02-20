@@ -17,7 +17,7 @@
 
                         <div class="box-body">
                             <div class="table-responsive">
-                                <table id="example_division" class="table table-bordered table-hover text-center">
+                                <table id="example" class="table table-bordered table-hover text-center">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Sr.no</th>
@@ -26,7 +26,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php if (!empty($division)): ?>
 
+                                            <?php $sr_number = 1; ?>
+
+                                            <?php foreach ($division as $divisions): ?>
+                                                <tr>
+                                                    <td class="text-center"><?php echo htmlspecialchars($sr_number++); ?></td>
+                                                    <td class="text-center"><?php echo htmlspecialchars($divisions['Division_Code']); ?>
+                                                    </td>
+                                                    <td class="text-center"><?php echo htmlspecialchars($divisions['Division_Name']); ?></td>
+
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="2">No zone found</td>
+                                            </tr>
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
 
@@ -43,7 +60,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<script>
+<!-- <script>
     $(document).ready(function() {
         var table = $('#example_division').DataTable({
             "paging": true,
@@ -58,6 +75,7 @@
             "fixedFooter": true,
             "processing": true,
             "serverSide": true,
+            "order": [[1, 'asc']],
             "ajax": {
                 "url": "<?= site_url('admin/division_Ajex_Load_Data') ?>",
                 "type": "GET",
@@ -69,12 +87,8 @@
                 processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">', // Custom loading message
             }
         });
-
-
-
-
         $('#dt-search-0').on('keyup', function() {
             table.ajax.reload();
         });
     });
-</script>
+</script> -->

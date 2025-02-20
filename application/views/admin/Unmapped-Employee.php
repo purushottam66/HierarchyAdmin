@@ -62,7 +62,6 @@
                                             <th class="text-center ">employer name</th>
                                             <th class="text-center ">Email</th>
                                             <th class="text-center ">Contact No.</th>
-                                            <th class="text-center ">pjp_code</th>
                                             <th class="text-center ">employee_id</th>
                                             <th class="text-center ">level</th>
                                             <th class="text-center ">City</th>
@@ -142,10 +141,7 @@
             language: {
                 processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">', // Custom loading message
             },
-            columnDefs: [{
-                    targets: [3, 4],
-                    orderable: false
-                },
+            columnDefs: [
                 {
                     className: 'text-center',
                     targets: '_all'

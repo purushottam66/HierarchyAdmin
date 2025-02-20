@@ -858,23 +858,16 @@ class Employee extends CI_Controller
 
         $result = $this->Maping_model->get_pjp_code_by_level($level, $pjp_code, $limit, $offset, $search);
 
-        if (empty($result['data'])) {
-            echo json_encode([
-                'status' => 'failure',
-                'message' => 'No data found'
-            ]);
-        } else {
-            echo json_encode([
-                'status' => 'success',
-                'data' => $result['data'],
-                'pagination' => [
-                    'page' => (int)$page,
-                    'limit' => (int)$limit,
-                    'total' => (int)$result['total_count'],
-                    'total_pages' => ceil($result['total_count'] / $limit)
-                ]
-            ]);
-        }
+        echo json_encode([
+            'status' => 'success',
+            'data' => $result['data'],
+            'pagination' => [
+                'page' => (int)$page,
+                'limit' => (int)$limit,
+                'total' => (int)$result['total_count'],
+                'total_pages' => ceil($result['total_count'] / $limit)
+            ]
+        ]);
     }
 
 
@@ -1071,24 +1064,23 @@ class Employee extends CI_Controller
         $level = isset($data['level']) ? $data['level'] : null;
         $pjpCode = isset($data['pjpCode']) ? $data['pjpCode'] : null;
         $search = isset($data['search']) ? $data['search'] : '';
-        $limit = isset($data['limit']) ? intval($data['limit']) : 50;
+        $limit = isset($data['limit']) ? intval($data['limit']) : 10;
         $page = isset($data['page']) ? intval($data['page']) : 1;
+        
+
 
         if (empty($level)) {
             echo json_encode(['error' => 'No level provided']);
             return;
         }
 
-        $offset = ($page - 1) * $limit;  // Offset Calculation
+        $offset = ($page - 1) * $limit;  
 
-        // Get Employees Data
+      
         $employees = $this->Employee_model->get_employees_by_Emp_level($level, $pjpCode, $search, $limit, $offset);
         $employeesPromoted = $this->Employee_model->get_employees_by_Emp_level_emp_Promoted($level, $pjpCode, $search, $limit, $offset);
-
-        // Get Total Records Count
+        
         $totalRecords = $this->Employee_model->get_employees_count($level, $pjpCode, $search);
-
-        // Calculate Total Pages
         $totalPages = ($limit > 0) ? ceil($totalRecords / $limit) : 1;
 
         $response = [
@@ -1102,6 +1094,61 @@ class Employee extends CI_Controller
 
         echo json_encode($response);
     }
+
+
+
+
+    public function empreplace_level_Promoted()
+    {
+        $back_user_id = $this->session->userdata('back_user_id');
+    
+        if (!$back_user_id) {
+            redirect('admin/login');
+        }
+    
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+    
+        $level = isset($data['level']) ? $data['level'] : null;
+        $pjpCode = isset($data['pjpCode']) ? $data['pjpCode'] : null;
+        $search = isset($data['search']) ? $data['search'] : '';
+        $limit = isset($data['limit']) ? intval($data['limit']) : 10;
+        $page = isset($data['page']) ? intval($data['page']) : 1;
+    
+        if (empty($level)) {
+            echo json_encode(['error' => 'No level provided']);
+            return;
+        }
+    
+        $offset = ($page - 1) * $limit;  
+    
+        // Normal employees
+        $employees = $this->Employee_model->get_employees_by_Emp_level($level, $pjpCode, $search, $limit, $offset);
+    
+        // Promoted employees
+        $employeesPromoted = $this->Employee_model->get_employees_by_Emp_level_emp_Promoted($level, $pjpCode, $search, $limit, $offset);
+        $totalRecordsPromoted = $this->Employee_model->get_employees_count($level, $pjpCode, $search);
+        $totalPagesPromoted = ($limit > 0) ? ceil($totalRecordsPromoted / $limit) : 1;
+    
+
+        // Total records count based on array length
+        $totalRecordsPromoted = count($employeesPromoted);
+        
+        // Calculate total pages
+        $totalPagesPromoted = ($limit > 0) ? ceil($totalRecordsPromoted / $limit) : 1;
+        
+        $response = [
+            'employees_level_Promoted' => $employeesPromoted,
+            'total_records' => $totalRecordsPromoted,
+            'limit' => $limit,
+            'page' => $page,
+            'total_pages' => $totalPagesPromoted
+        ];
+        
+        echo json_encode($response);
+        
+    }
+    
 
 
 
@@ -1358,7 +1405,6 @@ class Employee extends CI_Controller
                 $AS_employee->employer_name,
                 $AS_employee->email,
                 $AS_employee->mobile,
-                $AS_employee->pjp_code,
                 $AS_employee->employee_id,
                 $AS_employee->level,
                 $AS_employee->city,
@@ -1685,6 +1731,11 @@ class Employee extends CI_Controller
         }
 
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
+
+        // header('Content-Type: application/json');
+        // echo json_encode($data, JSON_PRETTY_PRINT);
+        // die();
+        
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/Employeeview', $data);

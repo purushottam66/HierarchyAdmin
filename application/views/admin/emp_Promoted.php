@@ -291,7 +291,7 @@
                                     </table>
 
 
-                                    <div id="updatePagination_Replace"></div>
+                                     <div id="updatePagination_Replace"></div> 
 
 
                                 </div>
@@ -569,7 +569,7 @@
             var pjpCode = selectedOption.data('pjp_code');
             $('#selectedEmployeesselectedValue').val(pjpCode);
 
-            fetchEmployees(selectedValue, pjpCode, 1); // Default Page 1 पर लोड करें
+            fetchEmployees(selectedValue, pjpCode, 1); 
 
         });
 
@@ -577,21 +577,26 @@
 
 
 
-        function fetchEmployees(selectedValue, pjpCode, pageNumber) {
+        function fetchEmployees(selectedValue, pjpCode, pageNumber,search) {
 
 
 
             $.ajax({
-                url: '<?= site_url('admin/empreplace_level'); ?>',
+                url: '<?= site_url('admin/empreplace_level_Promoted'); ?>',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     level: selectedValue,
-                    pjpCode: pjpCode
+                    pjpCode: pjpCode,
+                    page: pageNumber,
+                    search: search
                 }),
                 success: function(response) {
                     var response = JSON.parse(response);
                     empresponse = response;
+
+                    console.log("empresponse",empresponse);
+                    
                     table.clear();
                     updatePagination_Replace(response);
 
@@ -642,7 +647,7 @@
 
 
         function updatePagination_Replace(response) {
-            console.log("updatePagination", response);
+            console.log("updatePagination wrerdgthfg", response);
             var currentPage = parseInt(response.page);
             var totalPages = parseInt(response.total_pages);
             var totalRecords = parseInt(response.total_records);
@@ -716,16 +721,23 @@
             $('.employee-radio').on('change', function() {
                 var selectedName = $(this).data('name');
                 var selectedID = $(this).data('id');
-                console.log("Selected Employee:", selectedName, selectedID);
+          
             });
         }
 
 
 
 
+        $("#dt-search-0").keyup(function() {
+            var search = $(this).val();
+            var selectedValue = $('#level').val(); // लेवल का वैल्यू
+            var pjpCode = $('#selectedEmployeesselectedValue').val(); // PJP Code
 
-
-
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(function() {
+                fetchEmployees(selectedValue, pjpCode, 1, search); // सर्च वैल्यू भेजें
+            }, 500);
+        });
 
 
         function addRadioEventListeners() {

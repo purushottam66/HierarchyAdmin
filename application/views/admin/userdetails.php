@@ -232,10 +232,7 @@
                 processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">'
             },
 
-            columnDefs: [{
-                    targets: [3, 4],
-                    orderable: false
-                }, // Disable sorting for specific columns
+            columnDefs: [
                 {
                     className: 'text-center',
                     targets: '_all'

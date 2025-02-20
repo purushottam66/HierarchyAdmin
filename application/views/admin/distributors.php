@@ -49,18 +49,20 @@
 
             dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
 
-            "buttons": [{
-                    text: '<i class="fa fa-database"></i> Export All',
-                    titleAttr: 'Export All',
-                    action: function() {
-                        window.location.href = '<?php echo base_url("admin/export_distributors_csv"); ?>';
-                    }
-                },
+            "buttons": [
+
+                // {
+                //     text: '<i class="fa fa-database"></i> Export All',
+                //     titleAttr: 'Export All',
+                //     action: function() {
+                //         window.location.href = '<?php echo base_url("admin/export_distributors_csv"); ?>';
+                //     }
+                // },
                 {
                     extend: 'excelHtml5',
                     text: '<i class="fa fa-download"></i> Download',
                     titleAttr: 'Download as Excel',
-                    filename: 'distributor_data',
+                    filename: 'Un_mapped_Distributors',
                 }
 
             ],

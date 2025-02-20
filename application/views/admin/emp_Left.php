@@ -407,6 +407,7 @@
 <script>
     $(document).ready(function() {
         $('#vacant-container').hide()
+
         function escapeHtml(unsafe) {
             if (typeof unsafe !== 'string') {
                 return '';
@@ -454,10 +455,13 @@
                 selectedValue = 7;
             }
 
-            fetchEmployees(selectedValue, pjpCode, 1); 
+            fetchEmployees(selectedValue, pjpCode, 1);
         });
 
-        function fetchEmployees(selectedValue, pjpCode, pageNumber) {
+
+
+
+        function fetchEmployees(selectedValue, pjpCode, pageNumber , search) {
             $.ajax({
                 url: '<?= site_url('admin/empreplace_level'); ?>',
                 type: 'POST',
@@ -465,7 +469,8 @@
                 data: JSON.stringify({
                     level: selectedValue,
                     pjpCode: pjpCode,
-                    page: pageNumber
+                    page: pageNumber,
+                    search: search
                 }),
                 success: function(response) {
                     var response = JSON.parse(response);
@@ -582,9 +587,25 @@
             $('.employee-radio').on('change', function() {
                 var selectedName = $(this).data('name');
                 var selectedID = $(this).data('id');
-                console.log("Selected Employee:", selectedName, selectedID);
+
             });
         }
+
+
+
+
+
+        $("#dt-search-0").keyup(function() {
+            var search = $(this).val();
+            var selectedValue = $('#level').val(); 
+            var pjpCode = $('#selectedEmployeesselectedValue').val(); 
+
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(function() {
+                fetchEmployees(selectedValue, pjpCode, 1, search);
+            }, 500);
+        });
+
 
 
         function addRadioEventListeners() {
@@ -651,13 +672,15 @@
                         success: function(response) {
                             if (response) {
                                 var response = JSON.parse(response);
-                                console.log("response", response);
+
+                                // if (response.status === "failure") {
+                                //     $('#employeedb').DataTable().clear().destroy();
+                                //     return;
+                                // }
 
                                 let pagination = response.pagination;
+
                                 updatePagination_emp(pagination);
-
-                                
-
                                 $('#Vacant').empty();
                                 $('#Vacant').append('<option selected>Select</option>');
 
@@ -752,11 +775,12 @@
                 }
 
                 function updatePagination_emp(response) {
-                    console.log("updatePagination", response);
-                    var currentPage = parseInt(response.page);
-                    var totalPages = parseInt(response.total_pages);
-                    var totalRecords = parseInt(response.total);
-                    var limit = parseInt(response.limit);
+
+
+                    var currentPage = parseInt(response.page) || 0;
+                    var totalPages = parseInt(response.total_pages) || 0;
+                    var totalRecords = parseInt(response.total) || 0;
+                    var limit = parseInt(response.limit) || 0;
                     var paginationHtml = '';
 
                     var start = ((currentPage - 1) * limit) + 1;
@@ -826,7 +850,7 @@
                     window.searchTimeout = setTimeout(function() {
                         params.search = searchValue;
                         fetchData('<?= site_url('admin/pjp_code_emp_Left'); ?>', params);
-                    }, 500); 
+                    }, 500);
                 });
             });
         }
@@ -912,14 +936,14 @@
                             distributors_id: item.distributors_id || 'N/A'
                         });
 
-                     
+
                         $('<input>').attr({
-                            type: 'hidden', 
+                            type: 'hidden',
                             id: 'hidden_' + item.Customer_Code,
                             name: 'DB_Code[]',
                             style: 'width: 1200px !important;',
-                            value: jsonData 
-                        }).appendTo('#hiddenFieldsContainer'); 
+                            value: jsonData
+                        }).appendTo('#hiddenFieldsContainer');
                     });
 
 
@@ -1110,18 +1134,13 @@
         });
 
 
-
-
         $("#dt-search-1").keyup(function() {
             var searchValue = $(this).val();
-
             var params = getParams();
-
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(function() {
-                params.search = searchValue;
-                fetchData('<?= site_url('admin/pjp_code_emp_Left'); ?>', params);
-            }, 500); 
+                fetchData('<?= site_url('admin/replacedataajex'); ?>', params);
+            }, 500);
         });
 
 
