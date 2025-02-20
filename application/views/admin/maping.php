@@ -1,4 +1,10 @@
 <style>
+    #submitButton__ {
+        border: 1px solid #007bff;
+        background-color: #FB8B03;
+        color: #ffff;
+    }
+
     .form-group {
         margin-bottom: 15px;
     }
@@ -442,7 +448,7 @@
                                             </div>
 
                                             <div class="col-12">
-                                                <button type="submit" class="btn btnss setfont-btn">Submit</button> &#8202;
+                                                <button type="submit" id="submitButton__" class="btn btnss setfont-btn">Submit</button> &#8202;
                                             </div>
                                             <br>
                                         </div>
@@ -502,7 +508,7 @@
             "info": true,
             "autoWidth": true,
             "pageLength": 400,
-            "lengthMenu": [400, 500,  600],
+            "lengthMenu": [400, 500, 600],
             "scrollY": "350px",
             "scrollCollapse": true,
             "fixedHeader": true,
@@ -512,8 +518,7 @@
 
             dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
 
-            "buttons": [
-                {
+            "buttons": [{
                     extend: 'excelHtml5',
                     text: '<i class="fa fa-download"></i> Download',
                     titleAttr: 'Download as Excel',
@@ -586,7 +591,7 @@
                         };
 
                         return `<input type="checkbox" 
-                class="row-checkbox" 
+                class="row-checkbox customerDataSelected" 
                 data-id="${obj.Customer_Code || ''}" 
                 data-sales="${obj.Sales_Code || ''}" 
                 data-distribution="${obj.Distribution_Channel_Code || ''}" 
@@ -672,9 +677,9 @@
                     title: 'Status',
                     defaultContent: 'N/A'
                 },
-  
-       
-           
+
+
+
                 {
                     column: 'Customer_Type_Name',
                     title: 'Customer Type Name',
@@ -761,7 +766,7 @@
         $('#treeView').on('click', 'span', function(event) {
             event.stopPropagation();
             let level = $(this).data('level');
-            
+
             $('#treeView').find('li').removeClass('active');
             $(this).parent().addClass('active');
 
@@ -782,7 +787,7 @@
                     dataSrc: function(json) {
                         // Get unique designation names from the data
                         let uniqueDesignationNames = [...new Set(json.data.map(item => item.designation_name))].join(', ');
-                        
+
                         // Update the unicnme element with level and designation names
                         $('#unicnme').html(
                             `For level <strong>(${level})</strong><br>Select <strong>(${uniqueDesignationNames})</strong>`
@@ -790,26 +795,42 @@
                         return json.data;
                     }
                 },
-                columns: [
-                    { 
+                columns: [{
                         data: null,
                         render: function(data, type, row) {
-                            return '<input type="checkbox" class="row-checkbox_" id="' + 
-                                   row.level + '" data-designation_name="' + 
-                                   row.designation_name + '" data-name="' + 
-                                   row.name + '" data-id="' + row.pjp_code + '">';
+                            return '<input type="checkbox" class="row-checkbox_" id="' +
+                                row.level + '" data-designation_name="' +
+                                row.designation_name + '" data-name="' +
+                                row.name + '" data-id="' + row.pjp_code + '">';
                         }
                     },
-                    { data: 'employer_code' },
-                    { data: 'name' },
-                    { data: 'mobile' },
-                    { data: 'state' },
-                    { data: 'city' },
-                    { data: 'designation_name' },
-                    { data: 'email' }
+                    {
+                        data: 'employer_code'
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'mobile'
+                    },
+                    {
+                        data: 'state'
+                    },
+                    {
+                        data: 'city'
+                    },
+                    {
+                        data: 'designation_name'
+                    },
+                    {
+                        data: 'email'
+                    }
                 ],
                 pageLength: 10,
-                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                lengthMenu: [
+                    [10, 25, 50, 100],
+                    [10, 25, 50, 100]
+                ],
                 scrollY: "450px",
                 scrollCollapse: true,
                 fixedHeader: true,
@@ -862,7 +883,7 @@
         }
 
 
-        
+
 
         restoreCheckedLevel();
     });
@@ -921,7 +942,7 @@
                 Customer_Group_Code: $('#Customer_Group_Code').val() || null,
                 Population_Strata_2: $('#Population_Strata_2').val() || null,
                 Zone: $('#Zone_Code').val() || null,
-      
+
             };
         }
 
@@ -1162,7 +1183,7 @@
 
 
 
-     
+
 
 
     });
@@ -1203,15 +1224,54 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 
+
+
+<script>
+    $(document).ready(function() {
+        function checkConditions() {
+            let allSelected = true;
+            let levelSelected = false;
+            let customerDataSelected = false;
+
+            $("select").each(function() {
+                let value = $(this).val();
+                if (!value || value.trim() === "") {
+                    allSelected = false;
+                    return false;
+                }
+            });
+
+            $(".row-checkbox_:checked").each(function() {
+                levelSelected = true;
+                return false;
+            });
+
+            $(".customerDataSelected:checked").each(function() {
+                let customerId = $(this).data("id");
+                if (customerId && customerId.toString().trim() !== "") {
+                    customerDataSelected = true;
+                    return false;
+                }
+            });
+
+            let enableButton = allSelected && levelSelected && customerDataSelected;
+            console.log("🔵 Final Button Enable Status:", enableButton);
+
+            $("#submitButton__").prop("disabled", !enableButton);
+        }
+
+        $("select").on("change", checkConditions);
+
+        $(document).on("change", ".row-checkbox_, .customerDataSelected", checkConditions);
+
+        checkConditions();
+    });
+</script>
+
 <script>
     document.getElementById("myForm").addEventListener("submit", function(event) {
-        // Prevent the default form submission
         event.preventDefault();
-
-        // Reference to the form element
         const form = this;
-
-        // Display SweetAlert confirmation dialog
         swal({
                 title: "Are you sure you want to Proceed ?",
                 text: "",
@@ -1225,10 +1285,10 @@
             },
             function(isConfirm) {
                 if (isConfirm) {
-                    // If confirmed, submit the form
+
                     form.submit();
                 } else {
-                    // If canceled, show cancellation message (optional)
+
                     swal("Cancelled", "Your form submission was canceled.", "error");
                 }
             });

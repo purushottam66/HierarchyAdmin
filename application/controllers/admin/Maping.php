@@ -175,7 +175,7 @@ class Maping extends CI_Controller
         $this->form_validation->set_rules('Division_Code', 'Division Code', 'required');
         $this->form_validation->set_rules('Customer_Type_Code', 'Customer Type Code', 'required');
         $this->form_validation->set_rules('Customer_Group_Code', 'Customer Group Code', 'required');
-        $this->form_validation->set_rules('level1', 'Level 1', 'required');
+        //$this->form_validation->set_rules('level1', 'Level 1', 'required');
 
         if ($this->form_validation->run() == false) {
             $this->session->set_flashdata('error', validation_errors());
