@@ -47,41 +47,35 @@
             dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
 
             "buttons": [{
-                    text: '<i class="fa fa-database"></i> Export All',
+                    text: '<i class="fa fa-database"></i> Export Data',
                     titleAttr: 'Export All',
                     action: function() {
-                        window.location.href = '<?php echo base_url("admin/export_distributors_csv"); ?>';
+                        window.location.href = '<?php echo base_url("admin/distributors_csv"); ?>';
                     }
-                },
-                {
-                    extend: 'excelHtml5',
-                    text: '<i class="fa fa-download"></i> Download',
-                    titleAttr: 'Download as Excel',
-                    filename: 'distributor_data',
                 }
 
             ],
             order: [{
-                column: 0, // Sort by the first column
-                dir: "asc", // Ascending order
-            }], // Default sorting
+                column: 0, 
+                dir: "asc", 
+            }], 
             ajax: {
-                url: "<?= site_url('admin/distributors_db') ?>", // Ensure the URL is correct
+                url: "<?= site_url('admin/distributors_db') ?>", 
                 type: "POST",
                 data: function(d) {
-                    d.search = $('#dt-search-0').val(); // Add custom search parameters if needed
-                    console.log("Sent Data: ", d); // Log data being sent to server
+                    d.search = $('#dt-search-0').val(); 
+                    console.log("Sent Data: ", d);
                 },
                 dataSrc: function(json) {
-                    console.log("Received Response: ", json); // Debugging - log response
-                    return json.data; // Ensure API response has a 'data' property
+                    console.log("Received Response: ", json); 
+                    return json.data; 
                 },
                 error: function(xhr, error, code) {
                     console.error("Ajax Error: ", {
                         xhr,
                         error,
                         code
-                    }); // Log error
+                    }); 
                     alert(`Error loading data: ${xhr.responseText || error}`);
                 },
             },

@@ -28,12 +28,177 @@ class Distributor_model extends CI_Model
     }
 
 
-
-    public function get_all_Distributors()
+    public function unmapped_Distributors_csv()
     {
-        $query = $this->db->get('distributors');
+        $this->db->select('d.*');
+        $this->db->from('distributors d');
+        $this->db->join('maping m', 'd.Customer_Code = m.DB_Code', 'left');
+        $this->db->where('m.DB_Code IS NULL'); // Select only unmapped distributors
+        $query = $this->db->get();
         return $query->result_array();
     }
+    
+
+
+
+    public function get_all_distributors($city = null, $state = null)
+    {
+        $this->db->select('*');
+        $this->db->from('distributors');
+
+        // Apply filters if they are provided
+        if ($city) {
+            $this->db->where('City', $city);
+        }
+        if ($state) {
+            $this->db->where('State', $state);
+        }
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
+
+
+    public function get_all_distributors_filtered($customer_group_code = [], $customer_type_code = [], $distribution_channel_code = [], $division_code = [], $population_strata_2 = [], $sales_code = [], $zone = [], $state_code = [], $city = [])
+    {
+        $this->db->select('
+        mp.id,
+        mp.DB_Code,
+        mp.Level_1, 
+        COALESCE(emp1.name, "N/A") AS Level_1_Name, 
+        COALESCE(emp1.employer_code, "N/A") AS Level_1_Employer_Code, 
+        COALESCE(emp1.designation_name, "N/A") AS Level_1_Designation_Name, 
+        emp1.id AS Emp_id1,
+        
+        mp.Level_2, 
+        COALESCE(emp2.name, "N/A") AS Level_2_Name, 
+        COALESCE(emp2.employer_code, "N/A") AS Level_2_Employer_Code, 
+        COALESCE(emp2.designation_name, "N/A") AS Level_2_Designation_Name, 
+        emp2.id AS Emp_id2,
+        
+        mp.Level_3, 
+        COALESCE(emp3.name, "N/A") AS Level_3_Name, 
+        COALESCE(emp3.employer_code, "N/A") AS Level_3_Employer_Code, 
+        COALESCE(emp3.designation_name, "N/A") AS Level_3_Designation_Name, 
+        emp3.id AS Emp_id3,
+        
+        mp.Level_4, 
+        COALESCE(emp4.name, "N/A") AS Level_4_Name, 
+        COALESCE(emp4.employer_code, "N/A") AS Level_4_Employer_Code, 
+        COALESCE(emp4.designation_name, "N/A") AS Level_4_Designation_Name, 
+        emp4.id AS Emp_id4,
+        
+        mp.Level_5, 
+        COALESCE(emp5.name, "N/A") AS Level_5_Name, 
+        COALESCE(emp5.employer_code, "N/A") AS Level_5_Employer_Code, 
+        COALESCE(emp5.designation_name, "N/A") AS Level_5_Designation_Name, 
+        emp5.id AS Emp_id5,
+        
+        mp.Level_6, 
+        COALESCE(emp6.name, "N/A") AS Level_6_Name, 
+        COALESCE(emp6.employer_code, "N/A") AS Level_6_Employer_Code, 
+        COALESCE(emp6.designation_name, "N/A") AS Level_6_Designation_Name, 
+        emp6.id AS Emp_id6,
+        
+        mp.Level_7, 
+        COALESCE(emp7.name, "N/A") AS Level_7_Name, 
+        COALESCE(emp7.employer_code, "N/A") AS Level_7_Employer_Code, 
+        COALESCE(emp7.designation_name, "N/A") AS Level_7_Designation_Name, 
+        emp7.id AS Emp_id7,
+        
+        COALESCE(ds.Customer_Name, "N/A") AS Customer_Name, 
+        COALESCE(ds.Customer_Code, mp.DB_Code) AS Customer_Code, 
+        COALESCE(ds.Sales_Code, mp.Sales_Code) AS Sales_Code, 
+        COALESCE(ds.Distribution_Channel_Code, mp.Distribution_Channel_Code) AS Distribution_Channel_Code, 
+        COALESCE(ds.Division_Code, mp.Division_Code) AS Division_Code, 
+        COALESCE(ds.Customer_Type_Code, mp.Customer_Type_Code) AS Customer_Type_Code, 
+        COALESCE(ds.Customer_Group_Code, mp.Customer_Group_Code) AS Customer_Group_Code,
+        
+        COALESCE(ds.Pin_Code, "N/A") AS Pin_Code, 
+        COALESCE(ds.City, "N/A") AS City, 
+        COALESCE(ds.District, "N/A") AS District, 
+        COALESCE(ds.Contact_Number, "N/A") AS Contact_Number, 
+        COALESCE(ds.Country, "N/A") AS Country, 
+        COALESCE(ds.Zone, "N/A") AS Zone, 
+        COALESCE(ds.State, "N/A") AS State, 
+        COALESCE(ds.Population_Strata_1, "N/A") AS Population_Strata_1, 
+        COALESCE(ds.Population_Strata_2, "N/A") AS Population_Strata_2,
+        
+        COALESCE(ds.Country_Group, "N/A") AS Country_Group, 
+        COALESCE(ds.GTM_TYPE, "N/A") AS GTM_TYPE, 
+        COALESCE(ds.SUPERSTOCKIST, "N/A") AS SUPERSTOCKIST, 
+        COALESCE(ds.STATUS, "N/A") AS STATUS, 
+        COALESCE(ds.Customer_Type_Name, "N/A") AS Customer_Type_Name, 
+        COALESCE(ds.Customer_Creation_Date, "N/A") AS Customer_Creation_Date, 
+        COALESCE(ds.Division_Name, "N/A") AS Division_Name, 
+        COALESCE(ds.Sector_Code, "N/A") AS Sector_Code, 
+        COALESCE(ds.State_Code, "N/A") AS State_Code, 
+        COALESCE(ds.Zone_Code, "N/A") AS Zone_Code, 
+        COALESCE(ds.Distribution_Channel_Name, "N/A") AS Distribution_Channel_Name, 
+        COALESCE(ds.Customer_Group_Name, "N/A") AS Customer_Group_Name, 
+        COALESCE(ds.Sales_Name, "N/A") AS Sales_Name, 
+        COALESCE(ds.Division_Name, "N/A") AS Division_Name, 
+        COALESCE(ds.Sector_Name, "N/A") AS Sector_Name
+    ');
+
+        $this->db->from('maping mp');
+        $this->db->join('distributors ds', 'mp.DB_Code = ds.Customer_Code 
+                AND mp.Sales_Code = ds.Sales_Code 
+                AND mp.Distribution_Channel_Code = ds.Distribution_Channel_Code 
+                AND mp.Division_Code = ds.Division_Code 
+                AND mp.Customer_Type_Code = ds.Customer_Type_Code 
+                AND mp.Customer_Group_Code = ds.Customer_Group_Code', 'left');
+        $this->db->join('employee emp1', 'emp1.pjp_code = mp.Level_1 AND emp1.level = 1', 'left');
+        $this->db->join('employee emp2', 'emp2.pjp_code = mp.Level_2 AND emp2.level = 2', 'left');
+        $this->db->join('employee emp3', 'emp3.pjp_code = mp.Level_3 AND emp3.level = 3', 'left');
+        $this->db->join('employee emp4', 'emp4.pjp_code = mp.Level_4 AND emp4.level = 4', 'left');
+        $this->db->join('employee emp5', 'emp5.pjp_code = mp.Level_5 AND emp5.level = 5', 'left');
+        $this->db->join('employee emp6', 'emp6.pjp_code = mp.Level_6 AND emp6.level = 6', 'left');
+        $this->db->join('employee emp7', 'emp7.pjp_code = mp.Level_7 AND emp7.level = 7', 'left');
+
+        if (!empty($customer_group_code)) {
+            $this->db->where_in('mp.Customer_Group_Code', $customer_group_code);
+        }
+
+        if (!empty($customer_type_code)) {
+            $this->db->where_in('mp.Customer_Type_Code', $customer_type_code);
+        }
+
+        if (!empty($distribution_channel_code)) {
+            $this->db->where_in('mp.Distribution_Channel_Code', $distribution_channel_code);
+        }
+
+        if (!empty($division_code)) {
+            $this->db->where_in('mp.Division_Code', $division_code);
+        }
+
+        if (!empty($population_strata_2)) {
+            $this->db->where_in('ds.Population_Strata_2', $population_strata_2);
+        }
+
+        if (!empty($sales_code)) {
+            $this->db->where_in('mp.Sales_Code', $sales_code);
+        }
+
+        if (!empty($zone)) {
+            $this->db->where_in('ds.Zone_Code', $zone);
+        }
+
+        if (!empty($state_code)) {
+            $this->db->where_in('ds.State_Code', $state_code);
+        }
+
+        if (!empty($city)) {
+            $this->db->where_in('ds.City', $city);
+        }
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
     public function get_all_zones()
     {
         $this->db->select('Zone_Code, Zone');
@@ -166,7 +331,7 @@ class Distributor_model extends CI_Model
     }
 
 
-    
+
     public function get_sales_hierarchy($dbCode, $id)
     {
 

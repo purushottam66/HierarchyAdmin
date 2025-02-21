@@ -759,7 +759,7 @@ class Employee extends CI_Controller
                         return $value !== null;
                     });
 
-                    if (count($updateConditions) === 7) { // Check if all fields are present
+                    if (count($updateConditions) === 7) { 
                         $this->db->where($updateConditions);
                         $this->db->update('maping', [
                             "Level_{$postData['level']}" => $postData['set_pjp_code']
@@ -768,6 +768,41 @@ class Employee extends CI_Controller
                 }
             }
         }
+
+
+
+
+        $pjp_code = $postData['selectedEmployeesselectedValue'] ?? null;
+        $level = $postData['level'] ?? null;
+        $state = $postData['state'] ?? null;
+        $city = $postData['city'] ?? null;
+        $region = $postData['Zone'] ?? null;
+
+        // Calculate new level
+        $new_level = ($level > 1) ? max(2, $level - 1) : $level;
+
+        // Find and update employee
+        if ($pjp_code && $level) {
+            $employee = $this->db->where([
+                'pjp_code' => $pjp_code,
+                'level' => $level
+            ])->get('employee')->row();
+
+            if ($employee) {
+                $update_data = [
+                    'state' => $state,
+                    'city' => $city,
+                    'level' => $new_level,
+                    'region' => $region
+                ];
+                $this->db->where('id', $employee->id)->update('employee', $update_data);
+            }
+        }
+
+
+
+
+
 
         // Similar approach for employee_data processing
         if (!empty($postData['employee_data'])) {
@@ -1672,6 +1707,10 @@ class Employee extends CI_Controller
             'gender' => $this->input->post('gender'),
             'designation' => $this->input->post('designation'),
             'designation_label' => $this->input->post('designation_label'),
+            'designation_name' => $this->input->post('designation_name'),
+            'designation_label_name' => $this->input->post('designation_label_name'),
+
+
             // 'employee_status' => $this->input->post('employee_status'),
             // 'city' => $this->input->post('city'),
             // 'state' => $this->input->post('state'),
@@ -1680,6 +1719,10 @@ class Employee extends CI_Controller
             'updated_at' => date('Y-m-d H:i:s')  // Add update date
 
         ];
+
+
+        // print_r($updatedData);
+        // die();
 
 
         $this->Employee_model->update_employee($id, $updatedData);

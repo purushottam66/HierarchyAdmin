@@ -359,22 +359,27 @@
 
 
 <script>
-    document.getElementById('designation_label').addEventListener('change', function() {
-        var selectedOption = this.options[this.selectedIndex];
+document.getElementById('designation_label').addEventListener('change', function() {
+    var selectedOption = this.options[this.selectedIndex];
 
-        var designationName = selectedOption.getAttribute('data-name');
-
+    if (selectedOption) {
+        var designationName = selectedOption.textContent.trim(); // Get visible text (ASM)
         document.getElementById('designation_label_name').value = designationName;
-    });
+
+    }
+});
+
 </script>
 
 <script>
     document.getElementById('designation').addEventListener('change', function() {
         var selectedOption = this.options[this.selectedIndex];
 
-        var designationName = selectedOption.getAttribute('data-name');
+        if (selectedOption) {
+            var designationText = selectedOption.textContent.trim(); // Get visible text (ASM)
+            document.getElementById('designation_name').value = designationText;
 
-        document.getElementById('designation_name').value = designationName;
+        }
     });
 </script>
 

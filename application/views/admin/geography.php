@@ -68,15 +68,8 @@
                                                 data-size="5" data-live-search="true" multiple
                                                 data-selected-text-format="count"
                                                 data-count-selected-text=" ({0} items selected)">
-
-
                                             </select>
-
-
-
                                         </div>
-
-
                                     </div>
                                 </div>
                             </form>
@@ -132,30 +125,47 @@
             ],
 
             dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
-            buttons: [{
-                extend: 'excelHtml5',
-                text: '<i class="fa fa-download"></i> Download',
-                filename: 'Geography_Wise',
-                titleAttr: 'Download as Excel',
-            }],
+            buttons: [
+
+                {
+                    text: '<i class="fa fa-database"></i> Export  Data',
+                    titleAttr: 'Export Filtered Data',
+                    action: function() {
+                        var zoneSelect = $('#zoneSelect').val() || [];
+                        var State_Code = $('#State_Code').val() || [];
+                        var City = $('#City').val() || [];
+
+                        var params = new URLSearchParams();
+                        if (zoneSelect.length > 0) {
+                            params.append('zoneSelect', JSON.stringify(zoneSelect));
+                        }
+                        if (State_Code.length > 0) {
+                            params.append('State_Code', JSON.stringify(State_Code));
+                        }
+                        if (City.length > 0) {
+                            params.append('City', JSON.stringify(City));
+                        }
+
+
+                        var url = '<?php echo base_url("admin/export_distributors_csv"); ?>?' + params.toString();
+                        window.location.href = url;
+                    }
+                }
+
+            ],
             ajax: {
                 url: "<?= site_url('admin/geographyajex') ?>",
                 type: "POST",
                 data: function(d) {
                     $.extend(d, getParams());
                     d.search = $('#dt-search-0').val(); // Include search term
-                    // Log the data being sent
-
-                    console.log("sssssssssssss",d);
-                    
-
 
                     return d;
                 },
                 dataSrc: function(json) {
 
                     if (json.filter) {
-                       // updateSalesCodeDropdown(json.filter);
+                        // updateSalesCodeDropdown(json.filter);
                     }
                     return json.data;
                 },
@@ -573,7 +583,7 @@
     function fetchDataAndUpdate_(params) {
 
         console.log(params);
-        
+
         $.ajax({
             url: "<?= site_url('admin/get-hierarchy-filter-options') ?>",
             type: "GET",

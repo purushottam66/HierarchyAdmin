@@ -51,18 +51,30 @@
 
             "buttons": [
 
-                // {
-                //     text: '<i class="fa fa-database"></i> Export All',
-                //     titleAttr: 'Export All',
-                //     action: function() {
-                //         window.location.href = '<?php echo base_url("admin/export_distributors_csv"); ?>';
-                //     }
-                // },
+       
                 {
-                    extend: 'excelHtml5',
-                    text: '<i class="fa fa-download"></i> Download',
-                    titleAttr: 'Download as Excel',
-                    filename: 'Un_mapped_Distributors',
+                    text: '<i class="fa fa-database"></i> Export  Data',
+                    titleAttr: 'Export Filtered Data',
+                    action: function() {
+                        var zoneSelect = $('#zoneSelect').val() || [];
+                        var State_Code = $('#State_Code').val() || [];
+                        var City = $('#City').val() || [];
+
+                        var params = new URLSearchParams();
+                        if (zoneSelect.length > 0) {
+                            params.append('zoneSelect', JSON.stringify(zoneSelect));
+                        }
+                        if (State_Code.length > 0) {
+                            params.append('State_Code', JSON.stringify(State_Code));
+                        }
+                        if (City.length > 0) {
+                            params.append('City', JSON.stringify(City));
+                        }
+
+
+                        var url = '<?php echo base_url("admin/unmapped_distributors_csv"); ?>?' + params.toString();
+                        window.location.href = url;
+                    }
                 }
 
             ],

@@ -49,6 +49,9 @@ $route['admin/distributors_db_unmppd'] = 'admin/dashboard/distributors_db_unmppd
 
 $route['admin/export_distributors_csv'] = 'admin/Export_distributors_csv/export_distributors_csv';
 $route['admin/export_unmaped_distributors_csv'] = 'admin/Export_distributors_csv/export_unmaped_distributors_csv';
+$route['admin/distributors_csv'] = 'admin/Export_distributors_csv/distributors_csv';
+$route['admin/unmapped_distributors_csv'] = 'admin/Export_distributors_csv/unmapped_distributors_csv';
+
 
 
 
