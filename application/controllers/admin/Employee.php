@@ -1323,6 +1323,7 @@ class Employee extends CI_Controller
 
         $back_user_id = $this->session->userdata('back_user_id');
 
+   
         if (!$back_user_id) {
 
             redirect('admin/login');
@@ -1355,6 +1356,12 @@ class Employee extends CI_Controller
             exit;
         }
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
+
+
+        // header('Content-Type: application/json');
+        // echo json_encode($data, JSON_PRETTY_PRINT);
+        // die();
+
         $this->load->view('admin/header', $data);
         $this->load->view('admin/userdetails', $data);
         $this->load->view('admin/footer', $data);
@@ -1411,28 +1418,28 @@ class Employee extends CI_Controller
             redirect('admin/login');
         }
 
-        // Get parameters from the DataTables request
+      
         $draw = $this->input->get('draw');
         $start = $this->input->get('start', TRUE);
         $length = $this->input->get('length', TRUE);
         $search = $this->input->get('search', TRUE);
-        $order_column_index = $this->input->get('order[0][column]', TRUE);  // Column index for sorting
-        $order_dir = $this->input->get('order[0][dir]', TRUE);  // Sorting direction (asc/desc)
+        $order_column_index = $this->input->get('order[0][column]', TRUE);  
+        $order_dir = $this->input->get('order[0][dir]', TRUE);  
 
-        // Map the column index to the actual column name
+     
         $columns = ['name', 'employer_name', 'email', 'mobile', 'pjp_code', 'employee_id', 'level', 'city', 'designation_name', 'designation_label_name', 'gender', 'employee_status'];
-        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'name'; // Default sorting by 'name'
+        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'name'; 
 
-        // Apply sorting direction validation (either 'asc' or 'desc')
+     
         if (!in_array($order_dir, ['asc', 'desc'])) {
-            $order_dir = 'asc';  // Default to 'asc' if an invalid direction is passed
+            $order_dir = 'asc';  
         }
 
-        // Fetch total employee count and paginated employees
+      
         $total_get_employee = $this->Employee_model->getTotal_employees_unmaped($search);
         $employee_s = $this->Employee_model->get_employees_unmaped($start, $length, $search, $order_column, $order_dir);
 
-        // Prepare data for the table
+     
         $data = array();
         foreach ($employee_s->result() as $AS_employee) {
             $data[] = array(
@@ -1450,7 +1457,7 @@ class Employee extends CI_Controller
             );
         }
 
-        // Prepare the output in DataTable format
+       
         $output = array(
             'draw' => $draw,
             'recordsTotal' => $total_get_employee,

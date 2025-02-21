@@ -104,6 +104,9 @@
             <div class="dashhead-titles">
                 <h3 class="dashhead-title">User Manager</h3>
             </div>
+
+
+
             <!-- <div class="dashhead-toolbar">
                 <div class="dashhead-toolbar-item"><a href="#">Hierarchy</a> / User Details
                 </div>
@@ -126,7 +129,6 @@
                                             <th class="text-center ">employer name</th>
                                             <th class="text-center ">Email</th>
                                             <th class="text-center ">Contact No.</th>
-                                            <!-- <th class="text-center ">pjp_code</th> -->
                                             <th class="text-center ">employee_id</th>
                                             <th class="text-center ">level</th>
                                             <th class="text-center ">state</th>
@@ -185,6 +187,27 @@
 
 <script>
     $(document).ready(function() {
+
+        var permissions = <?php echo json_encode($permissions); ?>;
+        let addEmployeePermission = permissions.some(p => p.module_name === "User Master" && p.edit === "yes");
+        let buttonsList = [];
+
+        if (addEmployeePermission) {
+            buttonsList.push({
+                text: '<i class="fa fa-plus"></i> Add Employee',
+                titleAttr: 'Add Employee',
+                action: function() {
+                    window.location.href = '<?php echo base_url("admin/Employee"); ?>';
+                }
+            });
+        }
+        buttonsList.push({
+            text: '<i class="fa fa-user-times"></i> Unmapped Employee',
+            titleAttr: 'Unmapped Employee',
+            action: function() {
+                window.location.href = '<?php echo base_url("admin/Unmapped_Employee"); ?>';
+            }
+        });
         var table = $('#example11').DataTable({
             paging: true,
             searching: true,
@@ -200,25 +223,12 @@
             serverSide: true,
             dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
 
-            buttons: [{
-                    text: '<i class="fa fa-plus"></i> Add Employee',
-                    titleAttr: 'Add Employee',
-                    action: function() {
-                        window.location.href = '<?php echo base_url("admin/Employee"); ?>';
-                    }
-                },
-                {
-                    text: '<i class="fa fa-user-times"></i> Unmapped Employee',
-                    titleAttr: 'Unmapped Employee',
-                    action: function() {
-                        window.location.href = '<?php echo base_url("admin/Unmapped_Employee"); ?>';
-                    }
-                }
-            ],
+            buttons: buttonsList,
+
 
             order: [
                 [0, 'asc']
-            ], // Default sorting by the first column
+            ], 
 
             ajax: {
                 url: "<?= site_url('admin/Employee_ajex_load') ?>",
@@ -232,12 +242,10 @@
                 processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">'
             },
 
-            columnDefs: [
-                {
-                    className: 'text-center',
-                    targets: '_all'
-                }
-            ],
+            columnDefs: [{
+                className: 'text-center',
+                targets: '_all'
+            }],
         });
 
         $('#dt-search-0').on('keyup', function() {
@@ -251,7 +259,6 @@
 <script>
     function logStatusChange(element) {
         const status = element.value;
-        console.log(`Status changed to: ${status}`);
     }
 </script>
 
@@ -269,11 +276,11 @@
             success: function(data) {
 
                 if (data.status == 'success') {
-                    toastr.success(data.message); // Show success toast with dynamic message
+                    toastr.success(data.message); 
                 } else if (data.status == 'error') {
-                    toastr.error(data.message); // Show error toast with dynamic message
+                    toastr.error(data.message); 
                 } else {
-                    toastr.info("Unexpected response status"); // Handle unexpected status
+                    toastr.info("Unexpected response status");
                 }
             },
             error: function(xhr, status, error) {
