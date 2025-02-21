@@ -212,6 +212,7 @@
                         var divisionCode = $('#Division_Code').val() || [];
                         var populationStrata2 = $('#Population_Strata_2').val() || [];
                         var salesCode = $('#Sales_Code').val() || [];
+                        var search = $('#dt-search-0').val();
 
                         // Construct the query parameters
                         var params = new URLSearchParams();
@@ -235,18 +236,22 @@
                         if (salesCode.length > 0) {
                             params.append('Sales_Code', JSON.stringify(salesCode));
                         }
+                        if (search.length > 0) {
+                            params.append('dt-search-0', JSON.stringify(search));
+                        }
 
                         // Construct the URL with the base URL and the query parameters
                         var url = '<?php echo base_url("admin/export_distributors_csv"); ?>?' + params.toString();
 
-                        // Log the sent data for debugging
-                        console.log("Sent Data:", {
+                    
+                        console.log("Sent Datasdgs:", {
                             Customer_Group_Code: customerGroupCode,
                             Customer_Type_Code: customerTypeCode,
                             Distribution_Channel_Code: distributionChannelCode,
                             Division_Code: divisionCode,
                             Population_Strata_2: populationStrata2,
-                            Sales_Code: salesCode
+                            Sales_Code: salesCode,
+                            Search: search
                         });
                         console.log("Export URL:", url);
 

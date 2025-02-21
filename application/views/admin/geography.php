@@ -134,6 +134,7 @@
                         var zoneSelect = $('#zoneSelect').val() || [];
                         var State_Code = $('#State_Code').val() || [];
                         var City = $('#City').val() || [];
+                        var search = $('#dt-search-0').val();
 
                         var params = new URLSearchParams();
                         if (zoneSelect.length > 0) {
@@ -144,6 +145,9 @@
                         }
                         if (City.length > 0) {
                             params.append('City', JSON.stringify(City));
+                        }
+                        if (search.length > 0) {
+                            params.append('dt-search-0', JSON.stringify(search));
                         }
 
 

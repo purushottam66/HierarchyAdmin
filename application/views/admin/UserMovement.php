@@ -174,15 +174,71 @@
             serverSide: true,
 
             order: [
-                [0, 'asc'] // Default sorting by the first column
+                [0, 'asc'] 
             ],
             dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
-            buttons: [{
-                extend: 'excelHtml5',
-                text: '<i class="fa fa-download"></i> Download',
-                titleAttr: 'Download as Excel',
-                filename: 'UserMovement'
-            }],
+            buttons: [
+                
+                {
+                    text: '<i class="fa fa-database"></i> Export  Data',
+                    titleAttr: 'Export Filtered Data',
+                    action: function() {
+                        // Retrieve selected values from the dropdowns
+                        var customerGroupCode = $('#Customer_Group_Code').val() || [];
+                        var customerTypeCode = $('#Customer_Type_Code').val() || [];
+                        var distributionChannelCode = $('#Distribution_Channel_Code').val() || [];
+                        var divisionCode = $('#Division_Code').val() || [];
+                        var populationStrata2 = $('#Population_Strata_2').val() || [];
+                        var salesCode = $('#Sales_Code').val() || [];
+                        var search = $('#dt-search-0').val();
+
+                        // Construct the query parameters
+                        var params = new URLSearchParams();
+
+                        // Add each filter to the URL parameters if it has values
+                        if (customerGroupCode.length > 0) {
+                            params.append('Customer_Group_Code', JSON.stringify(customerGroupCode));
+                        }
+                        if (customerTypeCode.length > 0) {
+                            params.append('Customer_Type_Code', JSON.stringify(customerTypeCode));
+                        }
+                        if (distributionChannelCode.length > 0) {
+                            params.append('Distribution_Channel_Code', JSON.stringify(distributionChannelCode));
+                        }
+                        if (divisionCode.length > 0) {
+                            params.append('Division_Code', JSON.stringify(divisionCode));
+                        }
+                        if (populationStrata2.length > 0) {
+                            params.append('Population_Strata_2', JSON.stringify(populationStrata2));
+                        }
+                        if (salesCode.length > 0) {
+                            params.append('Sales_Code', JSON.stringify(salesCode));
+                        }
+                        if (search.length > 0) {
+                            params.append('dt-search-0', JSON.stringify(search));
+                        }
+
+                        // Construct the URL with the base URL and the query parameters
+                        var url = '<?php echo base_url("admin/export_distributors_csv"); ?>?' + params.toString();
+
+                    
+                        console.log("Sent Datasdgs:", {
+                            Customer_Group_Code: customerGroupCode,
+                            Customer_Type_Code: customerTypeCode,
+                            Distribution_Channel_Code: distributionChannelCode,
+                            Division_Code: divisionCode,
+                            Population_Strata_2: populationStrata2,
+                            Sales_Code: salesCode,
+                            Search: search
+                        });
+                        console.log("Export URL:", url);
+
+                        // Redirect to the constructed URL
+                        window.location.href = url;
+                    }
+                }
+        
+        ],
             ajax: {
                 url: "<?= site_url('admin/hierarchydata_ajex') ?>",
                 type: "POST",

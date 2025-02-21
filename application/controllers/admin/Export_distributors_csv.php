@@ -209,6 +209,8 @@ class Export_distributors_csv extends CI_Controller
         $state_code = $this->input->get('State_Code');
         $city = $this->input->get('City');
 
+        $search = $this->input->get('dt-search-0');
+
 
         
 
@@ -221,6 +223,7 @@ class Export_distributors_csv extends CI_Controller
         $zone = $zone ? json_decode($zone, true) : [];
         $state_code = $state_code ? json_decode($state_code, true) : [];
         $city = $city ? json_decode($city, true) : [];
+        $search = $search ? json_decode($search, true) : [];
 
         $data = $this->Distributor_model->get_all_distributors_filtered(
             $customer_group_code,
@@ -231,7 +234,8 @@ class Export_distributors_csv extends CI_Controller
             $sales_code,
             $zone,
             $state_code,
-            $city
+            $city,
+            $search
         );
 
         $fileName = 'distributor_data_' . date('Ymd') . '.csv';

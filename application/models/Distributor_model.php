@@ -61,7 +61,7 @@ class Distributor_model extends CI_Model
 
 
 
-    public function get_all_distributors_filtered($customer_group_code = [], $customer_type_code = [], $distribution_channel_code = [], $division_code = [], $population_strata_2 = [], $sales_code = [], $zone = [], $state_code = [], $city = [])
+    public function get_all_distributors_filtered($customer_group_code = [], $customer_type_code = [], $distribution_channel_code = [], $division_code = [], $population_strata_2 = [], $sales_code = [], $zone = [], $state_code = [], $city = [], $search = [])
     {
         $this->db->select('
         mp.id,
@@ -192,6 +192,58 @@ class Distributor_model extends CI_Model
 
         if (!empty($city)) {
             $this->db->where_in('ds.City', $city);
+        }
+
+
+        if (!empty($search)) {
+            $search = $this->db->escape_like_str($search);
+
+            // log_message('debug', 'Search applied with escaped term: ' . $search);
+            // log_message('debug', 'Building search query...');
+
+            $escaped_search = $this->db->escape_like_str($search);
+            $this->db->group_start();
+            $this->db->like('ds.Customer_Code', $escaped_search);
+            $this->db->or_like('ds.Customer_Name', $escaped_search);
+            $this->db->or_like('ds.Pin_Code', $escaped_search);
+            $this->db->or_like('ds.City', $escaped_search);
+            $this->db->or_like('ds.District', $escaped_search);
+            $this->db->or_like('ds.Contact_Number', $escaped_search);
+            $this->db->or_like('ds.Country', $escaped_search);
+            $this->db->or_like('ds.Zone', $escaped_search);
+            $this->db->or_like('ds.State', $escaped_search);
+            $this->db->or_like('ds.Population_Strata_1', $escaped_search);
+            $this->db->or_like('ds.Population_Strata_2', $escaped_search);
+            $this->db->or_like('ds.Country_Group', $escaped_search);
+            $this->db->or_like('ds.GTM_TYPE', $escaped_search);
+            $this->db->or_like('ds.SUPERSTOCKIST', $escaped_search);
+            $this->db->or_like('ds.STATUS', $escaped_search);
+            $this->db->or_like('ds.Customer_Type_Code', $escaped_search);
+            $this->db->or_like('ds.Sales_Code', $escaped_search);
+            $this->db->or_like('ds.Customer_Type_Name', $escaped_search);
+            $this->db->or_like('ds.Customer_Group_Code', $escaped_search);
+            $this->db->or_like('ds.Customer_Creation_Date', $escaped_search);
+            $this->db->or_like('ds.Division_Code', $escaped_search);
+            $this->db->or_like('ds.Sector_Code', $escaped_search);
+            $this->db->or_like('ds.State_Code', $escaped_search);
+            $this->db->or_like('ds.Zone_Code', $escaped_search);
+            $this->db->or_like('ds.Distribution_Channel_Code', $escaped_search);
+            $this->db->or_like('ds.Distribution_Channel_Name', $escaped_search);
+            $this->db->or_like('ds.Customer_Group_Name', $escaped_search);
+            $this->db->or_like('ds.Sales_Name', $escaped_search);
+            $this->db->or_like('ds.Division_Name', $escaped_search);
+            $this->db->or_like('ds.Sector_Name', $escaped_search);
+
+
+            $this->db->or_like('emp1.name', $escaped_search);
+            $this->db->or_like('emp2.name', $escaped_search);
+            $this->db->or_like('emp3.name', $escaped_search);
+            $this->db->or_like('emp4.name', $escaped_search);
+            $this->db->or_like('emp5.name', $escaped_search);
+            $this->db->or_like('emp6.name', $escaped_search);
+            $this->db->or_like('emp7.name', $escaped_search);
+
+            $this->db->group_end();
         }
 
         $query = $this->db->get();
