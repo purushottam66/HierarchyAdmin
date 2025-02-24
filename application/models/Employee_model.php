@@ -584,6 +584,7 @@ class Employee_model extends CI_Model
     {
         $this->db->select('e.*')
             ->from('employee e')
+            ->where('e.employee_status', 'active')
             ->join('maping m', 'e.pjp_code = m.Level_1 OR e.pjp_code = m.Level_2 OR e.pjp_code = m.Level_3 OR e.pjp_code = m.Level_4 OR e.pjp_code = m.Level_5 OR e.pjp_code = m.Level_6 OR e.pjp_code = m.Level_7', 'left')
             ->where('m.Level_1 IS NULL')
             ->where('m.Level_2 IS NULL')
@@ -636,6 +637,8 @@ class Employee_model extends CI_Model
     {
         $this->db->select('COUNT(*) as total_get_employee')
             ->from('employee e')
+
+            ->where('e.employee_status', 'active')
             ->join('maping m', 'e.pjp_code = m.Level_1 OR e.pjp_code = m.Level_2 OR e.pjp_code = m.Level_3 OR e.pjp_code = m.Level_4 OR e.pjp_code = m.Level_5 OR e.pjp_code = m.Level_6 OR e.pjp_code = m.Level_7', 'left')
             ->where('m.Level_1 IS NULL')
             ->where('m.Level_2 IS NULL')
