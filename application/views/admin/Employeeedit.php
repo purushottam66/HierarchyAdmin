@@ -203,8 +203,7 @@
                                         <!-- Designation_Label -->
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="designation_label">Designation
-                                                    Label</label>
+                                                <label for="designation_label">Designation Label</label>
                                                 <select class="selectpicker  form-control" id="designation_label"
                                                     name="designation_label" required>
                                                     <option selected>Select Label</option>
@@ -241,72 +240,14 @@
                                                 </select>
                                             </div>
                                         </div> -->
-                                        <!-- 
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="state">state:</label>
-                                                <select class="selectpicker form-control" data-actions-box="true"
-                                                    title="Select state" data-size="5" data-live-search="true"
-                                                    id="state" name="state">
-                                                    <?php if (!empty($unique_State)) : ?>
-                                                        <?php foreach ($unique_State as $unique_State__) : ?>
-                                                            <?php if ($unique_State__ !== null) : ?>
-                                                                <?php
-                                                                // Trim the values to remove any extra spaces or hidden characters
-                                                                $unique_State__ = trim($unique_State__);
-                                                                $employee_state = trim($employee['state']);
-                                                                ?>
-                                                                <option value="<?php echo htmlspecialchars($unique_State__); ?>"
-                                                                    <?php echo ($unique_State__ == $employee_state) ? 'selected="selected"' : ''; ?>>
-                                                                    <?php echo htmlspecialchars($unique_State__); ?>
-                                                                </option>
-                                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    <?php else : ?>
-                                                        <option value="N/A">No available</option>
-                                                    <?php endif; ?>
-                                                </select>
-                                            </div>
-                                        </div> -->
-
-
-                                        <!-- 
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="city"> city:</label>
-                                                <select class="selectpicker form-control" data-actions-box="true"
-                                                    title="Select City" data-size="5" data-live-search="true" id="city" name="city">
-                                                    <option value="<?php echo htmlspecialchars($employee_city); ?>"
-                                                        <?php echo (strtolower(trim($employee_city)) == strtolower(trim($employee_city))) ? 'selected="selected"' : ''; ?>>
-                                                        <?php echo htmlspecialchars($employee_city); ?>
-                                                    </option>
-                                                </select>
-
-
-                                            </div>
-                                        </div> -->
+                            
 
 
 
 
 
-                                        <!-- 
-                                        <div class="col-md-3">
-                                            <div class="form-group ">
-                                                <label for="region"> Zone:</label>
-                                                <select class="selectpicker  form-control" data-actions-box="true"
-                                                    title="Select Zone" data-size="5" data-live-search="true"
-                                                    id="region" name="region" required>
-                                                    <option value="N/A">Select </option>
 
-                                                    <option value="<?php echo htmlspecialchars($employee_region); ?>"
-                                                        <?php echo (strtolower(trim($employee_region)) == strtolower(trim($employee_region))) ? 'selected="selected"' : ''; ?>>
-                                                        <?php echo htmlspecialchars($employee_region); ?>
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div> -->
+
 
 
 
@@ -462,5 +403,59 @@ document.getElementById('designation_label').addEventListener('change', function
         function escapeHtml(text) {
             return $('<div/>').text(text).html();
         }
+    });
+</script>
+
+<!-- 
+<script>
+    $(document).ready(function() {
+
+        $('#designation').change(function() {
+            var designationId = $(this).val();
+            $('#designation_label').empty();
+            $('#designation_label').append('<option selected>Select Label</option>');
+            $('option[data-name]').each(function() {
+                var label = $(this).data('name');
+                var value = $(this).val();
+
+                if (designationId == value) {
+
+                    $('#designation_label').append('<option value="' + value + '" data-name="' + label + '">' + label + '</option>');
+                }
+            });
+            $('#designation_label').selectpicker('refresh');
+        });
+    });
+</script> -->
+
+
+
+<script>
+    $(document).ready(function() {
+        // On change of the Designation dropdown
+        $('#designation').change(function() {
+            var designationId = $(this).val(); // Get the selected Designation ID
+
+
+    
+            // Clear the Designation Label dropdown
+            $('#designation_label').empty();
+            $('#designation_label').append('<option selected>Select Label</option>'); // Reset the first option
+
+            // Loop through the options and find the labels corresponding to the selected designation
+            $('option[data-name]').each(function() {
+                var label = $(this).data('name'); // Get the corresponding Designation Label
+                var value = $(this).val(); // Get the corresponding Designation ID
+
+                // Only append the label if the ID matches the selected Designation ID
+                if (designationId == value) {
+                    // Correctly append the option with the 'data-name' attribute and the label
+                    $('#designation_label').append('<option value="' + value + '" data-name="' + label + '">' + label + '</option>');
+                }
+            });
+
+            // Reinitialize selectpicker to reflect changes
+            $('#designation_label').selectpicker('refresh');
+        });
     });
 </script>
