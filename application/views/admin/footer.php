@@ -181,7 +181,7 @@
 
         var menuPaths = [
             'admin/zone',
-            'admin/distributors',
+ 
             'admin/salesorg',
             'admin/distributionchannel',
             'admin/division',

@@ -157,7 +157,7 @@
         border: 1px solid gray;
         padding: 10px 9px 10px 11px;
         line-height: 43px;
-        font-size: 10px;
+        font-size: 8px;
 
 
 
@@ -448,32 +448,32 @@
                                             </div>
 
 
-                                            
-                                            <?php 
- 
- $hasPermission = false;
- if (is_array($permissions)) {
-     foreach ($permissions as $p) {
-         if ($p['module_name'] === "Mapping" && $p['edit'] === "yes") {
-             $hasPermission = true;
-             break;
-         }
-     }
- }
-?>
+
+                                            <?php
+
+                                            $hasPermission = false;
+                                            if (is_array($permissions)) {
+                                                foreach ($permissions as $p) {
+                                                    if ($p['module_name'] === "Mapping" && $p['edit'] === "yes") {
+                                                        $hasPermission = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            ?>
 
 
-                                 <?php if ($hasPermission): ?>
-                                    <div class="col-12">
-                                                <button type="submit" id="submitButton__" class="btn btnss setfont-btn">Submit</button> &#8202;
-                                            </div>
+                                            <?php if ($hasPermission): ?>
+                                                <div class="col-12">
+                                                    <button type="submit" id="submitButton__" class="btn btnss setfont-btn">Submit</button> &#8202;
+                                                </div>
                                             <?php else: ?>
                                                 <div class="col-12">
                                                     <p class=" btnss setfont-btn">No Permission to Submit</p>
                                                 </div>
                                             <?php endif; ?>
 
-                                
+
                                             <br>
                                         </div>
 
@@ -809,7 +809,6 @@
                         return d;
                     },
                     dataSrc: function(json) {
-                        // Get unique designation names from the data
                         let uniqueDesignationNames = [...new Set(json.data.map(item => item.designation_name))].join(', ');
 
                         // Update the unicnme element with level and designation names
@@ -1117,7 +1116,7 @@
                 success: function(response) {
                     updateSalesCodeDropdown(response);
 
-                   
+
 
 
                 },
@@ -1266,6 +1265,7 @@
             });
 
             $(".row-checkbox_:checked").each(function() {
+
                 levelSelected = true;
                 return false;
             });
@@ -1316,5 +1316,51 @@
                     swal("Cancelled", "Your form submission was canceled.", "error");
                 }
             });
+    });
+</script>
+
+
+
+<script>
+    $(document).ready(function() {
+        $("[id^=level_name_]").not("#level_name_1").addClass("disabled-level").css({
+            "pointer-events": "none",
+            "background-color": "red"
+        });
+
+
+        $("#level_name_1").css({
+          
+            "background-color": "green"
+        });
+
+
+        $(document).on("change", ".row-checkbox_", function() {
+            let levelSelected = parseInt($(this).attr("id").replace("level_", ""), 10);
+
+            console.log(levelSelected);
+
+            if (!isNaN(levelSelected)) {
+                let nextLevel = levelSelected + 1;
+
+                if ($(this).is(":checked")) {
+
+                    if (levelSelected >= 1 && levelSelected < 7) {
+                        $("#level_name_" + nextLevel).removeClass("disabled-level").css({
+                            "pointer-events": "auto",
+                            "background-color": "green"
+                        });
+                    }
+                } else {
+
+                    for (let i = nextLevel; i <= 7; i++) {
+                        $("#level_name_" + i).addClass("disabled-level").css({
+                            "pointer-events": "none",
+                            "background-color": "red"
+                        });
+                    }
+                }
+            }
+        });
     });
 </script>

@@ -724,7 +724,30 @@ class Maping_model extends CI_Model
 
 
 
+    public function is_pjp_code_mapped_to_levels($pjp_code) {
+        // Define the levels to check
+        $levels = [
+            'Level_1',
+            'Level_2',
+            'Level_3',
+            'Level_4',
+            'Level_5',
+            'Level_6',
+            'Level_7'
+        ];
 
+        // Build the query to check if the pjp_code exists in any of the level columns
+        $this->db->from('maping'); // Ensure table name is correct
+        $this->db->group_start();
+        foreach ($levels as $level) {
+            $this->db->or_where($level, $pjp_code);
+        }
+        $this->db->group_end();
+
+        $query = $this->db->get();
+
+        return ($query->num_rows() > 0);
+    }
 
 
 

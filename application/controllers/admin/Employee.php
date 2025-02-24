@@ -1677,57 +1677,77 @@ class Employee extends CI_Controller
         $this->load->view('admin/footer', $data);
     }
 
-    public function updateEmployeeStatus()
-    {
-        $back_user_id = $this->session->userdata('back_user_id');
-        if (!$back_user_id) {
-            redirect('admin/login');
+
+
+
+    
+        public function updateEmployeeStatus() {
+            $back_user_id = $this->session->userdata('back_user_id');
+            if (!$back_user_id) {
+                redirect('admin/login');
+            }
+    
+            $id = $this->input->post('employee_id', TRUE);
+            $employee_status = $this->input->post('employee_status', TRUE);
+    
+            date_default_timezone_set('Asia/Kolkata');
+    
+            log_message('debug', 'Employee ID: ' . $id);
+            log_message('debug', 'Employee Status: ' . $employee_status);
+    
+            if (empty($id) || empty($employee_status)) {
+                log_message('error', 'Invalid input data');
+                echo json_encode(['status' => 'error', 'message' => 'Invalid input data']);
+                return;
+            }
+    
+            // Get the pjp_code of the employee
+            $pjp_code = $this->Employee_model->get_pjp_code_by_employee_id($id);
+            log_message('debug', 'pjp_code: ' . $pjp_code);
+    
+            if (!$pjp_code) {
+                log_message('error', 'Failed to retrieve pjp_code');
+                echo json_encode(['status' => 'error', 'message' => 'Failed to retrieve pjp_code']);
+                return;
+            }
+    
+            // Check if pjp_code is mapped to levels 1 to 7
+            $is_mapped = $this->Maping_model->is_pjp_code_mapped_to_levels($pjp_code);
+    
+            if ($is_mapped) {
+                log_message('info', 'Status change not allowed: pjp_code is already mapped');
+                echo json_encode(['status' => 'error', 'message' => 'Status change not allowed: pjp_code is already mapped ']);
+                return;
+            }
+    
+            // Normalize employee_status
+            $employee_status = ucfirst(strtolower($employee_status)); 
+    
+            $data = ['employee_status' => $employee_status];
+    
+            // Set date for active/inactive status
+            if ($employee_status === 'Active') {
+                $data['active_date'] = date('Y-m-d H:i:s');
+            } elseif ($employee_status === 'Inactive') {
+                $data['inactive_date'] = date('Y-m-d H:i:s');
+            }
+    
+            log_message('debug', 'Update data: ' . print_r($data, true));
+    
+            $result = $this->Employee_model->update_employee($id, $data);
+    
+            if ($result) {
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => "Employee status successfully updated to {$employee_status}."
+                ]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+            }
         }
-
-        $id = $this->input->post('employee_id', TRUE);
-        $employee_status = $this->input->post('employee_status', TRUE);
-
-        date_default_timezone_set('Asia/Kolkata'); // Example for Indian Standard Time (IST)
-
-
-        // Log input data
-        log_message('debug', 'Employee ID: ' . $id);
-        log_message('debug', 'Employee Status: ' . $employee_status);
-
-        if (empty($id) || empty($employee_status)) {
-            log_message('error', 'Invalid input data');
-            echo json_encode(['status' => 'error', 'message' => 'Invalid input data']);
-            return;
-        }
-
-
-
-        // Normalize the employee_status for case consistency
-        $employee_status = ucfirst(strtolower($employee_status)); // Convert to "Active" or "Inactive"
-
-        $data = ['employee_status' => $employee_status];
-
-        // Set date for active/inactive status
-        if ($employee_status === 'Active') {
-            $data['active_date'] = date('Y-m-d H:i:s'); // Update active date
-        } elseif ($employee_status === 'Inactive') {
-            $data['inactive_date'] = date('Y-m-d H:i:s'); // Update inactive date
-        }
-
-        // Log the data being sent for the update
-        log_message('debug', 'Update Data: ' . print_r($data, true));
-
-        $result = $this->Employee_model->update_employee($id, $data);
-
-        if ($result) {
-            echo json_encode([
-                'status' => 'success',
-                'message' => "Employee status updated successfully to {$employee_status}."
-            ]);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
-        }
-    }
+    
+    
+    
 
 
 

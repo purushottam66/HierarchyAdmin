@@ -228,7 +228,7 @@
 
             order: [
                 [0, 'asc']
-            ], 
+            ],
 
             ajax: {
                 url: "<?= site_url('admin/Employee_ajex_load') ?>",
@@ -265,6 +265,16 @@
 <script>
     function changeEmployeeStatus(employeeId, status) {
         console.log(`Changing status of Employee ID: ${employeeId} to ${status}`);
+
+        let activeRadio = document.getElementById("switchActive" + employeeId);
+        let inactiveRadio = document.getElementById("switchInactive" + employeeId);
+
+        let switchWrapper = document.querySelector(`#switchActive${employeeId}, #switchInactive${employeeId}`).closest(".switches-container").querySelector(".switch-wrapper");
+
+
+        // पिछले स्टेटस को सेव करें
+        let previousStatus = inactiveRadio.checked ? "active" : "inactive";
+
         $.ajax({
             url: '<?= site_url('admin/updateEmployeeStatus') ?>',
             type: 'POST',
@@ -275,10 +285,27 @@
             },
             success: function(data) {
 
+         
+
+
                 if (data.status == 'success') {
-                    toastr.success(data.message); 
+                    toastr.success(data.message);
+
+                    if (newStatus === "active") {
+                    switchWrapper.style.transform = "translateX(0%)";
+                } else {
+                    switchWrapper.style.transform = "translateX(100%)";
+                }
                 } else if (data.status == 'error') {
-                    toastr.error(data.message); 
+                    toastr.error(data.message);
+
+                    if (previousStatus === "active") {
+                    activeRadio.checked = true;
+                    switchWrapper.style.transform = "translateX(0%)";
+                } else {
+                    inactiveRadio.checked = true;
+                    switchWrapper.style.transform = "translateX(100%)";
+                }
                 } else {
                     toastr.info("Unexpected response status");
                 }

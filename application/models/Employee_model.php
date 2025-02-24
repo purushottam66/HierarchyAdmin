@@ -293,7 +293,18 @@ class Employee_model extends CI_Model
     
     
 
+    public function get_pjp_code_by_employee_id($employee_id) {
+        $this->db->select('pjp_code');
+        $this->db->from('employee');
+        $this->db->where('id', $employee_id);
+        $query = $this->db->get();
 
+        if ($query->num_rows() > 0) {
+            return $query->row()->pjp_code;
+        } else {
+            return null; 
+        }
+    }
 
 
 
