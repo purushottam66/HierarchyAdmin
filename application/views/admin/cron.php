@@ -38,9 +38,33 @@
                             <div class="row">
                                 <form action="" method="post">
                                     <div class="col-md-6">
-                                        <button type="submit" class="btn custom-cron-btn pull-left">Cron Update</button>
+
+
+                                    <?php 
+ 
+ $hasPermission = false;
+ if (is_array($permissions)) {
+     foreach ($permissions as $p) {
+         if ($p['module_name'] === "cron" && $p['edit'] === "yes") {
+             $hasPermission = true;
+             break;
+         }
+     }
+ }
+?>
+
+
+                                 <?php if ($hasPermission): ?>
+                        
+                                    <button type="submit" class="btn custom-cron-btn pull-left">Cron Update</button>
                                         <button type="button" class="btn custom-update-btn pull-left" id="updateDistributor">Update Distributor</button>
                                         <!-- <button type="button" class="btn custom-update-btn pull-left" id="dummmy">dummy mapping</button> -->
+                                        <?php else: ?>
+                                                    <span class="text-danger fw-bold">No Permission</span>
+                                                <?php endif; ?>
+
+
+
 
 
                                     </div>

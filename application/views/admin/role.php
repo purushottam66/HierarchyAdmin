@@ -33,7 +33,7 @@
         <div class="container-fluid p-t-15">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box shadow-2dp b-r-2">  
+                    <div class="box shadow-2dp b-r-2">
                         <?php if ($this->session->flashdata('message')): ?>
                             <div class="alert alert-info">
                                 <?php echo $this->session->flashdata('message'); ?>
@@ -80,24 +80,45 @@
                                                 <?php echo date('Y-m-d', strtotime($user['created_date'])); ?></td>
                                             <td class="text-center">
 
-                                                <a href="<?php echo site_url('admin/Addrole/' . $user['id']); ?>"
-                                                    class="href">
-                                                    <button class="btn btn-primary setfont">
-                                                        <i class="fa-solid fa-pencil fa-fw"></i> Role
-                                                    </button>
-                                                </a>
+                                                <?php
 
-                                                <a href="<?php echo site_url('admin/edit/' . $user['id']); ?>" class="href">
-                                                    <button class="btn btn-primary setfont">
-                                                        <i class="fa-solid fa-eye fa-fw"></i>
-                                                    </button>
-                                                </a>
-                                                <a href="javascript:void(0);" data-id="<?php echo $user['id']; ?>"
-                                                    class="delete-btn">
-                                                    <button class="btn btn-primary setfont ">
-                                                        <i class="fa-solid fa-trash fa-fw"></i>
-                                                    </button>
-                                                </a>
+                                                $hasPermission = false;
+                                                if (is_array($permissions)) {
+                                                    foreach ($permissions as $p) {
+                                                        if ($p['module_name'] === "Role Manager" && $p['edit'] === "yes") {
+                                                            $hasPermission = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                ?>
+
+                                                
+
+                                                <?php if ($hasPermission): ?>
+                                                    <a href="<?php echo site_url('admin/Addrole/' . $user['id']); ?>" class="href">
+                                                        <button class="btn btn-primary setfont">
+                                                            <i class="fa-solid fa-pencil fa-fw"></i> Role
+                                                        </button>
+                                                    </a>
+
+                                                    <a href="<?php echo site_url('admin/edit/' . $user['id']); ?>" class="href">
+                                                        <button class="btn btn-primary setfont">
+                                                            <i class="fa-solid fa-eye fa-fw"></i>
+                                                        </button>
+                                                    </a>
+
+                                                    <a href="javascript:void(0);" data-id="<?php echo $user['id']; ?>" class="delete-btn">
+                                                        <button class="btn btn-danger setfont">
+                                                            <i class="fa-solid fa-trash fa-fw"></i>
+                                                        </button>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <span class="text-danger fw-bold">No Permission</span>
+                                                <?php endif; ?>
+
+
+
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -154,6 +175,31 @@
             $('#employeeTable').DataTable().clear().destroy();
         }
 
+        var permissions = <?php echo json_encode($permissions); ?>;
+        let rolePermission = permissions.some(p => p.module_name === "Role Manager" && p.edit === "yes");
+        let buttonsList = [];
+
+        if (rolePermission) {
+            buttonsList.push({
+                text: '<i class="fa fa-plus"></i> Add New User',
+                titleAttr: 'Add New User',
+                action: function() {
+                    window.location.href =
+                        '<?php echo base_url("admin/Adduser"); ?>';
+                }
+            });
+
+            buttonsList.push({
+            text: '<i class="fa fa-list"></i> Role List',
+            titleAttr: 'Role List',
+            action: function() {
+                window.location.href =
+                    '<?php echo base_url("admin/Rolelist"); ?>';
+            }
+        });
+        }
+ 
+
         $('#employeeTable').DataTable({
             paging: true,
             searching: true,
@@ -166,23 +212,9 @@
             fixedHeader: true,
             fixedFooter: true,
             dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
-            buttons: [{
-                    text: '<i class="fa fa-plus"></i> Add New User',
-                    titleAttr: 'Add New User',
-                    action: function() {
-                        window.location.href =
-                            '<?php echo base_url("admin/Adduser"); ?>';
-                    }
-                },
-                {
-                    text: '<i class="fa fa-list"></i> Role List',
-                    titleAttr: 'Role List',
-                    action: function() {
-                        window.location.href =
-                            '<?php echo base_url("admin/Rolelist"); ?>';
-                    }
-                }
-            ]
+
+
+            buttons: buttonsList,
         });
 
     });

@@ -83,7 +83,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="password">Password</label>
-                                                <input type="text" id="password" class="form-control" name="password"
+                                                <input type="text" id="password" max="8" class="form-control" name="password"
                                                     placeholder="Enter Password" required>
                                             </div>
                                         </div>

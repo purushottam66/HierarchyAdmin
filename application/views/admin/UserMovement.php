@@ -159,6 +159,9 @@
             .replace(/'/g, "&#039;");
     }
 
+    // var permissions = <?php echo json_encode($permissions); ?>;
+    // let EmployeeMovementPermission = permissions.some(p => p.module_name === "Employee Movement" && p.edit === "yes");
+
     $(document).ready(function() {
         var table = $('#exampley').DataTable({
             paging: true,
@@ -222,18 +225,9 @@
                         var url = '<?php echo base_url("admin/export_distributors_csv"); ?>?' + params.toString();
 
                     
-                        console.log("Sent Datasdgs:", {
-                            Customer_Group_Code: customerGroupCode,
-                            Customer_Type_Code: customerTypeCode,
-                            Distribution_Channel_Code: distributionChannelCode,
-                            Division_Code: divisionCode,
-                            Population_Strata_2: populationStrata2,
-                            Sales_Code: salesCode,
-                            Search: search
-                        });
-                        console.log("Export URL:", url);
+                 
 
-                        // Redirect to the constructed URL
+                     
                         window.location.href = url;
                     }
                 }
@@ -263,7 +257,7 @@
                 },
             },
             language: {
-                processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">', // Custom loading message
+                processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">', 
             },
             columns: [{
                     data: "id",
@@ -361,25 +355,42 @@
                     title: "Level 7 Designation"
                 },
                 {
-                    data: null,
-                    title: "Actions",
-                    orderable: false,
-                    render: function(data, type, row) {
-                        return `
-                            <div class="testone">
-                                <a href="<?= site_url('admin/emp_Left') ?>?id1=${encodeURIComponent(data.Emp_id1 || 'N/A')}&id2=${encodeURIComponent(data.Emp_id2 || 'N/A')}&id3=${encodeURIComponent(data.Emp_id3 || 'N/A')}&id4=${encodeURIComponent(data.Emp_id4 || 'N/A')}&id5=${encodeURIComponent(data.Emp_id5 || 'N/A')}&id6=${encodeURIComponent(data.Emp_id6 || 'N/A')}&id7=${encodeURIComponent(data.Emp_id7 || 'N/A')}&customer_name=${encodeURIComponent(data.Customer_Name || 'N/A')}" class="btn btn-primary text-white setfont">
-                                    Left
-                                </a>
-                                <a href="<?= site_url('admin/emp_Transfer') ?>?id1=${encodeURIComponent(data.Emp_id1 || 'N/A')}&id2=${encodeURIComponent(data.Emp_id2 || 'N/A')}&id3=${encodeURIComponent(data.Emp_id3 || 'N/A')}&id4=${encodeURIComponent(data.Emp_id4 || 'N/A')}&id5=${encodeURIComponent(data.Emp_id5 || 'N/A')}&id6=${encodeURIComponent(data.Emp_id6 || 'N/A')}&id7=${encodeURIComponent(data.Emp_id7 || 'N/A')}&customer_name=${encodeURIComponent(data.Customer_Name || 'N/A')}" class="btn btn-primary text-white setfont">
-                                    Transfer
-                                </a>
-                                <a href="<?= site_url('admin/emp_Promoted') ?>?id1=${encodeURIComponent(data.Emp_id1 || 'N/A')}&id2=${encodeURIComponent(data.Emp_id2 || 'N/A')}&id3=${encodeURIComponent(data.Emp_id3 || 'N/A')}&id4=${encodeURIComponent(data.Emp_id4 || 'N/A')}&id5=${encodeURIComponent(data.Emp_id5 || 'N/A')}&id6=${encodeURIComponent(data.Emp_id6 || 'N/A')}&id7=${encodeURIComponent(data.Emp_id7 || 'N/A')}&customer_name=${encodeURIComponent(data.Customer_Name || 'N/A')}" class="btn btn-primary text-white setfont">
-                                    Promoted
-                                </a>
-                            </div>
-                        `;
-                    },
-                },
+    data: null,
+    title: "Actions",
+    orderable: false,
+    render: function(data, type, row) {
+        // PHP से permissions डेटा लेना
+        var permissions = <?php echo json_encode($permissions); ?>;
+        
+        let EmployeeMovementPermission = permissions.some(p => p.module_name === "Employee Movement" && p.edit === "yes");
+
+        function buildUrl(baseUrl, data) {
+            let params = new URLSearchParams();
+            for (let i = 1; i <= 7; i++) {
+                params.append(`id${i}`, data[`Emp_id${i}`] || 'N/A');
+            }
+            params.append("customer_name", data.Customer_Name || 'N/A');
+            return `${baseUrl}?${params.toString()}`;
+        }
+
+        function createButton(url, text) {
+            return `<a href="${url}" class="btn btn-primary text-white setfont">${text}</a>`;
+        }
+
+        if (!EmployeeMovementPermission) {
+            return `<div class="testone"><span class="text-danger fw-bold">No Permission</span></div>`;
+        }
+
+        return `
+            <div class="testone">
+                ${createButton(buildUrl("<?= site_url('admin/emp_Left') ?>", data), "Left")}
+                ${createButton(buildUrl("<?= site_url('admin/emp_Transfer') ?>", data), "Transfer")}
+                ${createButton(buildUrl("<?= site_url('admin/emp_Promoted') ?>", data), "Promoted")}
+            </div>
+        `;
+    }
+},
+
             ],
         });
 

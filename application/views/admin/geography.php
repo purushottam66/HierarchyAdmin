@@ -443,25 +443,37 @@
 
 
                 {
-                    data: null,
-                    title: "Actions",
-                    orderable: false,
-                    render: function(data, type, row) {
-                        return `
-        <div class="d-flex">
-            <a href="<?= site_url('admin/hierarchyedit') ?>?id=${encodeURIComponent(row.id || 'N/A')}&customer_name=${encodeURIComponent(row.Customer_Name || 'N/A')}" class="btn btn-primary text-white setfont">
-                <i class="fa-solid fa-pencil fa-fw"></i>
-            </a>
-            <a href="javascript:void(0);" data-id="${row.id || 'N/A'}" class="delete-btn">
-                <button class="btn btn-primary text-white setfont">
-                    <i class="fa-solid fa-trash fa-fw"></i>
-                </button>
-            </a>
-        </div>
-    `;
-                    }
+    data: null,
+    title: "Actions",
+    orderable: false,
+    render: function(data, type, row) {
+        var permissions = <?php echo json_encode($permissions); ?>;
+        
+        // Check if the user has edit permission for "Hierarchy Data"
+        let hasEditPermission = permissions.some(p => p.module_name === "Hierarchy Data" && p.edit === "yes");
 
-                },
+        // Build the action buttons
+        let actionButtons = '<div class="d-flex">';
+
+        if (hasEditPermission) {
+            actionButtons += `
+                <a href="<?= site_url('admin/hierarchyedit') ?>?id=${encodeURIComponent(row.id || 'N/A')}&customer_name=${encodeURIComponent(row.Customer_Name || 'N/A')}" class="btn btn-primary text-white setfont">
+                    <i class="fa-solid fa-pencil fa-fw"></i>
+                </a>
+                <a href="javascript:void(0);" data-id="${row.id || 'N/A'}" class="delete-btn">
+                    <button class="btn btn-danger text-white setfont">
+                        <i class="fa-solid fa-trash fa-fw"></i>
+                    </button>
+                </a>`;
+        } else {
+            actionButtons += `<span class="text-danger fw-bold">No Permission</span>`;
+        }
+
+        actionButtons += `</div>`;
+        return actionButtons;
+    }
+}
+
             ],
         });
 

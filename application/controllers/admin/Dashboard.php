@@ -1322,13 +1322,11 @@ class Dashboard extends CI_Controller
         // Remove duplicate zone IDs
         $zone_ids = array_unique($zone_ids);
 
-        // Filter mapping data based on zone IDs
         $filtered_maping = array_filter($data['maping'], function ($item) use ($zone_ids) {
             return in_array($item['Zone_Code'], $zone_ids);
         });
         $data['maping'] = $filtered_maping;
 
-        // Fetch user and permissions
         $data['user'] = $this->Role_model->get_user_by_id($user_id);
         if ($user_id) {
             if ($data['user']) {
@@ -1342,6 +1340,10 @@ class Dashboard extends CI_Controller
         }
 
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
+
+        // echo json_encode($data['permissions']);
+        // die();
+        
 
         // Load views
         $this->load->view('admin/header', $data);

@@ -94,23 +94,23 @@ class Employee extends CI_Controller
 
 
 
-//         $Emp_id1 = $this->input->get('id1');
-// $Emp_id2 = $this->input->get('id2');
-// $Emp_id3 = $this->input->get('id3');
-// $Emp_id4 = $this->input->get('id4');
-// $Emp_id5 = $this->input->get('id5');
-// $Emp_id6 = $this->input->get('id6');
-// $Emp_id7 = $this->input->get('id7');
-// $customer_name = $this->input->get('customer_name');
+        //         $Emp_id1 = $this->input->get('id1');
+        // $Emp_id2 = $this->input->get('id2');
+        // $Emp_id3 = $this->input->get('id3');
+        // $Emp_id4 = $this->input->get('id4');
+        // $Emp_id5 = $this->input->get('id5');
+        // $Emp_id6 = $this->input->get('id6');
+        // $Emp_id7 = $this->input->get('id7');
+        // $customer_name = $this->input->get('customer_name');
 
-// echo "Emp ID 1: " . $Emp_id1 . "<br>";
-// echo "Emp ID 2: " . $Emp_id2 . "<br>";
-// echo "Emp ID 3: " . $Emp_id3 . "<br>";
-// echo "Emp ID 4: " . $Emp_id4 . "<br>";
-// echo "Emp ID 5: " . $Emp_id5 . "<br>";
-// echo "Emp ID 6: " . $Emp_id6 . "<br>";
-// echo "Emp ID 7: " . $Emp_id7 . "<br>";
-// echo "Customer Name: " . $customer_name . "<br>";
+        // echo "Emp ID 1: " . $Emp_id1 . "<br>";
+        // echo "Emp ID 2: " . $Emp_id2 . "<br>";
+        // echo "Emp ID 3: " . $Emp_id3 . "<br>";
+        // echo "Emp ID 4: " . $Emp_id4 . "<br>";
+        // echo "Emp ID 5: " . $Emp_id5 . "<br>";
+        // echo "Emp ID 6: " . $Emp_id6 . "<br>";
+        // echo "Emp ID 7: " . $Emp_id7 . "<br>";
+        // echo "Customer Name: " . $customer_name . "<br>";
 
 
 
@@ -397,8 +397,6 @@ class Employee extends CI_Controller
                 "message" => "Employee details updated successfully."
             ]);
         }
-
-
     }
 
     public function employeedata()
@@ -759,7 +757,7 @@ class Employee extends CI_Controller
                         return $value !== null;
                     });
 
-                    if (count($updateConditions) === 7) { 
+                    if (count($updateConditions) === 7) {
                         $this->db->where($updateConditions);
                         $this->db->update('maping', [
                             "Level_{$postData['level']}" => $postData['set_pjp_code']
@@ -1101,7 +1099,7 @@ class Employee extends CI_Controller
         $search = isset($data['search']) ? $data['search'] : '';
         $limit = isset($data['limit']) ? intval($data['limit']) : 10;
         $page = isset($data['page']) ? intval($data['page']) : 1;
-        
+
 
 
         if (empty($level)) {
@@ -1109,12 +1107,12 @@ class Employee extends CI_Controller
             return;
         }
 
-        $offset = ($page - 1) * $limit;  
+        $offset = ($page - 1) * $limit;
 
-      
+
         $employees = $this->Employee_model->get_employees_by_Emp_level($level, $pjpCode, $search, $limit, $offset);
         $employeesPromoted = $this->Employee_model->get_employees_by_Emp_level_emp_Promoted($level, $pjpCode, $search, $limit, $offset);
-        
+
         $totalRecords = $this->Employee_model->get_employees_count($level, $pjpCode, $search);
         $totalPages = ($limit > 0) ? ceil($totalRecords / $limit) : 1;
 
@@ -1136,42 +1134,42 @@ class Employee extends CI_Controller
     public function empreplace_level_Promoted()
     {
         $back_user_id = $this->session->userdata('back_user_id');
-    
+
         if (!$back_user_id) {
             redirect('admin/login');
         }
-    
+
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
-    
+
         $level = isset($data['level']) ? $data['level'] : null;
         $pjpCode = isset($data['pjpCode']) ? $data['pjpCode'] : null;
         $search = isset($data['search']) ? $data['search'] : '';
         $limit = isset($data['limit']) ? intval($data['limit']) : 10;
         $page = isset($data['page']) ? intval($data['page']) : 1;
-    
+
         if (empty($level)) {
             echo json_encode(['error' => 'No level provided']);
             return;
         }
-    
-        $offset = ($page - 1) * $limit;  
-    
+
+        $offset = ($page - 1) * $limit;
+
         // Normal employees
         $employees = $this->Employee_model->get_employees_by_Emp_level($level, $pjpCode, $search, $limit, $offset);
-    
+
         // Promoted employees
         $employeesPromoted = $this->Employee_model->get_employees_by_Emp_level_emp_Promoted($level, $pjpCode, $search, $limit, $offset);
         $totalRecordsPromoted = $this->Employee_model->get_employees_count($level, $pjpCode, $search);
         $totalPagesPromoted = ($limit > 0) ? ceil($totalRecordsPromoted / $limit) : 1;
-    
+
 
         // Total records count based on array length
         $totalRecordsPromoted = count($employeesPromoted);
-        
+
         // Calculate total pages
         $totalPagesPromoted = ($limit > 0) ? ceil($totalRecordsPromoted / $limit) : 1;
-        
+
         $response = [
             'employees_level_Promoted' => $employeesPromoted,
             'total_records' => $totalRecordsPromoted,
@@ -1179,11 +1177,10 @@ class Employee extends CI_Controller
             'page' => $page,
             'total_pages' => $totalPagesPromoted
         ];
-        
+
         echo json_encode($response);
-        
     }
-    
+
 
 
 
@@ -1323,7 +1320,7 @@ class Employee extends CI_Controller
 
         $back_user_id = $this->session->userdata('back_user_id');
 
-   
+
         if (!$back_user_id) {
 
             redirect('admin/login');
@@ -1358,9 +1355,9 @@ class Employee extends CI_Controller
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
 
-        // header('Content-Type: application/json');
-        // echo json_encode($data, JSON_PRETTY_PRINT);
-        // die();
+        //  header('Content-Type: application/json');
+        //  echo json_encode($data, JSON_PRETTY_PRINT);
+        //  die();
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/userdetails', $data);
@@ -1418,28 +1415,28 @@ class Employee extends CI_Controller
             redirect('admin/login');
         }
 
-      
+
         $draw = $this->input->get('draw');
         $start = $this->input->get('start', TRUE);
         $length = $this->input->get('length', TRUE);
         $search = $this->input->get('search', TRUE);
-        $order_column_index = $this->input->get('order[0][column]', TRUE);  
-        $order_dir = $this->input->get('order[0][dir]', TRUE);  
+        $order_column_index = $this->input->get('order[0][column]', TRUE);
+        $order_dir = $this->input->get('order[0][dir]', TRUE);
 
-     
+
         $columns = ['name', 'employer_name', 'email', 'mobile', 'pjp_code', 'employee_id', 'level', 'city', 'designation_name', 'designation_label_name', 'gender', 'employee_status'];
-        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'name'; 
+        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'name';
 
-     
+
         if (!in_array($order_dir, ['asc', 'desc'])) {
-            $order_dir = 'asc';  
+            $order_dir = 'asc';
         }
 
-      
+
         $total_get_employee = $this->Employee_model->getTotal_employees_unmaped($search);
         $employee_s = $this->Employee_model->get_employees_unmaped($start, $length, $search, $order_column, $order_dir);
 
-     
+
         $data = array();
         foreach ($employee_s->result() as $AS_employee) {
             $data[] = array(
@@ -1457,7 +1454,7 @@ class Employee extends CI_Controller
             );
         }
 
-       
+
         $output = array(
             'draw' => $draw,
             'recordsTotal' => $total_get_employee,
@@ -1475,9 +1472,14 @@ class Employee extends CI_Controller
     {
         // Get the input values from the DataTables request
         $back_user_id = $this->session->userdata('back_user_id');
+        $user_id = $this->session->userdata('back_user_id');
+
         if (!$back_user_id) {
             redirect('admin/login');
         }
+
+        $data['user'] = $this->Role_model->get_user_by_id($user_id);
+
 
         $draw = $this->input->post('draw');
         $start = $this->input->post('start', TRUE);
@@ -1494,10 +1496,41 @@ class Employee extends CI_Controller
         $total_get_employee = $this->Employee_model->getTotal_employees($search);
         $employee_s = $this->Employee_model->get_employees($start, $length, $search, $order_column_name, $order_dir);
 
-        // Prepare data for the table
+
+        if ($user_id) {
+            if ($data['user']) {
+                $data['permissions'] = $this->Role_model->get_permissions_by_role($user_id);
+            } else {
+                $data['permissions'] = [];
+                log_message('debug', 'No permissions found for the user.');
+            }
+        } else {
+            $data['user'] = null;
+            $data['permissions'] = [];
+            log_message('debug', 'User ID not provided, permissions set to empty.');
+        }
+
+
+        // Fetch user permissions
+        $permissions = $data['permissions'];
+
+
+        $has_edit_permission = false;
+        foreach ($permissions as $permission) {
+            if ($permission['module_name'] === "userdetails" && $permission['edit'] === "yes") {
+                $has_edit_permission = true;
+                break;
+            }
+        }
+
+        // Log Permission Check
+        //log_message('debug', 'userdetails Edit Permission: ' . ($has_edit_permission ? 'Allowed' : 'Denied'));
+
+
         $data = [];
         foreach ($employee_s->result() as $AS_employee) {
-            $status_switch = '
+            // Status switch should be disabled if the user lacks edit permission
+            $status_switch = $has_edit_permission ? '
                 <div class="switches-container">
                     <input type="radio" id="switchActive' . $AS_employee->id . '" name="switchPlan' . $AS_employee->id . '" 
                         value="Active" ' . ($AS_employee->employee_status == 'active' ? 'checked="checked"' : '') . '
@@ -1514,14 +1547,33 @@ class Employee extends CI_Controller
                         </div>
                     </div>
                 </div>
-            ';
-
+            ' : '<span class="text-danger fw-bold">No Permission</span>'; // Show "No Permission" if edit is denied
+        
+            // Action buttons should be hidden if the user lacks edit permission
+            $action_buttons = '<div class="d-flex">';
+            
+            if ($has_edit_permission) {
+                $action_buttons .= '
+                    <a href="' . site_url('admin/Employeeedit/' . $AS_employee->id) . '" class="btn btn-primary setfont">
+                        <i class="fa-solid fa-pencil fa-fw"></i>
+                    </a>
+                    <a href="javascript:void(0);" data-id="' . $AS_employee->id . '" class="delete-btn btn btn-danger setfont">
+                        <i class="fa-solid fa-trash fa-fw"></i>
+                    </a>';
+            }
+        
+            // View button should always be shown
+            $action_buttons .= '
+                <a href="' . site_url('admin/Employeeview/' . $AS_employee->id) . '" class="btn btn-primary setfont">
+                    <i class="fa-solid fa-eye fa-fw"></i>
+                </a>
+            </div>';
+        
             $data[] = [
                 $AS_employee->name,
                 $AS_employee->employer_name,
                 $AS_employee->email,
                 $AS_employee->mobile,
-                // $AS_employee->pjp_code,
                 $AS_employee->employee_id,
                 $AS_employee->level,
                 $AS_employee->state,
@@ -1530,22 +1582,13 @@ class Employee extends CI_Controller
                 $AS_employee->designation_name,
                 $AS_employee->designation_label_name,
                 !empty($AS_employee->gender) ? $AS_employee->gender : 'Non',
-                $status_switch,
-                '<div class="d-flex">
-                    <a href="' . site_url('admin/Employeeedit/' . $AS_employee->id) . '" class="btn btn-primary setfont">
-                        <i class="fa-solid fa-pencil fa-fw"></i>
-                    </a>
-                    <a href="' . site_url('admin/Employeeview/' . $AS_employee->id) . '" class="btn btn-primary setfont">
-                        <i class="fa-solid fa-eye fa-fw"></i>
-                    </a>
-                    <a href="javascript:void(0);" data-id="' . $AS_employee->id . '" class="delete-btn btn btn-danger setfont">
-                        <i class="fa-solid fa-trash fa-fw"></i>
-                    </a>
-                </div>'
+                $status_switch, // Show status switch only if permission is granted
+                $action_buttons // Show edit/delete buttons only if permission is granted
             ];
         }
+        
 
-        // Return the response as JSON
+
         $output = [
             'draw' => $draw,
             'recordsTotal' => $total_get_employee,
@@ -1553,7 +1596,7 @@ class Employee extends CI_Controller
             'data' => $data
         ];
 
-        echo json_encode($output);  // Make sure the response is in proper JSON format
+        echo json_encode($output);
         exit();
     }
 
@@ -1785,7 +1828,7 @@ class Employee extends CI_Controller
         // header('Content-Type: application/json');
         // echo json_encode($data, JSON_PRETTY_PRINT);
         // die();
-        
+
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/Employeeview', $data);
@@ -1805,5 +1848,4 @@ class Employee extends CI_Controller
         $this->Employee_model->delete_employee($id);
         redirect('admin/userdetails');
     }
-
 }

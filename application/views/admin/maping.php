@@ -447,9 +447,33 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-12">
+
+                                            
+                                            <?php 
+ 
+ $hasPermission = false;
+ if (is_array($permissions)) {
+     foreach ($permissions as $p) {
+         if ($p['module_name'] === "Mapping" && $p['edit'] === "yes") {
+             $hasPermission = true;
+             break;
+         }
+     }
+ }
+?>
+
+
+                                 <?php if ($hasPermission): ?>
+                                    <div class="col-12">
                                                 <button type="submit" id="submitButton__" class="btn btnss setfont-btn">Submit</button> &#8202;
                                             </div>
+                                            <?php else: ?>
+                                                <div class="col-12">
+                                                    <p class=" btnss setfont-btn">No Permission to Submit</p>
+                                                </div>
+                                            <?php endif; ?>
+
+                                
                                             <br>
                                         </div>
 
@@ -1093,7 +1117,7 @@
                 success: function(response) {
                     updateSalesCodeDropdown(response);
 
-                    console.log(response);
+                   
 
 
                 },

@@ -67,10 +67,6 @@
                                         <th class="col-md-2 text-center">designation Name</th>
                                         <th class="col-md-2 text-center">designation Label</th>
                                         <th class="col-md-2 text-center">Action</th>
-
-
-
-
                                     </tr>
                                 </thead>
 
@@ -82,7 +78,23 @@
 
                                             <td class="text-center">
 
-                                                <a href="<?php echo site_url('admin/designation-edit/' . $user['id']); ?>"
+
+                                            <?php 
+ 
+ $hasPermission = false;
+ if (is_array($permissions)) {
+     foreach ($permissions as $p) {
+         if ($p['module_name'] === "Designation List	" && $p['edit'] === "yes") {
+             $hasPermission = true;
+             break;
+         }
+     }
+ }
+?>
+
+
+                                 <?php if ($hasPermission): ?>
+                                    <a href="<?php echo site_url('admin/designation-edit/' . $user['id']); ?>"
                                                     class="href">
                                                     <button class="btn btn-primary setfont">
                                                         <i class="fa-solid fa-pencil fa-fw"></i>
@@ -95,6 +107,11 @@
                                                         <i class="fa-solid fa-trash fa-fw"></i>
                                                     </button>
                                                 </a>
+                                                <?php else: ?>
+                                                    <span class="text-danger fw-bold">No Permission</span>
+                                                <?php endif; ?>
+
+                             
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
