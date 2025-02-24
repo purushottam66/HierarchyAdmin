@@ -1706,8 +1706,8 @@ class Employee extends CI_Controller
             log_message('debug', 'pjp_code: ' . $pjp_code);
     
             if (!$pjp_code) {
-                log_message('error', 'Failed to retrieve pjp_code');
-                echo json_encode(['status' => 'error', 'message' => 'Failed to retrieve pjp_code']);
+                log_message('error', 'Failed to retrieve Employee ');
+                echo json_encode(['status' => 'error', 'message' => 'Failed to retrieve Employee ']);
                 return;
             }
     
@@ -1715,8 +1715,8 @@ class Employee extends CI_Controller
             $is_mapped = $this->Maping_model->is_pjp_code_mapped_to_levels($pjp_code);
     
             if ($is_mapped) {
-                log_message('info', 'Status change not allowed: pjp_code is already mapped');
-                echo json_encode(['status' => 'error', 'message' => 'Status change not allowed: pjp_code is already mapped ']);
+                log_message('info', 'Status change not allowed: Employee is already mapped');
+                echo json_encode(['status' => 'error', 'message' => 'Status change not allowed: Employee is already mapped ']);
                 return;
             }
     
@@ -1858,14 +1858,32 @@ class Employee extends CI_Controller
 
     public function delete_employee($id)
     {
-
         $back_user_id = $this->session->userdata('back_user_id');
-
+    
         if (!$back_user_id) {
-
             redirect('admin/login');
         }
-        $this->Employee_model->delete_employee($id);
+    
+        // Get the pjp_code of the employee
+        $pjp_code = $this->Employee_model->get_pjp_code_by_employee_id($id);
+    
+        if (!$pjp_code) {
+            $this->session->set_flashdata('error', 'Failed to retrieve PJP Code.');
+            redirect('admin/userdetails');
+            return;
+        }
+    
+        // Check if pjp_code is mapped to levels 1 to 7
+        $is_mapped = $this->Maping_model->is_pjp_code_mapped_to_levels($pjp_code);
+    
+        if ($is_mapped) {
+            $this->session->set_flashdata('error', ' Employee not deleted. It is mapped.');
+        } else {
+            $this->Employee_model->delete_employee($id);
+            $this->session->set_flashdata('success', 'Employee deleted successfully.');
+        }
+    
         redirect('admin/userdetails');
     }
+    
 }
