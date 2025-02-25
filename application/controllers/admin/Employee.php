@@ -161,7 +161,7 @@ class Employee extends CI_Controller
             return;
         }
 
-        // Handle DB_Code and set_pjp_code updates
+        
         if (!empty($postData['DB_Code'])) {
             foreach ($postData['DB_Code'] as $db_code_json) {
                 $db_code_data = json_decode($db_code_json, true);
@@ -176,12 +176,12 @@ class Employee extends CI_Controller
                         'distributors_id' => $db_code_data['distributors_id'] ?? null
                     ];
 
-                    // Filter null values in the conditions
+                
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
 
-                    if (count($updateConditions) === 7) { // Check if all fields are present
+                    if (count($updateConditions) === 7) {
                         $this->db->where($updateConditions);
                         $this->db->update('maping', [
                             "Level_{$postData['level']}" => $postData['set_pjp_code']
@@ -191,7 +191,7 @@ class Employee extends CI_Controller
             }
         }
 
-        // Handle Vacant replacement
+  
         if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
             foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
                 $replace_db_code_data = json_decode($replace_db_code_json, true);
@@ -206,13 +206,13 @@ class Employee extends CI_Controller
                         'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
                     ];
 
-                    // Filter null values
+              
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
 
                     if (!empty($updateConditions)) {
-                        // Update the vacant level with the new value
+                     
                         $this->db->where($updateConditions);
                         $this->db->update('maping', [
                             "Level_{$postData['level']}" => $postData['Vacant']
@@ -224,7 +224,7 @@ class Employee extends CI_Controller
             log_message('info', 'Vacant data is empty or Replace_DB_Code is not provided. No updates made.');
         }
 
-        // Check if transaction was successful
+    
         if ($this->db->trans_status() === FALSE) {
             echo json_encode(["status" => "error", "message" => "Failed to update mapping table."]);
         } else {
@@ -243,7 +243,7 @@ class Employee extends CI_Controller
         }
         $postData = $this->input->post();
 
-        // Validate required fields
+
         if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
             echo json_encode([
                 "status" => "error",
@@ -254,12 +254,12 @@ class Employee extends CI_Controller
 
         $this->db->trans_start();
 
-        // Process updates for DB_Code and Mapping Table
+  
         if (!empty($postData['DB_Code'])) {
             foreach ($postData['DB_Code'] as $db_code_json) {
                 $db_code_data = json_decode($db_code_json, true);
                 if ($db_code_data) {
-                    // Use null coalescing and array_filter for robust condition building
+            
                     $updateConditions = [
                         'DB_Code' => $db_code_data['Customer_Code'] ?? null,
                         'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
@@ -270,12 +270,12 @@ class Employee extends CI_Controller
                         'distributors_id' => $db_code_data['distributors_id'] ?? null
                     ];
 
-                    // Remove null values
+            
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
 
-                    if (count($updateConditions) === 7) { // Check if all fields are present
+                    if (count($updateConditions) === 7) { 
                         $this->db->where($updateConditions);
                         $this->db->update('maping', [
                             "Level_{$postData['level']}" => $postData['set_pjp_code']
@@ -285,17 +285,15 @@ class Employee extends CI_Controller
             }
         }
 
-        // Prepare variables with null coalescing
+
         $pjp_code = $postData['selectedEmployeesselectedValue'] ?? null;
         $level = $postData['level'] ?? null;
         $state = $postData['state'] ?? null;
         $city = $postData['city'] ?? null;
         $region = $postData['Zone'] ?? null;
 
-        // Calculate new level
         $new_level = ($level > 1) ? max(2, $level - 1) : $level;
 
-        // Find and update employee
         if ($pjp_code && $level) {
             $employee = $this->db->where([
                 'pjp_code' => $pjp_code,
@@ -313,17 +311,17 @@ class Employee extends CI_Controller
             }
         }
 
-        // Process employee data
+  
         if (!empty($postData['employee_data'])) {
             foreach ($postData['employee_data'] as $employee_data_json) {
                 $employee_data = json_decode($employee_data_json, true);
 
                 if ($employee_data) {
-                    // Calculate level with null coalescing
+      
                     $current_level = $postData['level'] ?? 1;
                     $level = ($current_level > 1) ? max(2, $current_level - 1) : $current_level;
 
-                    // Prepare update conditions
+         
                     $updateConditions = [
                         'DB_Code' => $employee_data['Customer_Code'] ?? null,
                         'Sales_Code' => $employee_data['Sales_Code'] ?? null,
@@ -334,7 +332,7 @@ class Employee extends CI_Controller
                         'distributors_id' => $employee_data['distributors_id'] ?? null
                     ];
 
-                    // Remove null values
+       
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
@@ -349,7 +347,7 @@ class Employee extends CI_Controller
             }
         }
 
-        // Process Replace DB Code
+
         if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
             foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
                 $replace_db_code_data = json_decode($replace_db_code_json, true);
@@ -365,7 +363,7 @@ class Employee extends CI_Controller
                         'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
                     ];
 
-                    // Remove null values
+        
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
@@ -409,9 +407,8 @@ class Employee extends CI_Controller
         $order_column = $this->input->post('order')[0]['column'];
         $order_dir = $this->input->post('order')[0]['dir'];
 
-        // Map DataTables column index to database column names
         $columns = array(
-            0 => 'id', // checkbox column
+            0 => 'id', 
             1 => 'employer_code',
             2 => 'name',
             3 => 'mobile',
@@ -423,7 +420,7 @@ class Employee extends CI_Controller
 
         $sort_by = isset($columns[$order_column]) ? $columns[$order_column] : 'id';
 
-        // Get paginated data
+
         $employees = $this->Employee_model->get_Employee_by_level(
             $level,
             $length,
@@ -433,7 +430,7 @@ class Employee extends CI_Controller
             $order_dir
         );
 
-        // Get total count for pagination
+ 
         $total_records = $this->Employee_model->get_total_employees_by_level($level, $search);
 
         $response = array(
@@ -449,7 +446,7 @@ class Employee extends CI_Controller
 
     public function dummmymaping__()
     {
-        // Predefined list of pjp_codes
+        
 
 
         $this->db->select('d.Customer_Code, d.Sales_Code, d.Distribution_Channel_Code, 
@@ -471,14 +468,14 @@ class Employee extends CI_Controller
 
                 $mapingQuery = $this->db->get();
 
-                // Step 4: If there's a matching record in the mapping table, delete it
+           
                 if ($mapingQuery->num_rows() > 0) {
                     $mapingId = $mapingQuery->row()->id;
-                    // Delete the corresponding mapping record
+       
                     $this->db->delete('maping', ['id' => $mapingId]);
                 }
 
-                // Step 5: Insert a new mapping record with a random pjp_code
+         
                 $mappingData = [
                     'DB_Code' => $distributor->Customer_Code,
                     'Sales_Code' => $distributor->Sales_Code,
@@ -486,17 +483,17 @@ class Employee extends CI_Controller
                     'Division_Code' => $distributor->Division_Code,
                     'Customer_Type_Code' => $distributor->Customer_Type_Code,
                     'Customer_Group_Code' => $distributor->Customer_Group_Code,
-                    'pjp_code' => $pjp_codes[array_rand($pjp_codes)] // Random pjp_code
+                    'pjp_code' => $pjp_codes[array_rand($pjp_codes)] 
                 ];
 
-                // Insert the new mapping record
+          
                 $this->db->insert('maping', $mappingData);
             }
 
-            // Step 6: Return success message
+        
             echo json_encode(['status' => 'success', 'message' => 'Active distributors and corresponding mappings updated with pjp_code successfully.']);
         } else {
-            // If no active distributors are found
+        
             echo json_encode(['status' => 'error', 'message' => 'No active distributors found.']);
         }
     }
@@ -505,7 +502,7 @@ class Employee extends CI_Controller
 
     public function dummmymaping()
     {
-        // Fetch unique distributors data
+        
         $this->db->select('d.Customer_Code, d.Sales_Code, d.Distribution_Channel_Code, 
                            d.Division_Code, d.Customer_Type_Code, d.Customer_Group_Code');
         $this->db->from('distributors d');
@@ -519,20 +516,20 @@ class Employee extends CI_Controller
         ]);
         $query = $this->db->get();
 
-        // Log the query result for debugging
+ 
         log_message('info', 'Distributors Query Result: ' . json_encode($query->result()));
 
-        $totalMappingsAdded = 0; // To keep track of the number of mappings added
+        $totalMappingsAdded = 0; 
 
         if ($query->num_rows() > 0) {
-            // Initialize array for new mappings to be inserted
+        
             $mappingsToInsert = [];
 
             foreach ($query->result() as $distributor) {
-                // Log the distributor data being processed
+
                 log_message('info', 'Processing Distributor: ' . json_encode($distributor));
 
-                // Check if this mapping already exists in the 'maping' table
+   
                 $this->db->from('maping');
                 $this->db->where([
                     'DB_Code' => $distributor->Customer_Code,
@@ -544,15 +541,15 @@ class Employee extends CI_Controller
                 ]);
                 $existingMapping = $this->db->count_all_results();
 
-                // Log if a mapping already exists
+
                 log_message('info', 'Existing Mapping Count: ' . $existingMapping);
 
                 if ($existingMapping > 0) {
                     log_message('info', 'Mapping already exists for Distributor: ' . json_encode($distributor));
-                    continue; // Skip if mapping already exists
+                    continue; 
                 }
 
-                // Add new mapping data (without pjp_code)
+
                 $mappingData = [
                     'DB_Code' => $distributor->Customer_Code,
                     'Sales_Code' => $distributor->Sales_Code,
@@ -562,38 +559,35 @@ class Employee extends CI_Controller
                     'Customer_Group_Code' => $distributor->Customer_Group_Code
                 ];
 
-                // Log the mapping data to be inserted
                 log_message('info', 'Inserting Mapping: ' . json_encode($mappingData));
 
-                // Add the mapping to the insert array
                 $mappingsToInsert[] = $mappingData;
             }
 
-            // Insert new mappings in bulk if any new mappings are found
+
             if (!empty($mappingsToInsert)) {
-                // Log before insert
+    
                 log_message('info', 'Inserting Mappings to Database: ' . json_encode($mappingsToInsert));
 
                 $this->db->insert_batch('maping', $mappingsToInsert);
 
-                // Get the total number of mappings added
+       
                 $totalMappingsAdded = count($mappingsToInsert);
 
-                // Log the total mappings added
+          
                 log_message('info', 'Total Mappings Added: ' . $totalMappingsAdded);
 
-                // Respond with a success message
                 echo json_encode([
                     'status' => 'success',
                     'message' => $totalMappingsAdded . ' mappings added successfully.'
                 ]);
             } else {
-                // No mappings to insert
+          
                 log_message('info', 'No new mappings to add.');
                 echo json_encode(['status' => 'error', 'message' => 'No new mappings to add.']);
             }
         } else {
-            // No distributors found
+         
             log_message('error', 'No distributors found.');
             echo json_encode(['status' => 'error', 'message' => 'No distributors found.']);
         }
@@ -604,18 +598,18 @@ class Employee extends CI_Controller
 
     public function checkAndDeleteDistributor()
     {
-        // Step 1: Select all inactive distributors
+       
         $this->db->select('d.Customer_Code, d.Sales_Code, d.Distribution_Channel_Code, 
                        d.Division_Code, d.Customer_Type_Code, d.Customer_Group_Code');
-        $this->db->select('d.*'); // Select all columns from the distributors table
+        $this->db->select('d.*'); 
         $this->db->from('distributors d');
-        $this->db->where('d.STATUS', 'INACTIVE');  // Only inactive distributors
+        $this->db->where('d.STATUS', 'INACTIVE');  
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
-            // Step 2: Loop through the inactive distributors
+         
             foreach ($query->result() as $distributor) {
-                // Step 3: Join with the mapping table to find matching records
+        
                 $this->db->select('m.id, m.DB_Code, m.Sales_Code, m.Distribution_Channel_Code, m.Division_Code, 
             m.Customer_Type_Code, m.Customer_Group_Code, m.Level_1, m.Level_2, m.Level_3, m.Level_4, m.Level_5, m.Level_6, m.Level_7');
                 $this->db->from('maping m');
@@ -628,10 +622,10 @@ class Employee extends CI_Controller
 
                 $mapingQuery = $this->db->get();
 
-                // Step 4: If there's a matching record in the maping table, delete it
+          
                 if ($mapingQuery->num_rows() > 0) {
                     foreach ($mapingQuery->result_array() as $mapingData) {
-                        // Step 4.1: Archive the record with employee data
+                    
                         $archivedData = [
                             'DB_Code' => $mapingData['DB_Code'],
                             'Sales_Code' => $mapingData['Sales_Code'],
@@ -672,7 +666,7 @@ class Employee extends CI_Controller
                             'Division_Name' => $distributor->Division_Name,
                             'Sector_Name' => $distributor->Sector_Name,
 
-                            'deleted_at' => date('Y-m-d H:i:s') // Timestamp for deletion
+                            'deleted_at' => date('Y-m-d H:i:s') 
                         ];
 
                         for ($i = 1; $i <= 7; $i++) {
@@ -685,8 +679,8 @@ class Employee extends CI_Controller
                             if ($employeeQuery->num_rows() > 0) {
                                 $employeeData = $employeeQuery->row_array();
                                 $employeeData = $employeeQuery->row_array();
-                                $archivedData['Level_' . $i . '_employee_name'] = $employeeData['name']; // name
-                                $archivedData['Level_' . $i . '_employee_code'] = $employeeData['employer_code']; // employer_code
+                                $archivedData['Level_' . $i . '_employee_name'] = $employeeData['name']; 
+                                $archivedData['Level_' . $i . '_employee_code'] = $employeeData['employer_code']; 
                                 $archivedData['Level_' . $i . '_employee_designation'] = $employeeData['designation_name']; // designation_name
                                 $archivedData['Level_' . $i . '_employee_employer'] = $employeeData['employer_name']; // employer_name
                                 $archivedData['Level_' . $i . '_employee_id'] = $employeeData['id'];
@@ -706,10 +700,10 @@ class Employee extends CI_Controller
                 }
             }
 
-            // Step 5: Return success message
+
             echo json_encode(['status' => 'success', 'message' => 'Inactive distributors and corresponding mappings deleted successfully.']);
         } else {
-            // If no inactive distributors are found
+      
             echo json_encode(['status' => 'error', 'message' => 'No inactive distributors found.']);
         }
     }
@@ -723,7 +717,7 @@ class Employee extends CI_Controller
         }
         $postData = $this->input->post();
 
-        // Validate required fields
+  
         if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
             echo json_encode([
                 "status" => "error",
@@ -732,16 +726,16 @@ class Employee extends CI_Controller
             return;
         }
 
-        // Start a database transaction
+    
         $this->db->trans_start();
 
-        // Process updates for DB_Code and Mapping Table
+
         if (!empty($postData['DB_Code'])) {
             foreach ($postData['DB_Code'] as $db_code_json) {
                 $db_code_data = json_decode($db_code_json, true);
 
                 if ($db_code_data) {
-                    // Use null coalescing and array_filter for robust condition building
+               
                     $updateConditions = [
                         'DB_Code' => $db_code_data['Customer_Code'] ?? null,
                         'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
@@ -752,7 +746,7 @@ class Employee extends CI_Controller
                         'distributors_id' => $db_code_data['distributors_id'] ?? null
                     ];
 
-                    // Remove null values
+             
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
@@ -776,10 +770,10 @@ class Employee extends CI_Controller
         $city = $postData['city'] ?? null;
         $region = $postData['Zone'] ?? null;
 
-        // Calculate new level
+
         $new_level = ($level > 1) ? max(2, $level - 1) : $level;
 
-        // Find and update employee
+    
         if ($pjp_code && $level) {
             $employee = $this->db->where([
                 'pjp_code' => $pjp_code,

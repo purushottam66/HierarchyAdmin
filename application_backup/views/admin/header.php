@@ -337,7 +337,7 @@
                                                         <img src="<?php echo base_url('admin/assets/icons/employee_details.png'); ?>" alt=""
                                                             style="height:20px">
                                                     </span>
-                                                    <span class="nav-title">maping inactive</span>
+                                                    <span class="nav-title">Mapping Inactive</span>
                                                 </a>
                                             </li>
                                             <li class="nav-divider"></li>

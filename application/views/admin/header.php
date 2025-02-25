@@ -307,7 +307,7 @@
                                     <?php endforeach; ?>
                                 <?php endif; ?>
 
-
+<!-- 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
                                         <?php if ($permission['module_name'] == 'Inactive Distributors' && $permission['view'] == 'yes') : ?>
@@ -324,7 +324,7 @@
                                             </li>
                                         <?php endif; ?>
                                     <?php endforeach; ?>
-                                <?php endif; ?>
+                                <?php endif; ?> -->
 
 
                                 
@@ -339,7 +339,7 @@
                                                         <img src="<?php echo base_url('admin/assets/icons/employee_details.png'); ?>" alt=""
                                                             style="height:20px">
                                                     </span>
-                                                    <span class="nav-title">maping inactive</span>
+                                                    <span class="nav-title">Inactive SAP CDs</span>
                                                 </a>
                                             </li>
                                             <li class="nav-divider"></li>

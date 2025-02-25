@@ -190,7 +190,7 @@ class Maping extends CI_Controller
 
             date_default_timezone_set('Asia/Kolkata');
             foreach ($distributors as $distributor_code) {
-                // Get the next global sequence number
+              
                 $new_sequence = $this->Maping_model->get_next_global_sequence();
 
                 $data = array(

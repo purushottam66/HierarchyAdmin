@@ -1676,7 +1676,7 @@ class Dashboard extends CI_Controller
             $designations = $this->Designation_model->get_all_designations();
         }
     
-        // JSON Response भेजें
+      
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($designations));

@@ -101,7 +101,7 @@ class Export_distributors_csv extends CI_Controller
             ]);
         }
 
-        // Close output stream
+      
         fclose($output);
         exit;
     }
@@ -197,7 +197,7 @@ class Export_distributors_csv extends CI_Controller
 
     public function export_distributors_csv()
     {
-        // Get filter parameters from the request
+       
         $customer_group_code = $this->input->get('Customer_Group_Code');
         $customer_type_code = $this->input->get('Customer_Type_Code');
         $distribution_channel_code = $this->input->get('Distribution_Channel_Code');
@@ -316,7 +316,7 @@ class Export_distributors_csv extends CI_Controller
         ]);
 
 
-        // Write data rows
+  
         foreach ($data as $row) {
             fputcsv($output, [
                 $row['id'],
@@ -391,7 +391,6 @@ class Export_distributors_csv extends CI_Controller
         }
 
 
-        // Close output stream
         fclose($output);
         exit;
     }
@@ -443,7 +442,7 @@ class Export_distributors_csv extends CI_Controller
             'Sector Name'
         ]);
 
-        // Write data rows
+      
         foreach ($data as $row) {
             fputcsv($output, [
                 $row['id'],
@@ -480,7 +479,7 @@ class Export_distributors_csv extends CI_Controller
             ]);
         }
 
-        // Close output stream
+       
         fclose($output);
         exit;
     }

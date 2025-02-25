@@ -2,7 +2,7 @@
     <header class="main-heading shadow-2dp">
         <div class="dashhead bg-white">
             <div class="dashhead-titles">
-                <h3 class="dashhead-title">Maping Inactive</h3>
+                <h3 class="dashhead-title">Mapping Inactive</h3>
             </div>
             <!-- <div class="dashhead-toolbar">
                 <div class="dashhead-toolbar-item"><a href="#">Hierarchy</a> / Un Mapped Distributors

@@ -15,6 +15,8 @@ class RoleController extends CI_Controller
         $this->load->helper('form');
         $this->load->model('Zone_model');
         $this->load->model('Distributor_model');
+
+
     }
 
 
@@ -23,20 +25,16 @@ class RoleController extends CI_Controller
         $back_user_id = $this->session->userdata('back_user_id');
 
         if (!$back_user_id) {
-
             redirect('admin/login');
         }
 
 
         $data['users'] = $this->Role_model->get_users();
-
-
         $user_id = $this->session->userdata('back_user_id');
 
         if ($user_id) {
             $data['user'] = $this->Role_model->get_user_by_id($user_id);
             if ($data['user']) {
-
                 $role_id = $data['user']['role_id'];
                 $data['permissions'] = $this->Role_model->get_permissions_by_role($user_id);
             } else {
@@ -47,12 +45,30 @@ class RoleController extends CI_Controller
             $data['permissions'] = [];
         }
 
+        
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
+
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/role', $data);
         $this->load->view('admin/footer', $data);
     }
+
 
 
     public function Rolelist()
@@ -81,6 +97,26 @@ class RoleController extends CI_Controller
             $data['user'] = null;
             $data['permissions'] = [];
         }
+
+
+
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
+
+        
 
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
@@ -125,6 +161,24 @@ class RoleController extends CI_Controller
 
         $data['selected_zones_array'] = $selected_zones_array;
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
+
+
+
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/addrole', $data);
@@ -172,6 +226,23 @@ class RoleController extends CI_Controller
         $data['roles'] = $this->Role_model->get_roles();
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
+
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
+
         $this->load->view('admin/header', $data);
         $this->load->view('admin/Rolelistedit', $data);
         $this->load->view('admin/footer', $data);
@@ -206,6 +277,23 @@ class RoleController extends CI_Controller
             $data['permissions'] = [];
         }
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
+
+
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
 
 
         $this->load->view('admin/header', $data);
@@ -298,6 +386,24 @@ class RoleController extends CI_Controller
 
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
+
+
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
+
         $this->load->view('admin/header', $data);
         $this->load->view('admin/adduser', $data);
         $this->load->view('admin/footer', $data);
@@ -308,12 +414,12 @@ class RoleController extends CI_Controller
     public function create_user()
     {
         $back_user_id = $this->session->userdata('back_user_id');
-    
+
         if (!$back_user_id) {
             $this->session->set_flashdata('error', 'Please log in to continue.');
             redirect('admin/login');
         }
-    
+
         // Set validation rules
         $this->form_validation->set_rules('name', 'Name', 'required|trim|min_length[3]');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]');
@@ -321,16 +427,16 @@ class RoleController extends CI_Controller
         $this->form_validation->set_rules('address', 'Address', 'required|trim|min_length[5]');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
         $this->form_validation->set_rules('role', 'Role', 'required|numeric');
-    
+
         if ($this->form_validation->run() == FALSE) {
-          
+
             $errors = $this->form_validation->error_array();
             $error_message = "<ul>";
-    
+
             foreach ($errors as $field => $error) {
                 $error_message .= "<li><strong>" . ucfirst($field) . ":</strong> " . $error . "</li>";
             }
-    
+
             $error_message .= "</ul>";
             $this->session->set_flashdata('error', $error_message);
             redirect('admin/role');
@@ -340,13 +446,13 @@ class RoleController extends CI_Controller
                 'email' => $this->input->post('email', true),
                 'mobile' => $this->input->post('mobile', true),
                 'address' => $this->input->post('address', true),
-                'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT), 
+                'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
                 'role_id' => $this->input->post('role', true),
                 'created_date' => date('Y-m-d H:i:s')
             ];
-    
+
             $user_id = $this->Role_model->create_user($data);
-    
+
             if ($user_id) {
                 $this->session->set_flashdata('success', 'User created successfully.');
                 redirect('admin/role');
@@ -356,7 +462,7 @@ class RoleController extends CI_Controller
             }
         }
     }
-    
+
 
 
     public function update_role_user()
