@@ -173,46 +173,7 @@ class Dashboard extends CI_Controller
 
 
 
-    // public function ZoneHierarchy_ajex_tree()
-    // {
-
-
-    //     $user_id = $this->session->userdata('back_user_id');
-    //     if (!$user_id) {
-
-    //         redirect('admin/login');
-    //     }
-
-    //     $data['maping'] = $this->Maping_model->get_all_Maping_table_zone();
-    //     if (empty($data['maping'])) {
-    //         echo '<script>console.log("No mapping data found.");</script>';
-    //     }
-    //     $data['zone'] = $this->Distributor_model->get_all_zones();
-
-
-
-    //     if ($user_id) {
-    //         $data['user'] = $this->Role_model->get_user_by_id($user_id);
-    //         if ($data['user']) {
-
-    //             $role_id = $data['user']['role_id'];
-    //             $data['permissions'] = $this->Role_model->get_permissions_by_role($user_id);
-    //         } else {
-    //             $data['permissions'] = [];
-    //         }
-    //     } else {
-    //         $data['user'] = null;
-    //         $data['permissions'] = [];
-    //     }
-
-    //     $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
-
-
-    //     // echo json_encode($data, JSON_PRETTY_PRINT);
-    //     // die();
-    //     echo json_encode(   $data);
-
-    // }
+    
 
 
 

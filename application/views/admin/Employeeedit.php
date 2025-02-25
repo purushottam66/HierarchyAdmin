@@ -198,30 +198,32 @@
 
                                         <!-- Hidden input to store the designation name -->
                                         <input type="hidden" id="designation_name" name="designation_name"
-                                            value="<?php echo $employee['designation']; ?>">
+                                            value="<?php echo $employee['designation_name']; ?>">
 
                                         <!-- Designation_Label -->
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="designation_label">Designation Label</label>
-                                                <select class="selectpicker  form-control" id="designation_label"
-                                                    name="designation_label" required>
-                                                    <option selected>Select Label</option>
+                                                <select class="selectpicker form-control" id="designation_label" name="designation_label" required>
                                                     <?php foreach ($designation as $levels): ?>
-                                                        <option data-name="<?php echo $levels['id']; ?>"
-                                                            value="<?php echo $levels['id']; ?>"
-                                                            <?php echo $levels['id'] == $employee['designation_label'] ? 'selected' : ''; ?>>
-                                                            <?php echo $levels['Designation_Label']; ?>
-                                                        </option>
+                                                        <?php if ($levels['id'] == $employee['designation_label']): ?>
+                                                            <option selected value="<?php echo $levels['id']; ?>">
+                                                                <?php echo $levels['Designation_Label']; ?>
+                                                            </option>
+                                                        <?php endif; ?>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
                                         </div>
 
 
+
+
+
+
                                         <!-- Hidden input to store the designation name -->
                                         <input type="hidden" id="designation_label_name" name="designation_label_name"
-                                            value="<?php echo $employee['designation_label']; ?>">
+                                            value="<?php echo $employee['designation_label_name']; ?>">
 
                                         <!-- Date of Joining (DOJ) -->
 
@@ -278,7 +280,11 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
+<script>
+    $(document).ready(function() {
+        $("#designation_label option").not(":selected").hide(); // Hide all options except selected
+    });
+</script>
 
 <script>
     function updateCombinedValue() {
@@ -426,7 +432,9 @@
                 success: function(response) {
 
                     $('#designation_label').empty();
-                    $('#designation_label').append('<option selected>Select Label</option>');
+
+                    $('#designation_label_name').val(response.Designation_Label);
+              
 
                     if (response.id) {
                         $('#designation_label').append('<option value="' + response.id + '" data-name="' + response.id + '">' + response.Designation_Label + '</option>');

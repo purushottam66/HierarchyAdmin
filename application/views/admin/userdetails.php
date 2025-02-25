@@ -282,7 +282,7 @@
         let switchWrapper = document.querySelector(`#switchActive${employeeId}, #switchInactive${employeeId}`).closest(".switches-container").querySelector(".switch-wrapper");
 
 
-        // पिछले स्टेटस को सेव करें
+        
         let previousStatus = inactiveRadio.checked ? "active" : "inactive";
 
         $.ajax({

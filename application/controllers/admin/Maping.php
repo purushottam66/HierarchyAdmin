@@ -155,6 +155,23 @@ class Maping extends CI_Controller
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
 
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "User - Dist.Mapping" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
+
+
         $this->load->view('admin/header', $data);
         $this->load->view('admin/maping', $data);
         $this->load->view('admin/footer', $data);

@@ -65,6 +65,23 @@ class Employee extends CI_Controller
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
 
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "User Manager" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
+
+
         $this->load->view('admin/header', $data);
         $this->load->view('admin/Employee', $data);
         $this->load->view('admin/footer', $data);
@@ -141,6 +158,23 @@ class Employee extends CI_Controller
         $data['Emp_id'] = $Emp_id;
 
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
+
+
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "User Movement" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/emp_Left', $data);
@@ -960,6 +994,23 @@ class Employee extends CI_Controller
         $data['Emp_id'] = $Emp_id;
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
+
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "User Movement" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
+
         $this->load->view('admin/header', $data);
         $this->load->view('admin/emp_Transfer', $data);
         $this->load->view('admin/footer', $data);
@@ -1017,6 +1068,24 @@ class Employee extends CI_Controller
         // Load the views with the data
         $data['Emp_id'] = $Emp_id;
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
+
+
+
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "User Movement" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+     
+        if (!$hasPermission) {
+            print_r("You do not have permission to access this page.");
+            return;
+        }
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/emp_Promoted', $data);
@@ -1462,9 +1531,10 @@ class Employee extends CI_Controller
         $permissions = $data['permissions'];
 
 
+
         $has_edit_permission = false;
         foreach ($permissions as $permission) {
-            if ($permission['module_name'] === "userdetails" && $permission['edit'] === "yes") {
+            if ($permission['module_name'] === "User Manager" && $permission['edit'] === "yes") {
                 $has_edit_permission = true;
                 break;
             }
@@ -1504,17 +1574,36 @@ class Employee extends CI_Controller
                     <a href="' . site_url('admin/Employeeedit/' . $AS_employee->id) . '" class="btn btn-primary setfont">
                         <i class="fa-solid fa-pencil fa-fw"></i>
                     </a>
+              ';
+            }
+
+            $action_buttons .= '
+            <a href="' . site_url('admin/Employeeview/' . $AS_employee->id) . '" class="btn btn-primary setfont">
+            <i class="fa-solid fa-eye fa-fw"></i>
+        </a>
+            ';
+
+
+            if ($has_edit_permission) {
+                $action_buttons .= '
+            
                     <a href="javascript:void(0);" data-id="' . $AS_employee->id . '" class="delete-btn btn btn-danger setfont">
                         <i class="fa-solid fa-trash fa-fw"></i>
                     </a>';
             }
         
-            // View button should always be shown
+
+          
+
+                
             $action_buttons .= '
-                <a href="' . site_url('admin/Employeeview/' . $AS_employee->id) . '" class="btn btn-primary setfont">
-                    <i class="fa-solid fa-eye fa-fw"></i>
-                </a>
-            </div>';
+                
+         
+            
+            
+            
+            
+            ';
         
             $data[] = [
                 $AS_employee->name,
@@ -1617,6 +1706,8 @@ class Employee extends CI_Controller
         $data['employee_city'] = $employee_city;
         $data['employee_region'] = $employee_region;
 
+        
+
 
 
         $this->load->view('admin/header', $data);
@@ -1703,48 +1794,60 @@ class Employee extends CI_Controller
 
 
 
-    public function submit_employee_edit($id)
-    {
-        $back_user_id = $this->session->userdata('back_user_id');
-        if (!$back_user_id) {
-
-            redirect('admin/login');
+        public function submit_employee_edit($id)
+        {
+            $back_user_id = $this->session->userdata('back_user_id');
+            if (!$back_user_id) {
+                redirect('admin/login');
+            }
+        
+            // Load form validation library
+            //$this->load->library('form_validation');
+        
+            // Validation Rules
+            $this->form_validation->set_rules('name', 'Name', 'required|trim|min_length[3]');
+            $this->form_validation->set_rules('employer_name', 'Employer Name', 'required|trim');
+            $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
+            $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|min_length[10]|max_length[10]');
+            $this->form_validation->set_rules('dob', 'Date of Birth', 'required');
+            $this->form_validation->set_rules('employer_code', 'Employer Code', 'required');
+            $this->form_validation->set_rules('adhar_card', 'Aadhar Card', 'required|numeric|min_length[12]|max_length[12]');
+            $this->form_validation->set_rules('gender', 'Gender', 'required');
+            $this->form_validation->set_rules('designation', 'Designation', 'required');
+            $this->form_validation->set_rules('designation_label', 'Designation Label', 'required');
+            $this->form_validation->set_rules('address', 'Address', 'required|trim');
+        
+            if ($this->form_validation->run() == FALSE) {
+                // If validation fails, reload the edit page with errors
+                $this->session->set_flashdata('error', validation_errors());
+                redirect('admin/edit_employee/' . $id);
+            } else {
+                // If validation passes, update the employee data
+                date_default_timezone_set('Asia/Kolkata');
+        
+                $updatedData = [
+                    'name' => $this->input->post('name'),
+                    'employer_name' => $this->input->post('employer_name'),
+                    'email' => $this->input->post('email'),
+                    'mobile' => $this->input->post('mobile'),
+                    'dob' => $this->input->post('dob'),
+                    'employer_code' => $this->input->post('employer_code'),
+                    'adhar_card' => $this->input->post('adhar_card'),
+                    'gender' => $this->input->post('gender'),
+                    'designation' => $this->input->post('designation'),
+                    'designation_label' => $this->input->post('designation_label'),
+                    'designation_name' => $this->input->post('designation_name'),
+                    'designation_label_name' => $this->input->post('designation_label_name'),
+                    'address' => $this->input->post('address'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+        
+                $this->Employee_model->update_employee($id, $updatedData);
+                $this->session->set_flashdata('success', 'Employee details updated successfully.');
+                redirect('admin/userdetails');
+            }
         }
-        date_default_timezone_set('Asia/Kolkata'); // Example for Indian Standard Time (IST)
-
-        $updatedData = [
-            'name' => $this->input->post('name'),
-            'employer_name' => $this->input->post('employer_name'),
-
-            'email' => $this->input->post('email'),
-            'mobile' => $this->input->post('mobile'),
-            'dob' => $this->input->post('dob'),
-            'employer_code' => $this->input->post('employer_code'),
-            'adhar_card' => $this->input->post('adhar_card'),
-            'gender' => $this->input->post('gender'),
-            'designation' => $this->input->post('designation'),
-            'designation_label' => $this->input->post('designation_label'),
-            'designation_name' => $this->input->post('designation_name'),
-            'designation_label_name' => $this->input->post('designation_label_name'),
-
-
-            // 'employee_status' => $this->input->post('employee_status'),
-            // 'city' => $this->input->post('city'),
-            // 'state' => $this->input->post('state'),
-            // 'region' => $this->input->post('region'),
-            'address' => $this->input->post('address'),
-            'updated_at' => date('Y-m-d H:i:s')  // Add update date
-
-        ];
-
-
-        // print_r($updatedData);
-        // die();
-
-
-        $this->Employee_model->update_employee($id, $updatedData);
-        redirect('admin/userdetails');
-    }
+        
 
 
     public function view_employee($id)
@@ -1824,7 +1927,7 @@ class Employee extends CI_Controller
         $is_mapped = $this->Maping_model->is_pjp_code_mapped_to_levels($pjp_code);
     
         if ($is_mapped) {
-            $this->session->set_flashdata('error', ' Employee not deleted. It is mapped.');
+            $this->session->set_flashdata('error', ' Deletion of this user is not allowed as the user is mapped to the distributor..');
         } else {
             $this->Employee_model->delete_employee($id);
             $this->session->set_flashdata('success', 'Employee deleted successfully.');
