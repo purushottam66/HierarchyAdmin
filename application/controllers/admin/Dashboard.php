@@ -103,7 +103,7 @@ class Dashboard extends CI_Controller
             $data['permissions'] = [];
         }
 
-        // Check if the user has 'view' permission for the "User Master" module
+   
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
@@ -121,7 +121,7 @@ class Dashboard extends CI_Controller
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
 
-        // Load the views if permission is granted
+   
         $this->load->view('admin/header', $data);
         $this->load->view('admin/zone');
         $this->load->view('admin/footer', $data);

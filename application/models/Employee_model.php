@@ -82,10 +82,10 @@ class Employee_model extends CI_Model
             $this->db->group_end();
         }
     
-        // Apply sorting
+  
         $this->db->order_by($sort_by, $sort_order);
     
-        // Apply pagination
+
         $this->db->limit($limit, $offset);
     
         $query = $this->db->get();
@@ -518,7 +518,7 @@ class Employee_model extends CI_Model
     {
         $this->db->from('employee');
 
-        // Apply search filters if provided
+ 
         if ($search) {
             $this->db->group_start()
                 ->like('name', $search)
@@ -534,21 +534,20 @@ class Employee_model extends CI_Model
                 ->group_end();
         }
 
-        // Validate order_column to prevent SQL injection
+    
         $valid_columns = ['name', 'email', 'mobile', 'pjp_code', 'employee_id', 'level', 'designation_name', 'designation_label_name', 'gender', 'employee_status', 'created_at'];
         if (!in_array($order_column, $valid_columns)) {
-            $order_column = 'name'; // Default sorting column
+            $order_column = 'name'; 
         }
 
-        // Apply sorting (ensure column and direction are sanitized)
+
         if (in_array($order_dir, ['asc', 'desc'], true)) {
             $this->db->order_by($order_column, $order_dir);
         } else {
-            // Default order if invalid direction provided
+        
             $this->db->order_by('name', 'asc');
         }
 
-        // Apply pagination and execute query
         return $this->db->limit($length, $start)->get();
     }
 
@@ -634,21 +633,21 @@ class Employee_model extends CI_Model
             $this->db->group_end();
         }
 
-        // Validate order_column to prevent SQL injection
+        
         $valid_columns = ['name', 'email', 'mobile', 'pjp_code', 'employee_id', 'level', 'designation_name', 'designation_label_name', 'gender', 'employee_status', 'created_at'];
         if (!in_array($order_column, $valid_columns)) {
-            $order_column = 'name'; // Default sorting column
+            $order_column = 'name'; 
         }
 
-        // Apply sorting (ensure column and direction are sanitized)
+     
         if (in_array($order_dir, ['asc', 'desc'], true)) {
             $this->db->order_by($order_column, $order_dir);
         } else {
-            // Default order if invalid direction provided
+         
             $this->db->order_by('name', 'asc');
         }
 
-        // Apply pagination and execute query
+      
         return $this->db->limit($length, $start)->get();
     }
 

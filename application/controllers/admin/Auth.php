@@ -12,9 +12,9 @@ class Auth extends CI_Controller
 
     public function login()
     {
-        // Check if the user is already logged in
+       
         if ($this->session->userdata('back_user_id')) {
-            redirect('admin/hierarchydata'); // Redirect to the dashboard if already logged in
+            redirect('admin/hierarchydata'); 
         }
     
         if ($this->input->method() === 'post') {

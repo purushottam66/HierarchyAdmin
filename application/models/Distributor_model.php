@@ -866,26 +866,26 @@ class Distributor_model extends CI_Model
 
     public function get_distributors_unmapped($start, $length, $search = '', $zone_ids = [], $order_column = '', $order_direction = '')
     {
-        // Ensure $zone_ids is an array
+       
         if (!is_array($zone_ids)) {
             $zone_ids = [];
         }
 
-        // Ensure $search is a string
+      
         $search = is_string($search) ? $search : '';
 
 
         $this->db->select('d.*');
         $this->db->from('distributors d');
 
-        // Filter by zone
+    
         if (!empty($zone_ids)) {
             $this->db->where_in('d.Zone_Code', $zone_ids);
         }
 
-        // Apply search filters
+       
         if (!empty($search)) {
-            $this->db->group_start(); // Start grouping conditions
+            $this->db->group_start(); 
             $this->db->like('d.Customer_Name', $search);
             $this->db->or_like('d.Customer_Code', $search);
             $this->db->or_like('d.Pin_Code', $search);
@@ -917,25 +917,25 @@ class Distributor_model extends CI_Model
             $this->db->group_end(); // End grouping
         }
 
-        // Apply sorting (ensure valid sorting column)
+       
         $valid_columns = ['Customer_Name', 'Customer_Code', 'Pin_Code', 'City', 'District', 'Zone', 'State', 'Population_Strata_1', 'Population_Strata_2', 'Country_Group', 'GTM_TYPE', 'SUPERSTOCKIST', 'STATUS', 'Sales_Code', 'Customer_Type_Name'];
         if (!in_array($order_column, $valid_columns)) {
-            $order_column = 'Customer_Name'; // Default to Customer_Name if invalid column is provided
+            $order_column = 'Customer_Name'; 
         }
 
-        // Apply sorting
+     
         $this->db->order_by($order_column, $order_direction);
 
-        // Limit the results
+  
         $this->db->limit($length, $start);
 
-        // Fetch data
+    
         $query = $this->db->get();
 
         // Debugging: Check the SQL query being executed
-        log_message('debug', 'SQL Query: ' . $this->db->last_query());
+       // log_message('debug', 'SQL Query: ' . $this->db->last_query());
 
-        // Return the result
+     
         return $query;
     }
 
