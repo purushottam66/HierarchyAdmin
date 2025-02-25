@@ -167,6 +167,8 @@ $route['admin/Save_Replace_emp_Transfer'] = 'admin/Employee/Save_Replace_emp_Tra
 $route['admin/Unmapped_Employee_ajex_load'] = 'admin/Employee/Unmapped_Employee_ajex_load';
 $route['admin/Unmapped_Employee'] = 'admin/Employee/Unmapped_Employee';
 
+$route['admin/Unmapped_Employee_csv'] = 'admin/Export_employee/Unmapped_Employee_csv';
+
 
 
 $route['admin/employeedata'] = 'admin/Employee/employeedata';

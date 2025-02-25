@@ -199,7 +199,7 @@
     $(document).ready(function() {
 
         var permissions = <?php echo json_encode($permissions); ?>;
-        let addEmployeePermission = permissions.some(p => p.module_name === "User Master" && p.edit === "yes");
+        let addEmployeePermission = permissions.some(p => p.module_name === "User Manager" && p.edit === "yes");
         let buttonsList = [];
 
         if (addEmployeePermission) {

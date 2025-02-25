@@ -49,7 +49,7 @@ class RoleController extends CI_Controller
         $hasPermission = false;
         if (!empty($data['permissions']) && is_array($data['permissions'])) {
             foreach ($data['permissions'] as $p) {
-                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                if ($p['module_name'] === "Permission Manager" && $p['view'] === "yes") {
                     $hasPermission = true;
                     break;
                 }
@@ -103,7 +103,7 @@ class RoleController extends CI_Controller
         $hasPermission = false;
         if (!empty($data['permissions']) && is_array($data['permissions'])) {
             foreach ($data['permissions'] as $p) {
-                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                if ($p['module_name'] === "Permission Manager" && $p['view'] === "yes") {
                     $hasPermission = true;
                     break;
                 }
@@ -164,21 +164,21 @@ class RoleController extends CI_Controller
 
 
 
-        $hasPermission = false;
-        if (!empty($data['permissions']) && is_array($data['permissions'])) {
-            foreach ($data['permissions'] as $p) {
-                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
-                    $hasPermission = true;
-                    break;
-                }
-            }
-        }
+        // $hasPermission = false;
+        // if (!empty($data['permissions']) && is_array($data['permissions'])) {
+        //     foreach ($data['permissions'] as $p) {
+        //         if ($p['module_name'] === "Permission Manager" && $p['view'] === "yes") {
+        //             $hasPermission = true;
+        //             break;
+        //         }
+        //     }
+        // }
 
      
-        if (!$hasPermission) {
-            print_r("You do not have permission to access this page.");
-            return;
-        }
+        // if (!$hasPermission) {
+        //     print_r("You do not have permission to access this page.");
+        //     return;
+        // }
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/addrole', $data);
@@ -230,7 +230,7 @@ class RoleController extends CI_Controller
         $hasPermission = false;
         if (!empty($data['permissions']) && is_array($data['permissions'])) {
             foreach ($data['permissions'] as $p) {
-                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                if ($p['module_name'] === "Permission Manager" && $p['view'] === "yes") {
                     $hasPermission = true;
                     break;
                 }
@@ -282,7 +282,7 @@ class RoleController extends CI_Controller
         $hasPermission = false;
         if (!empty($data['permissions']) && is_array($data['permissions'])) {
             foreach ($data['permissions'] as $p) {
-                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                if ($p['module_name'] === "Permission Manager" && $p['view'] === "yes") {
                     $hasPermission = true;
                     break;
                 }
@@ -391,7 +391,7 @@ class RoleController extends CI_Controller
         $hasPermission = false;
         if (!empty($data['permissions']) && is_array($data['permissions'])) {
             foreach ($data['permissions'] as $p) {
-                if ($p['module_name'] === "Role Manager" && $p['view'] === "yes") {
+                if ($p['module_name'] === "Permission Manager" && $p['view'] === "yes") {
                     $hasPermission = true;
                     break;
                 }

@@ -85,7 +85,7 @@
                                                 $hasPermission = false;
                                                 if (is_array($permissions)) {
                                                     foreach ($permissions as $p) {
-                                                        if ($p['module_name'] === "Role Manager" && $p['edit'] === "yes") {
+                                                        if ($p['module_name'] === "Permission Manager" && $p['edit'] === "yes") {
                                                             $hasPermission = true;
                                                             break;
                                                         }
@@ -93,7 +93,7 @@
                                                 }
                                                 ?>
 
-                                                
+
 
                                                 <?php if ($hasPermission): ?>
                                                     <a href="<?php echo site_url('admin/Addrole/' . $user['id']); ?>" class="href">
@@ -176,7 +176,7 @@
         }
 
         var permissions = <?php echo json_encode($permissions); ?>;
-        let rolePermission = permissions.some(p => p.module_name === "Role Manager" && p.edit === "yes");
+        let rolePermission = permissions.some(p => p.module_name === "Permission Manager" && p.edit === "yes");
         let buttonsList = [];
 
         if (rolePermission) {
@@ -190,15 +190,15 @@
             });
 
             buttonsList.push({
-            text: '<i class="fa fa-list"></i> Role List',
-            titleAttr: 'Role List',
-            action: function() {
-                window.location.href =
-                    '<?php echo base_url("admin/Rolelist"); ?>';
-            }
-        });
+                text: '<i class="fa fa-list"></i> Role List',
+                titleAttr: 'Role List',
+                action: function() {
+                    window.location.href =
+                        '<?php echo base_url("admin/Rolelist"); ?>';
+                }
+            });
         }
- 
+
 
         $('#employeeTable').DataTable({
             paging: true,

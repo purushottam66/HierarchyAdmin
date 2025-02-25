@@ -243,7 +243,7 @@
                         // Construct the URL with the base URL and the query parameters
                         var url = '<?php echo base_url("admin/export_distributors_csv"); ?>?' + params.toString();
 
-                    
+
                         console.log("Sent Datasdgs:", {
                             Customer_Group_Code: customerGroupCode,
                             Customer_Type_Code: customerTypeCode,
@@ -264,7 +264,7 @@
 
 
 
-           
+
             ],
             ajax: {
                 url: "<?= site_url('admin/hierarchydata_ajex') ?>",
@@ -558,18 +558,18 @@
 
 
                 {
-    data: null,
-    title: "Actions",
-    orderable: false,
-    render: function(data, type, row) {
-        var permissions = <?php echo json_encode($permissions); ?>;
-        
-        let hasEditPermission = permissions.some(p => p.module_name === "Hierarchy Data" && p.edit === "yes");
+                    data: null,
+                    title: "Actions",
+                    orderable: false,
+                    render: function(data, type, row) {
+                        var permissions = <?php echo json_encode($permissions); ?>;
 
-        let actionButtons = '<div class="d-flex">';
+                        let hasEditPermission = permissions.some(p => p.module_name === "Report" && p.edit === "yes");
 
-        if (hasEditPermission) {
-            actionButtons += `
+                        let actionButtons = '<div class="d-flex">';
+
+                        if (hasEditPermission) {
+                            actionButtons += `
                 <a href="<?= site_url('admin/hierarchyedit') ?>?id=${encodeURIComponent(row.id || 'N/A')}&customer_name=${encodeURIComponent(row.Customer_Name || 'N/A')}" class="btn btn-primary text-white setfont">
                     <i class="fa-solid fa-pencil fa-fw"></i>
                 </a>
@@ -578,14 +578,14 @@
                         <i class="fa-solid fa-trash fa-fw"></i>
                     </button>
                 </a>`;
-        } else {
-            actionButtons += `<span class="text-danger ">No Permission</span>`;
-        }
+                        } else {
+                            actionButtons += `<span class="text-danger ">No Permission</span>`;
+                        }
 
-        actionButtons += `</div>`;
-        return actionButtons;
-    }
-}
+                        actionButtons += `</div>`;
+                        return actionButtons;
+                    }
+                }
 
             ],
         });

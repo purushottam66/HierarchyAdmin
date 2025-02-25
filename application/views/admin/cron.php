@@ -1,18 +1,13 @@
 <style>
-    /* Custom Cron Update Button Color */
+
     .custom-cron-btn {
         background-color: #28a745 !important;
-        /* Green */
         color: white;
         border: none;
     }
 
-
-
-    /* Custom Update Distributor Button Color */
     .custom-update-btn {
         background-color: #007bff !important;
-        /* Blue */
         color: white;
         border: none;
     }
@@ -24,9 +19,7 @@
             <div class="dashhead-titles">
                 <h3 class="dashhead-title">Data Scheduler</h3>
             </div>
-            <!-- <div class="dashhead-toolbar">
-                <div class="dashhead-toolbar-item"><a href="#">Hierarchy</a> / Cron</div>
-            </div> -->
+
         </div>
     </header>
     <div class="main-content bg-clouds">
@@ -40,33 +33,27 @@
                                     <div class="col-md-6">
 
 
-                                    <?php 
- 
- $hasPermission = false;
- if (is_array($permissions)) {
-     foreach ($permissions as $p) {
-         if ($p['module_name'] === "cron" && $p['edit'] === "yes") {
-             $hasPermission = true;
-             break;
-         }
-     }
- }
-?>
+                                        <?php
+
+                                        $hasPermission = false;
+                                        if (is_array($permissions)) {
+                                            foreach ($permissions as $p) {
+                                                if ($p['module_name'] === "Data Scheduler" && $p['edit'] === "yes") {
+                                                    $hasPermission = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        ?>
 
 
-                                 <?php if ($hasPermission): ?>
-                        
-                                    <button type="submit" class="btn custom-cron-btn pull-left">Cron Update</button>
-                                        <button type="button" class="btn custom-update-btn pull-left" id="updateDistributor">Update Distributor</button>
-                                        <!-- <button type="button" class="btn custom-update-btn pull-left" id="dummmy">dummy mapping</button> -->
+                                        <?php if ($hasPermission): ?>
+
+                                            <button type="submit" class="btn custom-cron-btn pull-left">Cron Update</button>
+                                            <button type="button" class="btn custom-update-btn pull-left" id="updateDistributor">Update Distributor</button>
                                         <?php else: ?>
-                                                    <span class="text-danger fw-bold">No Permission</span>
-                                                <?php endif; ?>
-
-
-
-
-
+                                            <span class="text-danger fw-bold">No Permission</span>
+                                        <?php endif; ?>
                                     </div>
                                 </form>
                             </div>
@@ -84,35 +71,35 @@
 
 <script>
     $('#updateDistributor').on('click', function() {
-        // Disable the button and show loading text or spinner
+   
         var $button = $(this);
-        $button.prop('disabled', true); // Disable the button
-        $button.html('Loading ...'); // Change button text to indicate loading (or add a spinner here)
+        $button.prop('disabled', true); 
+        $button.html('Loading ...'); 
 
         $.ajax({
             url: '<?= site_url("admin/checkAndDeleteDistributor") ?>',
-            type: 'POST', // Use POST for state-changing requests
+            type: 'POST', 
             dataType: 'json',
             success: function(response) {
-                // Check the response status
+         
                 if (response.status == 'success') {
-                    toastr.success(response.message); // Show success toast with dynamic message
+                    toastr.success(response.message); 
 
 
 
                 } else if (response.status == 'error') {
-                    toastr.error(response.message); // Show error toast with dynamic message
+                    toastr.error(response.message); 
                 } else {
-                    toastr.info("Unexpected response status"); // Handle unexpected status
+                    toastr.info("Unexpected response status"); 
                 }
             },
             error: function() {
                 alert('An error occurred while processing the request.');
             },
             complete: function() {
-                // Re-enable the button and reset the text once the request is complete
+        
                 $button.prop('disabled', false);
-                $button.html('Update Distributor'); // Reset button text
+                $button.html('Update Distributor'); 
             }
         });
     });
@@ -122,33 +109,33 @@
 
 <script>
     $('#dummmy').on('click', function() {
-        // Disable the button and show loading text or spinner
+  
         var $button = $(this);
-        $button.prop('disabled', true); // Disable the button
-        $button.html('Loading ...'); // Change button text to indicate loading (or add a spinner here)
+        $button.prop('disabled', true); 
+        $button.html('Loading ...'); 
 
         $.ajax({
             url: '<?= site_url("admin/dummmymaping") ?>',
-            type: 'POST', // Use POST for state-changing requests
+            type: 'POST', 
             dataType: 'json',
             success: function(response) {
-                // Check the response status
+           
                 if (response.status == 'success') {
-                    toastr.success(response.message); // Show success toast with dynamic message
+                    toastr.success(response.message); 
 
                 } else if (response.status == 'error') {
-                    toastr.error(response.message); // Show error toast with dynamic message
+                    toastr.error(response.message); 
                 } else {
-                    toastr.info("Unexpected response status"); // Handle unexpected status
+                    toastr.info("Unexpected response status"); 
                 }
             },
             error: function() {
                 alert('An error occurred while processing the request.');
             },
             complete: function() {
-                // Re-enable the button and reset the text once the request is complete
+          
                 $button.prop('disabled', false);
-                $button.html('Done'); // Reset button text
+                $button.html('Done'); 
             }
         });
     });

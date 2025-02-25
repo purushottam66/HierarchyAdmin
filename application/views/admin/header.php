@@ -115,7 +115,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'User Master' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'Masters' && $permission['view'] == 'yes') : ?>
                                             <li class="nav-item <?php echo (in_array($current_page, ['admin/zone', 'admin/distributors', 'admin/salesorg', 'admin/distributionchannel', 'admin/division', 'admin/gcpdata'])) ? 'menu-open' : ''; ?>">
                                                 <a href="javascript:void(0);" class="dropdown-toggle <?php echo (in_array($current_page, ['admin/zone', 'admin/distributors', 'admin/salesorg', 'admin/distributionchannel', 'admin/division', 'admin/gcpdata'])) ? 'active' : ''; ?>" data-toggle="collapse" data-target="#level1">
                                                     <span class="nav-icon">
@@ -156,7 +156,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'userdetails' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'User Movement' && $permission['view'] == 'yes') : ?>
                                             <li>
                                                 <a class="<?php echo ($current_page == 'admin/UserMovement') ? 'active' : ''; ?>"
                                                     href="<?php echo base_url('admin/UserMovement'); ?>">
@@ -183,7 +183,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'Mapping' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'User - Dist.Mapping' && $permission['view'] == 'yes') : ?>
                                             <!-- Product Hierarchy -->
                                             <li>
                                                 <a class="<?php echo ($current_page == 'admin/maping') ? 'active' : ''; ?>" href="<?php echo base_url('admin/maping'); ?>">
@@ -209,7 +209,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'Hierarchy Data' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'Report' && $permission['view'] == 'yes') : ?>
                                             <?php
                                             $isActiveTab = strpos($_SERVER['REQUEST_URI'], 'admin/hierarchydata') !== false ||
                                                 strpos($_SERVER['REQUEST_URI'], 'admin/geography') !== false ||
@@ -273,7 +273,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'Unmapped Distributors' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'Un mapped Distributors' && $permission['view'] == 'yes') : ?>
                                             <li>
                                                 <a class="<?php echo ($current_page == 'admin/distributors') ? 'active' : ''; ?>"
                                                     href="<?php echo base_url('admin/distributors'); ?>">
@@ -292,7 +292,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'userdetails' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'Un mapped User' && $permission['view'] == 'yes') : ?>
                                             <li>
                                                 <a class="<?php echo ($current_page == 'admin/Unmapped_Employee') ? 'active' : ''; ?>"
                                                     href="<?php echo base_url('admin/Unmapped_Employee'); ?>">
@@ -331,7 +331,7 @@
                                 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'maping inactive' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'Inactive SAP CD' && $permission['view'] == 'yes') : ?>
                                             <li>
                                                 <a class="<?php echo ($current_page == 'admin/mapinginactive') ? 'active' : ''; ?>"
                                                     href="<?php echo base_url('admin/mapinginactive'); ?>">
@@ -350,7 +350,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'Designation List' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'Positions' && $permission['view'] == 'yes') : ?>
                                             <li>
                                                 <a class="<?php echo ($current_page == 'admin/designation-list') ? 'active' : ''; ?>"
                                                     href="<?php echo base_url('admin/designation-list'); ?>">
@@ -369,7 +369,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'Employee Movement' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'User Manager' && $permission['view'] == 'yes') : ?>
                                             <li>
                                                 <a class="<?php echo ($current_page == 'admin/userdetails') ? 'active' : ''; ?>"
                                                     href="<?php echo base_url('admin/userdetails'); ?>">
@@ -389,7 +389,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'Role Manager' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'Permission Manager' && $permission['view'] == 'yes') : ?>
                                             <li>
                                                 <a class="<?php echo ($current_page == 'admin/role') ? 'active' : ''; ?>"
                                                     href="<?php echo base_url('admin/role'); ?>">
@@ -407,7 +407,7 @@
 
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
-                                        <?php if ($permission['module_name'] == 'cron' && $permission['view'] == 'yes') : ?>
+                                        <?php if ($permission['module_name'] == 'Data Scheduler' && $permission['view'] == 'yes') : ?>
                                             <li>
                                                 <a class="<?php echo ($current_page == 'admin/cron') ? 'active' : ''; ?>"
                                                     href="<?php echo base_url('admin/cron'); ?>">

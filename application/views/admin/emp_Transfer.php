@@ -174,23 +174,23 @@
 
                                 </div>
                                 <div class="d-flex flex-row-reverse bd-highlight">
-                                <?php 
- 
- $hasPermission = false;
- if (is_array($permissions)) {
-     foreach ($permissions as $p) {
-         if ($p['module_name'] === "Employee Movement" && $p['edit'] === "yes") {
-             $hasPermission = true;
-             break;
-         }
-     }
- }
-?>
+                                    <?php
+
+                                    $hasPermission = false;
+                                    if (is_array($permissions)) {
+                                        foreach ($permissions as $p) {
+                                            if ($p['module_name'] === "User Movement" && $p['edit'] === "yes") {
+                                                $hasPermission = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    ?>
 
 
-                                 <?php if ($hasPermission): ?>
-                                 <button type="submit" class="btn btnss">Save & Replace</button>
-                                 <?php endif; ?>
+                                    <?php if ($hasPermission): ?>
+                                        <button type="submit" class="btn btnss">Save & Replace</button>
+                                    <?php endif; ?>
 
                                 </div>
                             </form>
@@ -591,7 +591,7 @@
 
 
 
-        function fetchEmployees(selectedValue, pjpCode, pageNumber,search ) {
+        function fetchEmployees(selectedValue, pjpCode, pageNumber, search) {
 
             $.ajax({
                 url: '<?= site_url('admin/empreplace_level'); ?>',

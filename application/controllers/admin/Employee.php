@@ -52,7 +52,7 @@ class Employee extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'userdetails' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'User Manager' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -1183,53 +1183,6 @@ class Employee extends CI_Controller
 
 
 
-
-
-
-
-
-
-
-    // public function employeedata()
-    // {
-    //     $back_user_id = $this->session->userdata('back_user_id');
-
-    //     if (!$back_user_id) {
-    //         redirect('admin/login');
-    //     }
-
-    //     $level = $this->input->post('level');
-    //     $page = $this->input->post('page') ?? 1;  // Default page 1
-    //     $limit = $this->input->post('limit') ?? 500; // Default 10 records per page
-    //     $offset = ($page - 1) * $limit;  // Offset calculation
-
-    //     if (!isset($level) || !is_numeric($level)) {
-    //         echo json_encode(['status' => 'error', 'message' => 'Invalid level']);
-    //         return;
-    //     }
-
-    //     // Get total count
-    //     $total_records = $this->Employee_model->get_total_employees_by_level($level);
-
-    //     // Fetch paginated data
-    //     $data['emp'] = $this->Employee_model->get_Employee_by_level($level, $limit, $offset);
-
-    //     if (!empty($data['emp'])) {
-    //         echo json_encode([
-    //             'status' => 'success',
-    //             'data' => $data['emp'],
-    //             'total_records' => $total_records,
-    //             'total_pages' => ceil($total_records / $limit),
-    //             'current_page' => $page
-    //         ]);
-    //     } else {
-    //         echo json_encode(['status' => 'error', 'message' => 'No data found']);
-    //     }
-    // }
-
-
-
-
     public function submit_employee()
     {
         $back_user_id = $this->session->userdata('back_user_id');
@@ -1336,7 +1289,7 @@ class Employee extends CI_Controller
         }
         $has_view_permission = false;
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'userdetails' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'User Manager' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -1385,7 +1338,7 @@ class Employee extends CI_Controller
         }
         $has_view_permission = false;
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'userdetails' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'User Manager' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -1628,7 +1581,7 @@ class Employee extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'userdetails' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'User Manager' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -1826,7 +1779,7 @@ class Employee extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'userdetails' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'User Manager' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }

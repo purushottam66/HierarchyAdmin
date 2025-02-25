@@ -454,7 +454,7 @@
                                             $hasPermission = false;
                                             if (is_array($permissions)) {
                                                 foreach ($permissions as $p) {
-                                                    if ($p['module_name'] === "Mapping" && $p['edit'] === "yes") {
+                                                    if ($p['module_name'] === "User - Dist.Mapping" && $p['edit'] === "yes") {
                                                         $hasPermission = true;
                                                         break;
                                                     }

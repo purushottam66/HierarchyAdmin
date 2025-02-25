@@ -159,8 +159,7 @@
             .replace(/'/g, "&#039;");
     }
 
-    // var permissions = <?php echo json_encode($permissions); ?>;
-    // let EmployeeMovementPermission = permissions.some(p => p.module_name === "Employee Movement" && p.edit === "yes");
+   
 
     $(document).ready(function() {
         var table = $('#exampley').DataTable({
@@ -362,7 +361,7 @@
         // PHP से permissions डेटा लेना
         var permissions = <?php echo json_encode($permissions); ?>;
         
-        let EmployeeMovementPermission = permissions.some(p => p.module_name === "Employee Movement" && p.edit === "yes");
+        let EmployeeMovementPermission = permissions.some(p => p.module_name === "User Movement" && p.edit === "yes");
 
         function buildUrl(baseUrl, data) {
             let params = new URLSearchParams();

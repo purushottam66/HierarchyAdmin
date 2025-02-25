@@ -450,7 +450,7 @@
         var permissions = <?php echo json_encode($permissions); ?>;
         
         // Check if the user has edit permission for "Hierarchy Data"
-        let hasEditPermission = permissions.some(p => p.module_name === "Hierarchy Data" && p.edit === "yes");
+        let hasEditPermission = permissions.some(p => p.module_name === "Report" && p.edit === "yes");
 
         // Build the action buttons
         let actionButtons = '<div class="d-flex">';

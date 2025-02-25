@@ -580,6 +580,26 @@ class Employee_model extends CI_Model
     }
 
 
+    public function Unmapped_Employee_csv()
+    {
+
+        $this->db->select('e.*')
+        ->from('employee e')
+        ->where('e.employee_status', 'active')
+        ->join('maping m', 'e.pjp_code = m.Level_1 OR e.pjp_code = m.Level_2 OR e.pjp_code = m.Level_3 OR e.pjp_code = m.Level_4 OR e.pjp_code = m.Level_5 OR e.pjp_code = m.Level_6 OR e.pjp_code = m.Level_7', 'left')
+        ->where('m.Level_1 IS NULL')
+        ->where('m.Level_2 IS NULL')
+        ->where('m.Level_3 IS NULL')
+        ->where('m.Level_4 IS NULL')
+        ->where('m.Level_5 IS NULL')
+        ->where('m.Level_6 IS NULL')
+        ->where('m.Level_7 IS NULL');
+        $query = $this->db->get();
+        return $query->result_array();
+        
+    }
+
+
     public function get_employees_unmaped($start, $length, $search = '', $order_column = 'name', $order_dir = 'asc')
     {
         $this->db->select('e.*')

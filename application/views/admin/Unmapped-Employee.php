@@ -84,7 +84,7 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
@@ -128,6 +128,12 @@
             "fixedFooter": true,
             "processing": true,
             "serverSide": true,
+
+
+            dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
+
+
+
             order: [
                 [0, 'asc']
             ],
@@ -141,12 +147,18 @@
             language: {
                 processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">', // Custom loading message
             },
-            columnDefs: [
-                {
-                    className: 'text-center',
-                    targets: '_all'
+            columnDefs: [{
+                className: 'text-center',
+                targets: '_all'
+            }],
+
+            "buttons": [{
+                text: '<i class="fa fa-download"></i>  Export Data',
+                titleAttr: ' Export Data',
+                action: function() {
+                    window.location.href = '<?php echo base_url("admin/Unmapped_Employee_csv"); ?>';
                 }
-            ],
+            }]
         });
 
         $('#dt-search-0').on('keyup', function() {

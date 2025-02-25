@@ -180,23 +180,23 @@
 
 
                                 <div class="d-flex flex-row-reverse bd-highlight">
-                                <?php 
- 
- $hasPermission = false;
- if (is_array($permissions)) {
-     foreach ($permissions as $p) {
-         if ($p['module_name'] === "Employee Movement" && $p['edit'] === "yes") {
-             $hasPermission = true;
-             break;
-         }
-     }
- }
-?>
+                                    <?php
+
+                                    $hasPermission = false;
+                                    if (is_array($permissions)) {
+                                        foreach ($permissions as $p) {
+                                            if ($p['module_name'] === "User Movement" && $p['edit'] === "yes") {
+                                                $hasPermission = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    ?>
 
 
-                                 <?php if ($hasPermission): ?>
-                                 <button type="submit" class="btn btnss">Save & Replace</button>
-                                 <?php endif; ?>
+                                    <?php if ($hasPermission): ?>
+                                        <button type="submit" class="btn btnss">Save & Replace</button>
+                                    <?php endif; ?>
 
                                 </div>
                             </form>
@@ -307,7 +307,7 @@
                                     </table>
 
 
-                                     <div id="updatePagination_Replace"></div> 
+                                    <div id="updatePagination_Replace"></div>
 
 
                                 </div>
@@ -585,7 +585,7 @@
             var pjpCode = selectedOption.data('pjp_code');
             $('#selectedEmployeesselectedValue').val(pjpCode);
 
-            fetchEmployees(selectedValue, pjpCode, 1); 
+            fetchEmployees(selectedValue, pjpCode, 1);
 
         });
 
@@ -593,7 +593,7 @@
 
 
 
-        function fetchEmployees(selectedValue, pjpCode, pageNumber,search) {
+        function fetchEmployees(selectedValue, pjpCode, pageNumber, search) {
 
 
 
@@ -611,10 +611,10 @@
                     var response = JSON.parse(response);
                     empresponse = response;
 
-                    console.log("empresponse dfhgn",empresponse);
-                    
-              
-                    
+                    console.log("empresponse dfhgn", empresponse);
+
+
+
                     table.clear();
                     updatePagination_Replace(response);
 
@@ -739,18 +739,18 @@
             $('.employee-radio').on('change', function() {
                 var selectedName = $(this).data('name');
                 var selectedID = $(this).data('id');
-          
+
             });
         }
 
         $("#dt-search-0").keyup(function() {
             var search = $(this).val();
-            var selectedValue = $('#level').val(); 
-            var pjpCode = $('#selectedEmployeesselectedValue').val(); 
+            var selectedValue = $('#level').val();
+            var pjpCode = $('#selectedEmployeesselectedValue').val();
 
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(function() {
-                fetchEmployees(selectedValue, pjpCode, 1, search); 
+                fetchEmployees(selectedValue, pjpCode, 1, search);
             }, 500);
         });
 

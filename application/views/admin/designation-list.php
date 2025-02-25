@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" class="rel">
 
 
@@ -79,39 +78,39 @@
                                             <td class="text-center">
 
 
-                                            <?php 
- 
- $hasPermission = false;
- if (is_array($permissions)) {
-     foreach ($permissions as $p) {
-         if ($p['module_name'] === "Designation List	" && $p['edit'] === "yes") {
-             $hasPermission = true;
-             break;
-         }
-     }
- }
-?>
+                                                <?php
+
+                                                $hasPermission = false;
+                                                if (is_array($permissions)) {
+                                                    foreach ($permissions as $p) {
+                                                        if ($p['module_name'] === "Positions" && $p['edit'] === "yes") {
+                                                            $hasPermission = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                ?>
 
 
-                                 <?php if ($hasPermission): ?>
-                                    <a href="<?php echo site_url('admin/designation-edit/' . $user['id']); ?>"
-                                                    class="href">
-                                                    <button class="btn btn-primary setfont">
-                                                        <i class="fa-solid fa-pencil fa-fw"></i>
-                                                    </button>
-                                                </a>
+                                                <?php if ($hasPermission): ?>
+                                                    <a href="<?php echo site_url('admin/designation-edit/' . $user['id']); ?>"
+                                                        class="href">
+                                                        <button class="btn btn-primary setfont">
+                                                            <i class="fa-solid fa-pencil fa-fw"></i>
+                                                        </button>
+                                                    </a>
 
-                                                <a href="javascript:void(0);" data-id="<?php echo $user['id']; ?>"
-                                                    class="delete-btn">
-                                                    <button class="btn btn-primary setfont ">
-                                                        <i class="fa-solid fa-trash fa-fw"></i>
-                                                    </button>
-                                                </a>
+                                                    <a href="javascript:void(0);" data-id="<?php echo $user['id']; ?>"
+                                                        class="delete-btn">
+                                                        <button class="btn btn-primary setfont ">
+                                                            <i class="fa-solid fa-trash fa-fw"></i>
+                                                        </button>
+                                                    </a>
                                                 <?php else: ?>
                                                     <span class="text-danger fw-bold">No Permission</span>
                                                 <?php endif; ?>
 
-                             
+
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

@@ -107,7 +107,7 @@ class Dashboard extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'User Master' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'Masters' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -893,7 +893,7 @@ class Dashboard extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'User Master' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'Masters' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -927,7 +927,7 @@ class Dashboard extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'User Master' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'Masters' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -983,7 +983,7 @@ class Dashboard extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'User Master' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'Masters' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -1031,7 +1031,7 @@ class Dashboard extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'User Master' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'Masters' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -1078,7 +1078,7 @@ class Dashboard extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'User Master' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'Masters' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
@@ -1203,7 +1203,7 @@ class Dashboard extends CI_Controller
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
-            if ($permission['module_name'] === 'User Master' && $permission['view'] === 'yes') {
+            if ($permission['module_name'] === 'Masters' && $permission['view'] === 'yes') {
                 $has_view_permission = true;
                 break;
             }
