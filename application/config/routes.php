@@ -83,6 +83,7 @@ $route['admin/designation-update'] = 'admin/dashboard/designation_update';
 
 
 $route['admin/designation-list'] = 'admin/dashboard/designation_list';
+$route['admin/designations_ajex'] = 'admin/dashboard/designations_ajex';
 
 
 $route['admin/designationdelete/(:num)'] = 'admin/dashboard/designationdelete/$1';

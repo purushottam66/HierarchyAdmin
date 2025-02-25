@@ -18,6 +18,16 @@ class Designation_model extends CI_Model
         return $query->row_array();
     }
 
+    // public function get_all_designations()
+    // {
+    //     return $this->db->get('designations')->result_array(); // सभी designations प्राप्त करें
+    // }
+
+    // public function get_designation_by_id($id)
+    // {
+    //     return $this->db->get_where('designations', ['id' => $id])->row_array(); // सिर्फ एक designation लाएं
+    // }
+
 
     public function create_designation($data)
     {

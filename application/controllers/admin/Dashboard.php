@@ -9,7 +9,7 @@ class Dashboard extends CI_Controller
         parent::__construct();
         ini_set('memory_limit', '1024M');
         $this->load->model('User_model');
-        $this->load->model('Role_model');   
+        $this->load->model('Role_model');
         $this->load->model('Zone_model');
 
 
@@ -163,7 +163,7 @@ class Dashboard extends CI_Controller
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
 
-    
+
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/ZoneHierarchy', $data);
@@ -207,7 +207,7 @@ class Dashboard extends CI_Controller
 
     //     $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
-    
+
     //     // echo json_encode($data, JSON_PRETTY_PRINT);
     //     // die();
     //     echo json_encode(   $data);
@@ -217,7 +217,7 @@ class Dashboard extends CI_Controller
 
 
 
-    
+
 
     public function treezoneajex()
     {
@@ -312,25 +312,25 @@ class Dashboard extends CI_Controller
                 AND ds.Customer_Type_Code = mp.Customer_Type_Code
                 AND ds.Customer_Group_Code = mp.Customer_Group_Code', 'inner');
 
-                $this->db->join('employee emp1', 'emp1.pjp_code = mp.Level_1 AND emp1.level = 1', 'left');
+            $this->db->join('employee emp1', 'emp1.pjp_code = mp.Level_1 AND emp1.level = 1', 'left');
 
-                // For Level_2
-                $this->db->join('employee emp2', 'emp2.pjp_code = mp.Level_2 AND emp2.level = 2', 'left');
-                
-                // For Level_3
-                $this->db->join('employee emp3', 'emp3.pjp_code = mp.Level_3 AND emp3.level = 3', 'left');
-                
-                // For Level_4
-                $this->db->join('employee emp4', 'emp4.pjp_code = mp.Level_4 AND emp4.level = 4', 'left');
-                
-                // For Level_5
-                $this->db->join('employee emp5', 'emp5.pjp_code = mp.Level_5 AND emp5.level = 5', 'left');
-                
-                // For Level_6
-                $this->db->join('employee emp6', 'emp6.pjp_code = mp.Level_6 AND emp6.level = 6', 'left');
-                
-                // For Level_7
-                $this->db->join('employee emp7', 'emp7.pjp_code = mp.Level_7 AND emp7.level = 7', 'left');
+            // For Level_2
+            $this->db->join('employee emp2', 'emp2.pjp_code = mp.Level_2 AND emp2.level = 2', 'left');
+
+            // For Level_3
+            $this->db->join('employee emp3', 'emp3.pjp_code = mp.Level_3 AND emp3.level = 3', 'left');
+
+            // For Level_4
+            $this->db->join('employee emp4', 'emp4.pjp_code = mp.Level_4 AND emp4.level = 4', 'left');
+
+            // For Level_5
+            $this->db->join('employee emp5', 'emp5.pjp_code = mp.Level_5 AND emp5.level = 5', 'left');
+
+            // For Level_6
+            $this->db->join('employee emp6', 'emp6.pjp_code = mp.Level_6 AND emp6.level = 6', 'left');
+
+            // For Level_7
+            $this->db->join('employee emp7', 'emp7.pjp_code = mp.Level_7 AND emp7.level = 7', 'left');
 
 
             $this->db->where_in('mp.DB_Code', $dbCodes);
@@ -799,7 +799,7 @@ class Dashboard extends CI_Controller
         );
 
         // Remove null/empty values from filters
-        $filters = array_filter($filters, function($value) {
+        $filters = array_filter($filters, function ($value) {
             return $value !== null && $value !== '';
         });
 
@@ -862,8 +862,6 @@ class Dashboard extends CI_Controller
                 $AS_distributors->Distribution_Channel_Code,
                 $AS_distributors->Distribution_Channel_Name,
             );
-
-            
         }
 
         $output = array(
@@ -1343,7 +1341,7 @@ class Dashboard extends CI_Controller
 
         // echo json_encode($data['permissions']);
         // die();
-        
+
 
         // Load views
         $this->load->view('admin/header', $data);
@@ -1660,6 +1658,30 @@ class Dashboard extends CI_Controller
         $this->load->view('admin/designation-list', $data);
         $this->load->view('admin/footer', $data);
     }
+
+
+
+    public function designations_ajex()
+    {
+      
+        $designation_id = $this->input->post('id'); 
+        
+        $this->load->model('Designation_model');
+    
+        if ($designation_id) {
+            
+            $designations = $this->Designation_model->get_designation_by_id($designation_id);
+        } else {
+         
+            $designations = $this->Designation_model->get_all_designations();
+        }
+    
+        // JSON Response भेजें
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($designations));
+    }
+    
 
 
 
@@ -2125,7 +2147,7 @@ class Dashboard extends CI_Controller
             'Sector_Name',
         ];
 
-        
+
 
         // Check if the index is valid
 
@@ -2228,45 +2250,45 @@ class Dashboard extends CI_Controller
 
 
 
-  public function replacedataajex()
-{
-    $user_id = $this->session->userdata('back_user_id');
-    if (!$user_id) {
-        redirect('admin/login');
+    public function replacedataajex()
+    {
+        $user_id = $this->session->userdata('back_user_id');
+        if (!$user_id) {
+            redirect('admin/login');
+        }
+
+        $pjp_code = $this->input->get('pjp_code') ?? null;
+        $level = $this->input->get('employee_level') ?? null;
+        $search = $this->input->get('search') ?? ''; // Search keyword
+        $limit = $this->input->get('limit') ?? 10; // Default 10 records per page
+        $page = $this->input->get('page') ?? 1; // Default first page
+        $offset = ($page - 1) * $limit;
+
+
+
+
+        if ($pjp_code && $level) {
+            $result = $this->Maping_model->get_db_code_by_pjp_and_level($pjp_code, $level, $limit, $offset, $search);
+            $total_records = $this->Maping_model->get_total_records($pjp_code, $level, $search);
+            $common_records = $this->Maping_model->get_common_records($pjp_code, $level); // Get total records
+
+        } else {
+            $result = [];
+            $total_records = 0;
+        }
+
+        $response = [
+            'Distributor_data' => $result,
+            'common_records' => $common_records,
+
+            'total_records' => $total_records,
+            'limit' => $limit,
+            'page' => $page,
+            'total_pages' => ceil($total_records / $limit)
+        ];
+
+        echo json_encode($response);
     }
-
-    $pjp_code = $this->input->get('pjp_code') ?? null;
-    $level = $this->input->get('employee_level') ?? null;
-    $search = $this->input->get('search') ?? ''; // Search keyword
-    $limit = $this->input->get('limit') ?? 10; // Default 10 records per page
-    $page = $this->input->get('page') ?? 1; // Default first page
-    $offset = ($page - 1) * $limit;
-
-
-
-
-    if ($pjp_code && $level) {
-        $result = $this->Maping_model->get_db_code_by_pjp_and_level($pjp_code, $level, $limit, $offset, $search);
-        $total_records = $this->Maping_model->get_total_records($pjp_code, $level, $search); 
-        $common_records = $this->Maping_model->get_common_records($pjp_code, $level); // Get total records
-
-    } else {
-        $result = [];
-        $total_records = 0;
-    }
-
-    $response = [
-        'Distributor_data' => $result,
-        'common_records' => $common_records,
-
-        'total_records' => $total_records,
-        'limit' => $limit,
-        'page' => $page,
-        'total_pages' => ceil($total_records / $limit)
-    ];
-
-    echo json_encode($response);
-}
 
 
 
@@ -2356,9 +2378,9 @@ class Dashboard extends CI_Controller
 
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
-        $this->load->view('admin/header',$data);
-        $this->load->view('admin/mapinginactive',$data);
-        $this->load->view('admin/footer',$data);
+        $this->load->view('admin/header', $data);
+        $this->load->view('admin/mapinginactive', $data);
+        $this->load->view('admin/footer', $data);
     }
 
     public function fetchInactiveMappings()

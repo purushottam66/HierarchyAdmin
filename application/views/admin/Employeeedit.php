@@ -240,7 +240,7 @@
                                                 </select>
                                             </div>
                                         </div> -->
-                            
+
 
 
 
@@ -300,16 +300,15 @@
 
 
 <script>
-document.getElementById('designation_label').addEventListener('change', function() {
-    var selectedOption = this.options[this.selectedIndex];
+    document.getElementById('designation_label').addEventListener('change', function() {
+        var selectedOption = this.options[this.selectedIndex];
 
-    if (selectedOption) {
-        var designationName = selectedOption.textContent.trim(); // Get visible text (ASM)
-        document.getElementById('designation_label_name').value = designationName;
+        if (selectedOption) {
+            var designationName = selectedOption.textContent.trim(); // Get visible text (ASM)
+            document.getElementById('designation_label_name').value = designationName;
 
-    }
-});
-
+        }
+    });
 </script>
 
 <script>
@@ -406,56 +405,43 @@ document.getElementById('designation_label').addEventListener('change', function
     });
 </script>
 
-<!-- 
+
+
+
+
 <script>
     $(document).ready(function() {
-
         $('#designation').change(function() {
             var designationId = $(this).val();
-            $('#designation_label').empty();
-            $('#designation_label').append('<option selected>Select Label</option>');
-            $('option[data-name]').each(function() {
-                var label = $(this).data('name');
-                var value = $(this).val();
 
-                if (designationId == value) {
 
-                    $('#designation_label').append('<option value="' + value + '" data-name="' + label + '">' + label + '</option>');
+
+            $.ajax({
+                url: '<?= site_url('admin/designations_ajex'); ?>',
+                type: 'POST',
+                data: {
+                    id: designationId
+                },
+                dataType: 'json',
+                success: function(response) {
+
+                    $('#designation_label').empty();
+                    $('#designation_label').append('<option selected>Select Label</option>');
+
+                    if (response.id) {
+                        $('#designation_label').append('<option value="' + response.id + '" data-name="' + response.id + '">' + response.Designation_Label + '</option>');
+                    } else if (Array.isArray(response)) {
+                        $.each(response, function(index, item) {
+                            $('#designation_label').append('<option value="' + item.id + '" data-name="' + item.id + '">' + item.Designation_Label + '</option>');
+                        });
+                    }
+
+                    $('#designation_label').selectpicker('refresh');
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
                 }
             });
-            $('#designation_label').selectpicker('refresh');
-        });
-    });
-</script> -->
-
-
-
-<script>
-    $(document).ready(function() {
-        // On change of the Designation dropdown
-        $('#designation').change(function() {
-            var designationId = $(this).val(); // Get the selected Designation ID
-
-
-    
-            // Clear the Designation Label dropdown
-            $('#designation_label').empty();
-            $('#designation_label').append('<option selected>Select Label</option>'); // Reset the first option
-
-            // Loop through the options and find the labels corresponding to the selected designation
-            $('option[data-name]').each(function() {
-                var label = $(this).data('name'); // Get the corresponding Designation Label
-                var value = $(this).val(); // Get the corresponding Designation ID
-
-                // Only append the label if the ID matches the selected Designation ID
-                if (designationId == value) {
-                    // Correctly append the option with the 'data-name' attribute and the label
-                    $('#designation_label').append('<option value="' + value + '" data-name="' + label + '">' + label + '</option>');
-                }
-            });
-
-            // Reinitialize selectpicker to reflect changes
-            $('#designation_label').selectpicker('refresh');
         });
     });
 </script>
