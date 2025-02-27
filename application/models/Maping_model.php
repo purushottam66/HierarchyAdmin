@@ -64,6 +64,15 @@ class Maping_model extends CI_Model
         return $tree;
     }
 
+    private function get_employee_name($pjp_code)
+    {
+
+        $this->db->where('pjp_code', $pjp_code);
+        $query = $this->db->get('employee');
+        $result = $query->row_array();
+        return isset($result['name']) ? $result['name'] : '';
+    }
+
 
 
     public function get_all_Maping_table_zone()

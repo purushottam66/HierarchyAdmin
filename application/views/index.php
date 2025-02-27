@@ -445,8 +445,8 @@
 
 
                             <li class="dropdown b-l">
-                                <a class="dropdown-toggle profile-pic" href="#" data-bs-toggle="dropdown" role="button"
-                                    aria-haspopup="true" aria-expanded="false">
+                                <a class=" profile-pic" href="#" 
+                                   >
                                     <!-- <img class="img-circle" src="assets//img/m1.jpg" alt="Jone Doe">
                                     
                                      -->
@@ -454,14 +454,16 @@
                                         <?php echo htmlspecialchars($user_name); ?>!
                                     </b>
                                 </a>
-                                <ul class="dropdown-menu animated flipInY float-right">
+
+                                <a href="<?php echo base_url('welcome/logout'); ?>"><i
+                                                class="fa-solid fa-right-from-bracket fa-fw"></i> Logout</a>
+                                <!-- <ul class="dropdown-menu animated flipInY float-right">
 
 
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="<?php echo base_url('welcome/logout'); ?>"><i
-                                                class="fa-solid fa-right-from-bracket fa-fw"></i> Logout</a></li>
+                                    <li></li>
 
-                                </ul>
+                                </ul> -->
                             </li>
                         </ul>
                     </div>

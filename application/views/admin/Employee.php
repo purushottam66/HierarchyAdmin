@@ -196,7 +196,7 @@
                                                 <label for="level">Level</label>
                                                 <select class="selectpicker  form-control" id="level" name="level"
                                                     required>
-                                                    <option selected>Select Level</option>
+                                                  
                                                     <?php foreach ($level as $levels): ?>
                                                         <option value="<?php echo $levels['level_id']; ?>">
                                                             <?php echo $levels['level_name']; ?></option>

@@ -30,7 +30,10 @@ class Welcome extends CI_Controller
             $data['level'] = $id__session;
             $data['maping'] = $this->Maping_model->get_all_Maping_table($Pjp_Code_session);
 
-            $json_data = json_encode($data['maping'], JSON_PRETTY_PRINT);
+            //$json_data = json_encode($data['maping'], JSON_PRETTY_PRINT);
+
+
+
 
             $this->load->view('index', $data);
         }
