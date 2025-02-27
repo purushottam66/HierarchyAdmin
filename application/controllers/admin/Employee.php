@@ -1820,7 +1820,7 @@ class Employee extends CI_Controller
             if ($this->form_validation->run() == FALSE) {
                 // If validation fails, reload the edit page with errors
                 $this->session->set_flashdata('error', validation_errors());
-                redirect('admin/edit_employee/' . $id);
+                redirect('admin/Employeeedit/' . $id);
             } else {
                 // If validation passes, update the employee data
                 date_default_timezone_set('Asia/Kolkata');
