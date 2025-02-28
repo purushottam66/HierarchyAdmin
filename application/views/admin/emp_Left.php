@@ -174,35 +174,33 @@
                                                 <th>Country</th>
                                                 <th>Zone</th>
                                                 <th>State</th>
-                                                <th>Population Strata 1
-                                                </th>
-                                                <th>Population Strata 2
-                                                </th>
+                                                <th>Population Strata 1</th>
+                                                <th>Population Strata 2</th>
                                                 <th>Country Group</th>
                                                 <th>GTM TYPE</th>
                                                 <th>Super Stockist</th>
                                                 <th>Status</th>
-                                                <th>Customer Type Code
-                                                </th>
+
                                                 <th>Sales Code</th>
-                                                <th>Customer Type Name
-                                                </th>
-                                                <th>Customer Group Code
-                                                </th>
-                                                <th>Customer Creation Date
-                                                </th>
+                                                <th>Sales Name</th>
+                                                <th>Distribution Channel Code</th>
+                                                <th>Distribution Channel Name</th>
+
                                                 <th>Division Code</th>
+                                                <th>Division Name</th>
+
+                                                <th>Customer Type Code</th>
+                                                <th>Customer Type Name</th>
+
+                                                <th>Customer Group Code</th>
+                                                <th>Customer Group Name</th>
+
+                                                <th>Customer Creation Date</th>
+
                                                 <th>Sector Code</th>
                                                 <th>State Code</th>
                                                 <th>Zone Code</th>
-                                                <th>Distribution Channel
-                                                    Code</th>
-                                                <th>Distribution Channel
-                                                    Name</th>
-                                                <th>Customer Group Name
-                                                </th>
-                                                <th>Sales Name</th>
-                                                <th>Division Name</th>
+
                                                 <th>Sector Name</th>
                                             </tr>
                                         </thead>
@@ -283,35 +281,34 @@
                                                 <th>Country</th>
                                                 <th>Zone</th>
                                                 <th>State</th>
-                                                <th>Population Strata 1
-                                                </th>
-                                                <th>Population Strata 2
-                                                </th>
+                                                <th>Population Strata 1</th>
+                                                <th>Population Strata 2</th>
                                                 <th>Country Group</th>
                                                 <th>GTM TYPE</th>
                                                 <th>Super Stockist</th>
                                                 <th>Status</th>
-                                                <th>Customer Type Code
-                                                </th>
+
                                                 <th>Sales Code</th>
-                                                <th>Customer Type Name
-                                                </th>
-                                                <th>Customer Group Code
-                                                </th>
-                                                <th>Customer Creation Date
-                                                </th>
+                                                <th>Sales Name</th>
+
+                                                <th>Distribution Channel Code</th>
+                                                <th>Distribution Channel Name</th>
+
                                                 <th>Division Code</th>
+                                                <th>Division Name</th>
+
+                                                <th>Customer Type Code</th>
+                                                <th>Customer Type Name</th>
+
+                                                <th>Customer Group Code</th>
+                                                <th>Customer Group Name</th>
+
+                                                <th>Customer Creation Date</th>
+
                                                 <th>Sector Code</th>
                                                 <th>State Code</th>
                                                 <th>Zone Code</th>
-                                                <th>Distribution Channel
-                                                    Code</th>
-                                                <th>Distribution Channel
-                                                    Name</th>
-                                                <th>Customer Group Name
-                                                </th>
-                                                <th>Sales Name</th>
-                                                <th>Division Name</th>
+
                                                 <th>Sector Name</th>
                                             </tr>
                                         </thead>
@@ -773,60 +770,42 @@
 
                                         table.row.add([
                                             `<input type="hidden" class="row-checkbox" data-json='${escapeHtml(jsonData)}' checked>`,
-                                            escapeHtml(item.Customer_Name ||
-                                                'N/A'),
-                                            escapeHtml(item.Customer_Code ||
-                                                'N/A'),
+                                            escapeHtml(item.Customer_Name || 'N/A'),
+                                            escapeHtml(item.Customer_Code || 'N/A'),
                                             escapeHtml(item.Pin_Code || 'N/A'),
                                             escapeHtml(item.City || 'N/A'),
                                             escapeHtml(item.District || 'N/A'),
-                                            escapeHtml(item.Contact_Number ||
-                                                'N/A'),
+                                            escapeHtml(item.Contact_Number || 'N/A'),
                                             escapeHtml(item.Country || 'N/A'),
                                             escapeHtml(item.Zone || 'N/A'),
                                             escapeHtml(item.State || 'N/A'),
-                                            escapeHtml(item
-                                                .Population_Strata_1 || 'N/A'),
-                                            escapeHtml(item
-                                                .Population_Strata_2 || 'N/A'),
-                                            escapeHtml(item.Country_Group ||
-                                                'N/A'),
+                                            escapeHtml(item.Population_Strata_1 || 'N/A'),
+                                            escapeHtml(item.Population_Strata_2 || 'N/A'),
+                                            escapeHtml(item.Country_Group || 'N/A'),
                                             escapeHtml(item.GTM_TYPE || 'N/A'),
-                                            escapeHtml(item.SUPERSTOCKIST ||
-                                                'N/A'),
+                                            escapeHtml(item.SUPERSTOCKIST || 'N/A'),
                                             escapeHtml(item.STATUS || 'N/A'),
-                                            escapeHtml(item
-                                                .Customer_Type_Code || 'N/A'),
-                                            escapeHtml(item.Sales_Code ||
-                                                'N/A'),
-                                            escapeHtml(item
-                                                .Customer_Type_Name || 'N/A'),
-                                            escapeHtml(item
-                                                .Customer_Group_Code || 'N/A'),
-                                            escapeHtml(item
-                                                .Customer_Creation_Date || 'N/A'
-                                            ),
-                                            escapeHtml(item.Division_Code ||
-                                                'N/A'),
-                                            escapeHtml(item.Sector_Code ||
-                                                'N/A'),
-                                            escapeHtml(item.State_Code ||
-                                                'N/A'),
+
+                                            escapeHtml(item.Sales_Code || 'N/A'),
+                                            escapeHtml(item.Sales_Name || 'N/A'),
+                                            escapeHtml(item.Distribution_Channel_Code || 'N/A'),
+                                            escapeHtml(item.Distribution_Channel_Name || 'N/A'),
+                                            escapeHtml(item.Division_Code || 'N/A'),
+                                            escapeHtml(item.Division_Name || 'N/A'),
+
+                                            escapeHtml(item.Customer_Type_Code || 'N/A'),
+
+                                            escapeHtml(item.Customer_Type_Name || 'N/A'),
+
+                                            escapeHtml(item.Customer_Group_Code || 'N/A'),
+
+                                            escapeHtml(item.Customer_Group_Name || 'N/A'),
+                                            escapeHtml(item.Customer_Creation_Date || 'N/A'),
+
+                                            escapeHtml(item.Sector_Code || 'N/A'),
+                                            escapeHtml(item.State_Code || 'N/A'),
                                             escapeHtml(item.Zone_Code || 'N/A'),
-                                            escapeHtml(item
-                                                .Distribution_Channel_Code ||
-                                                'N/A'),
-                                            escapeHtml(item
-                                                .Distribution_Channel_Name ||
-                                                'N/A'),
-                                            escapeHtml(item
-                                                .Customer_Group_Name || 'N/A'),
-                                            escapeHtml(item.Sales_Name ||
-                                                'N/A'),
-                                            escapeHtml(item.Division_Name ||
-                                                'N/A'),
-                                            escapeHtml(item.Sector_Name ||
-                                                'N/A'),
+                                            escapeHtml(item.Sector_Name || 'N/A'),
                                         ]).draw();
 
                                         $('<input>').attr({
@@ -1079,20 +1058,26 @@
                                 escapeHtml(item.GTM_TYPE || 'N/A'),
                                 escapeHtml(item.SUPERSTOCKIST || 'N/A'),
                                 escapeHtml(item.STATUS || 'N/A'),
-                                escapeHtml(item.Customer_Type_Code || 'N/A'),
+
                                 escapeHtml(item.Sales_Code || 'N/A'),
-                                escapeHtml(item.Customer_Type_Name || 'N/A'),
-                                escapeHtml(item.Customer_Group_Code || 'N/A'),
-                                escapeHtml(item.Customer_Creation_Date || 'N/A'),
+                                escapeHtml(item.Sales_Name || 'N/A'),
+                                escapeHtml(item.Distribution_Channel_Code || 'N/A'),
+                                escapeHtml(item.Distribution_Channel_Name || 'N/A'),
                                 escapeHtml(item.Division_Code || 'N/A'),
+                                escapeHtml(item.Division_Name || 'N/A'),
+
+                                escapeHtml(item.Customer_Type_Code || 'N/A'),
+
+                                escapeHtml(item.Customer_Type_Name || 'N/A'),
+
+                                escapeHtml(item.Customer_Group_Code || 'N/A'),
+
+                                escapeHtml(item.Customer_Group_Name || 'N/A'),
+                                escapeHtml(item.Customer_Creation_Date || 'N/A'),
+
                                 escapeHtml(item.Sector_Code || 'N/A'),
                                 escapeHtml(item.State_Code || 'N/A'),
                                 escapeHtml(item.Zone_Code || 'N/A'),
-                                escapeHtml(item.Distribution_Channel_Code || 'N/A'),
-                                escapeHtml(item.Distribution_Channel_Name || 'N/A'),
-                                escapeHtml(item.Customer_Group_Name || 'N/A'),
-                                escapeHtml(item.Sales_Name || 'N/A'),
-                                escapeHtml(item.Division_Name || 'N/A'),
                                 escapeHtml(item.Sector_Name || 'N/A'),
                                 escapeHtml(item.Level_1 || 'N/A'),
                                 escapeHtml(item.Level_1_Name || 'N/A'),
