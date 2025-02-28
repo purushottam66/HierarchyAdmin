@@ -411,57 +411,67 @@ class RoleController extends CI_Controller
 
 
 
-    public function create_user()
-    {
-        $back_user_id = $this->session->userdata('back_user_id');
+public function create_user()
+{
+    $back_user_id = $this->session->userdata('back_user_id');
 
-        if (!$back_user_id) {
-            $this->session->set_flashdata('error', 'Please log in to continue.');
-            redirect('admin/login');
+    if (!$back_user_id) {
+        $this->session->set_flashdata('error', 'Please log in to continue.');
+        redirect('admin/login');
+    }
+
+    // Set validation rules
+    $this->form_validation->set_rules('name', 'Name', 'required|trim|min_length[3]');
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]|callback_email_domain_check');
+    $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|min_length[10]|max_length[15]');
+    $this->form_validation->set_rules('address', 'Address', 'required|trim|min_length[5]');
+    $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
+    $this->form_validation->set_rules('role', 'Role', 'required|numeric');
+
+    if ($this->form_validation->run() == FALSE) {
+        $errors = $this->form_validation->error_array();
+        $error_message = "<ul>";
+
+        foreach ($errors as $field => $error) {
+            $error_message .= "<li><strong>" . ucfirst($field) . ":</strong> " . $error . "</li>";
         }
 
-        // Set validation rules
-        $this->form_validation->set_rules('name', 'Name', 'required|trim|min_length[3]');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]');
-        $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|min_length[10]|max_length[15]');
-        $this->form_validation->set_rules('address', 'Address', 'required|trim|min_length[5]');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
-        $this->form_validation->set_rules('role', 'Role', 'required|numeric');
+        $error_message .= "</ul>";
+        $this->session->set_flashdata('error', $error_message);
+        redirect('admin/role');
+    } else {
+        $data = [
+            'name' => $this->input->post('name', true),
+            'email' => $this->input->post('email', true),
+            'mobile' => $this->input->post('mobile', true),
+            'address' => $this->input->post('address', true),
+            'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+            'role_id' => $this->input->post('role', true),
+            'created_date' => date('Y-m-d H:i:s')
+        ];
 
-        if ($this->form_validation->run() == FALSE) {
+        $user_id = $this->Role_model->create_user($data);
 
-            $errors = $this->form_validation->error_array();
-            $error_message = "<ul>";
-
-            foreach ($errors as $field => $error) {
-                $error_message .= "<li><strong>" . ucfirst($field) . ":</strong> " . $error . "</li>";
-            }
-
-            $error_message .= "</ul>";
-            $this->session->set_flashdata('error', $error_message);
+        if ($user_id) {
+            $this->session->set_flashdata('success', 'User created successfully.');
             redirect('admin/role');
         } else {
-            $data = [
-                'name' => $this->input->post('name', true),
-                'email' => $this->input->post('email', true),
-                'mobile' => $this->input->post('mobile', true),
-                'address' => $this->input->post('address', true),
-                'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-                'role_id' => $this->input->post('role', true),
-                'created_date' => date('Y-m-d H:i:s')
-            ];
-
-            $user_id = $this->Role_model->create_user($data);
-
-            if ($user_id) {
-                $this->session->set_flashdata('success', 'User created successfully.');
-                redirect('admin/role');
-            } else {
-                $this->session->set_flashdata('error', 'User creation failed. Please try again.');
-                redirect('admin/role');
-            }
+            $this->session->set_flashdata('error', 'User creation failed. Please try again.');
+            redirect('admin/role');
         }
     }
+}
+
+public function email_domain_check($email)
+{
+    if (substr($email, -14) === '@adaniwilmar.in') {
+        return TRUE;
+    } else {
+        $this->form_validation->set_message('email_domain_check', 'The {field} field must end with @adaniwilmar.in');
+        return FALSE;
+    }
+}
+
 
 
 
