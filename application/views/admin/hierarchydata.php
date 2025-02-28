@@ -273,7 +273,7 @@
                     $.extend(d, getParams());
                     d.search = $('#dt-search-0').val();
 
-                    console.log("Sent Data:", d);
+             
 
 
                 },

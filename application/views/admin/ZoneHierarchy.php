@@ -174,8 +174,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="box shadow-2dp b-r-2">
-                    <h1 class="text-center">coming soon</h1>
-                        <div class="box-body row"  style="display: none;">
+
+                        <div class="box-body row">
                             <div class="col-md-3 sidetree">
                                 <aside class="app-side mt-1">
                                     <div class="side-content">
@@ -214,7 +214,7 @@
                                             return $html;
                                         }
                                         ?>
-                                        <nav class="side-nav dmvertical-menu" id="ooooo" >
+                                        <nav class="side-nav dmvertical-menu" id="ooooo">
                                             <ul class="metismenu nav nav-inverse nav-bordered"
                                                 data-plugin="dashboardmenu" style="margin-left: -14px;">
                                                 <?php echo render_tree($maping); ?>
@@ -290,36 +290,43 @@
                                             <thead class="table-danger">
                                                 <tr>
                                                     <th class="text-center">sr.no</th>
-                                                    <th class="text-center ">Customer Name</th>
-                                                    <th class="text-center ">Customer Code </th>
-                                                    <th class="text-center ">Pin Code</th>
-                                                    <th class="text-center ">City</th>
-                                                    <th class="text-center ">District</th>
-                                                    <th class="text-center ">Contact Number</th>
-                                                    <th class="text-center ">Country</th>
-                                                    <th class="text-center ">Zone</th>
-                                                    <th class="text-center ">State</th>
-                                                    <th class="text-center ">Population Strata 1</th>
-                                                    <th class="text-center ">Population Strata 2</th>
-                                                    <!-- <th class="text-center ">Country Group</th> -->
-                                                    <th class="text-center ">GTM TYPE</th>
-                                                    <th class="text-center ">Super Stockist</th>
-                                                    <th class="text-center ">Status</th>
-                                                    <th class="text-center ">Customer Type Name</th>
-                                                    <!-- <th class="text-center ">Customer Type Code</th> -->
-                                                    <th class="text-center ">Sales Name</th>
-                                                    <!-- <th class="text-center ">Sales Code</th> -->
-                                                    <th class="text-center ">Customer Group Name</th>
-                                                    <!-- <th class="text-center ">Customer Group Code</th> -->
-                                                    <th class="text-center ">Customer Creation Date</th>
-                                                    <th class="text-center ">Division Name</th>
-                                                    <th class="text-center ">Division Code</th>
-                                                    <th class="text-center ">Sector Name</th>
-                                                    <th class="text-center ">Sector Code</th>
-                                                    <!-- <th class="text-center ">State Code</th> -->
-                                                    <!-- <th class="text-center ">Zone Code</th> -->
-                                                    <th class="text-center ">Distribution Channel Code</th>
-                                                    <th class="text-center ">Distribution Channel Name</th>
+                                                    <th>Customer Name</th>
+                                                    <th>Customer Code </th>
+                                                    <th>Pin Code</th>
+                                                    <th>City</th>
+                                                    <th>District</th>
+                                                    <th>Contact Number</th>
+                                                    <th>Country</th>
+                                                    <th>Zone</th>
+                                                    <th>State</th>
+                                                    <th>Population Strata 1</th>
+                                                    <th>Population Strata 2</th>
+                                                    <th>Country Group</th>
+                                                    <th>GTM TYPE</th>
+                                                    <th>Super Stockist</th>
+                                                    <th>Status</th>
+
+                                                    <th>Sales Code</th>
+                                                    <th>Sales Name</th>
+                                                    <th>Distribution Channel Code</th>
+                                                    <th>Distribution Channel Name</th>
+
+                                                    <th>Division Code</th>
+                                                    <th>Division Name</th>
+
+                                                    <th>Customer Type Code</th>
+                                                    <th>Customer Type Name</th>
+
+                                                    <th>Customer Group Code</th>
+                                                    <th>Customer Group Name</th>
+
+                                                    <th>Customer Creation Date</th>
+
+                                                    <th>Sector Code</th>
+                                                    <th>State Code</th>
+                                                    <th>Zone Code</th>
+
+                                                    <th>Sector Name</th>
                                                     <th class="text-center ">Level 1 Name</th>
                                                     <th class="text-center ">Level 1 designation name</th>
                                                     <th class="text-center ">Level 2 Name</th>
@@ -354,34 +361,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
-<script>
-    document.querySelectorAll('.delete-btn').forEach(function(element) {
-        element.onclick = function() {
-            var id = this.getAttribute('data-id');
 
-            swal({
-                    title: "Are you sure?",
-                    text: "You won't be able to undo this action!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: '#DD6B55',
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: "No, cancel!",
-                    closeOnConfirm: false,
-                    closeOnCancel: true
-                },
-                function(isConfirm) {
-                    if (isConfirm) {
-
-                        window.location.href = "<?php echo site_url('admin/hierarchydelete/'); ?>" +
-                            id;
-                    } else {
-                        swal("Cancelled", "Your item is safe :)", "error");
-                    }
-                });
-        };
-    });
-</script>
 
 
 
@@ -474,23 +454,96 @@
                 dataType: 'json',
                 data: JSON.stringify(requestData),
                 success: function(data) {
-                    var treeArray = data;
+                    var employeeData = data;
+
+                    console.log(employeeData);
+
 
 
                     $('#loader').hide();
 
-                    treeajex(treeArray);
 
-                    var levelKey = "Level_" + level;
-                    previousLevels[levelKey] = id;
+                    $('#employeeTable').DataTable().clear();
 
-                    if (level > 1) {
-                        for (var i = level + 1; i <= 7; i++) {
-                            previousLevels["Level_" + i] = null;
-                        }
-                    }
+                    $.each(employeeData, function(index, employee) {
+                        var serialNumber = index + 1;
 
-                    previousId = id;
+                        var rowData = [
+                            serialNumber,
+                            escapeHtml(employee.Customer_Name || 'N/A'),
+                            escapeHtml(employee.Customer_Code || 'N/A'),
+                            escapeHtml(employee.Pin_Code || 'N/A'),
+                            escapeHtml(employee.City || 'N/A'),
+                            escapeHtml(employee.District || 'N/A'),
+                            escapeHtml(employee.Contact_Number || 'N/A'),
+                            escapeHtml(employee.Country || 'N/A'),
+                            escapeHtml(employee.Zone || 'N/A'),
+                            escapeHtml(employee.State || 'N/A'),
+                            escapeHtml(employee.Population_Strata_1 || 'N/A'),
+                            escapeHtml(employee.Population_Strata_2 || 'N/A'),
+                            escapeHtml(employee.Country_Group || 'N/A'),
+                            escapeHtml(employee.GTM_TYPE || 'N/A'),
+                            escapeHtml(employee.SUPERSTOCKIST || 'N/A'),
+                            escapeHtml(employee.STATUS || 'N/A'),
+
+                            escapeHtml(employee.Sales_Code || 'N/A'),
+                            escapeHtml(employee.Sales_Name || 'N/A'),
+                            escapeHtml(employee.Distribution_Channel_Code || 'N/A'),
+                            escapeHtml(employee.Distribution_Channel_Name || 'N/A'),
+                            escapeHtml(employee.Division_Code || 'N/A'),
+                            escapeHtml(employee.Division_Name || 'N/A'),
+
+                            escapeHtml(employee.Customer_Type_Code || 'N/A'),
+
+                            escapeHtml(employee.Customer_Type_Name || 'N/A'),
+
+                            escapeHtml(employee.Customer_Group_Code || 'N/A'),
+
+                            escapeHtml(employee.Customer_Group_Name || 'N/A'),
+                            escapeHtml(employee.Customer_Creation_Date || 'N/A'),
+
+                            escapeHtml(employee.Sector_Code || 'N/A'),
+                            escapeHtml(employee.State_Code || 'N/A'),
+                            escapeHtml(employee.Zone_Code || 'N/A'),
+                            escapeHtml(employee.Sector_Name || 'N/A'),
+
+
+                            escapeHtml(employee.Level_1_Name || 'N/A'),
+
+                            escapeHtml(employee.Level_1_Designation || 'N/A'),
+
+                            escapeHtml(employee.Level_2_Name || 'N/A'),
+
+                            escapeHtml(employee.Level_2_Designation || 'N/A'),
+
+                            escapeHtml(employee.Level_3_Name || 'N/A'),
+
+                            escapeHtml(employee.Level_3_Designation || 'N/A'),
+
+                            escapeHtml(employee.Level_4_Name || 'N/A'),
+
+                            escapeHtml(employee.Level_4_Designation || 'N/A'),
+
+                            escapeHtml(employee.Level_5_Name || 'N/A'),
+
+                            escapeHtml(employee.Level_5_Designation || 'N/A'),
+
+                            escapeHtml(employee.Level_6_Name || 'N/A'),
+
+                            escapeHtml(employee.Level_6_Designation || 'N/A'),
+
+                            escapeHtml(employee.Level_7_Name || 'N/A'),
+
+                            escapeHtml(employee.Level_7_Designation || 'N/A'),
+
+                        ];
+
+                        $('#employeeTable').DataTable().row.add(rowData);
+                    });
+
+                    $('#employeeTable').DataTable().draw();
+
+
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error:', textStatus, errorThrown);
@@ -501,6 +554,8 @@
         $('#ooooo a').on('click', function() {
             var id = $(this).data('id');
             var level = $(this).data('level');
+
+            console.log(id, level);
 
             loadTreeData(id, level);
         });
@@ -524,129 +579,4 @@
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
-
-
-    function treeajex(treeArray) {
-        $('#loader').show();
-
-        $.ajax({
-            url: '<?php echo base_url('admin/treezoneajex'); ?>',
-            method: 'POST',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify(treeArray),
-            success: function(response) {
-                $('#loader').hide();
-                if (response.status === 'success') {
-                    $('#employeeTable').DataTable().clear();
-                    let employeeData = response.data;
-                    $.each(employeeData, function(index, employee) {
-                        var serialNumber = index + 1;
-
-                        var rowData = [
-                            serialNumber,
-                            escapeHtml(employee.Customer_Name || 'N/A'),
-                            escapeHtml(employee.Customer_Code || 'N/A'),
-                            escapeHtml(employee.Pin_Code || 'N/A'),
-                            escapeHtml(employee.City || 'N/A'),
-                            escapeHtml(employee.District || 'N/A'),
-                            escapeHtml(employee.Contact_Number || 'N/A'),
-                            escapeHtml(employee.Country || 'N/A'),
-                            escapeHtml(employee.Zone || 'N/A'),
-                            escapeHtml(employee.State || 'N/A'),
-                            escapeHtml(employee.Population_Strata_1 || 'N/A'),
-                            escapeHtml(employee.Population_Strata_2 || 'N/A'),
-                            // escapeHtml(employee.Country_Group || 'N/A'),
-                            escapeHtml(employee.GTM_TYPE || 'N/A'),
-                            escapeHtml(employee.SUPERSTOCKIST || 'N/A'),
-                            escapeHtml(employee.STATUS || 'N/A'),
-                            escapeHtml(employee.Customer_Type_Name || 'N/A'),
-                            // escapeHtml(employee.Customer_Type_Code || 'N/A'),
-                            escapeHtml(employee.Sales_Name || 'N/A'),
-                            // escapeHtml(employee.Sales_Code || 'N/A'),
-                            escapeHtml(employee.Customer_Group_Name || 'N/A'),
-                            // escapeHtml(employee.Customer_Group_Code || 'N/A'),
-                            escapeHtml(employee.Customer_Creation_Date || 'N/A'),
-                            escapeHtml(employee.Division_Name || 'N/A'),
-                            escapeHtml(employee.Division_Code || 'N/A'),
-                            escapeHtml(employee.Sector_Name || 'N/A'),
-                            escapeHtml(employee.Sector_Code || 'N/A'),
-                            // escapeHtml(employee.State_Code || 'N/A'),
-                            // escapeHtml(employee.Zone_Code || 'N/A'),
-                            escapeHtml(employee.Distribution_Channel_Code || 'N/A'),
-                            escapeHtml(employee.Distribution_Channel_Name || 'N/A'),
-                            escapeHtml(employee.emp1_name || 'N/A'),
-                            escapeHtml(employee.emp1_employee_id || 'N/A'),
-
-                            escapeHtml(employee.emp2_name || 'N/A'),
-                            escapeHtml(employee.emp2_employee_id || 'N/A'),
-
-                            escapeHtml(employee.emp3_name || 'N/A'),
-                            escapeHtml(employee.emp3_employee_id || 'N/A'),
-
-                            escapeHtml(employee.emp4_name || 'N/A'),
-                            escapeHtml(employee.emp4_employee_id || 'N/A'),
-
-                            escapeHtml(employee.emp5_name || 'N/A'),
-                            escapeHtml(employee.emp5_employee_id || 'N/A'),
-
-                            escapeHtml(employee.emp6_name || 'N/A'),
-                            escapeHtml(employee.emp6_employee_id || 'N/A'),
-
-                            escapeHtml(employee.emp7_name || 'N/A'),
-                            escapeHtml(employee.emp7_employee_id || 'N/A'),
-
-                        ];
-
-                        $('#employeeTable').DataTable().row.add(rowData);
-                    });
-
-                    $('#employeeTable').DataTable().draw();
-                } else {
-                    console.error('Error:', response.message);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('AJAX Error:', textStatus, errorThrown);
-            }
-        });
-    }
 </script>
-
-
-
-
-
-<!-- <script>
-        $(document).ready(function() {
-
-            $("#loader").show();
-
-            console.log("Fetching data...");
-            $.ajax({
-                url: '<?php echo base_url("admin/ZoneHierarchy_ajex_tree"); ?> ', 
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-
-                    console.log(response);
-                    
-
-                    console.log("Data fetched successfully.");
-
-                    $("#loader").hide();
-                    if (response && response.length > 0) {
-                        var treeHtml = generateTree(response); 
-                        $('#zone-hierarchy').html(treeHtml); 
-                    } else {
-                        $('#zone-hierarchy').html('No Data Available.');
-                    }
-                },
-                error: function() {
-                    $('#zone-hierarchy').html('Error fetching data.');
-                }
-            });
-
-
-        });
-    </script> -->

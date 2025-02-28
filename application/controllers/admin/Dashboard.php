@@ -341,28 +341,17 @@ class Dashboard extends CI_Controller
         }
 
         // Log user ID check
-        //log_message('info', 'User ID: ' . $user_id);
+        log_message('info', 'User ID: ' . $user_id);
 
         // Capture and log incoming POST data
         $postData = json_decode(file_get_contents('php://input'), true);
-        //log_message('info', 'Received POST data: ' . json_encode($postData, JSON_PRETTY_PRINT));
 
-        // Extract `level` and `id`, with logging
         $level = $postData['level'] ?? null;
-        $id = $postData['id'] ?? null;
-        //log_message('info', 'Level: ' . $level . ', ID: ' . $id);
+        $pjp_code = $postData['id'] ?? null;
+        log_message('info', 'Level: ' . $level . ', ID: ' . $pjp_code);
 
-        // Collect and log `Level_1` to `Level_7`
-        $levels = [];
-        for ($i = 1; $i <= 7; $i++) {
-            $levelKey = "Level_" . $i;
-            $levels[$levelKey] = $postData[$levelKey] ?? null;
-        }
-        //log_message('info', 'Levels data: ' . json_encode($levels, JSON_PRETTY_PRINT));
 
-        // Call model method and log the result
-        $result = $this->Maping_model->get_all_Maping_table_ajex_zone($level, $id, $levels);
-        // log_message('info', 'Result from get_all_Maping_table_ajex_zone: ' . json_encode($result, JSON_PRETTY_PRINT));
+        $result = $this->Maping_model->get_all_Maping_table_ajex_zone($level, $pjp_code , $user_id);
 
         // Output the result as JSON
         header('Content-Type: application/json');

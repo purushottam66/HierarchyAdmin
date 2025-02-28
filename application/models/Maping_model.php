@@ -173,80 +173,87 @@ class Maping_model extends CI_Model
     }
 
 
+ public function get_all_Maping_table_ajex_zone($level = null, $pjp_code = null, $user_id = null)
+{
+    $this->db->select('
+        mp.id, mp.DB_Code, 
+        mp.Level_1, emp1.name AS Level_1_Name, emp1.designation_name AS Level_1_Designation,
+        mp.Level_2, emp2.name AS Level_2_Name, emp2.designation_name AS Level_2_Designation,
+        mp.Level_3, emp3.name AS Level_3_Name, emp3.designation_name AS Level_3_Designation,
+        mp.Level_4, emp4.name AS Level_4_Name, emp4.designation_name AS Level_4_Designation,
+        mp.Level_5, emp5.name AS Level_5_Name, emp5.designation_name AS Level_5_Designation,
+        mp.Level_6, emp6.name AS Level_6_Name, emp6.designation_name AS Level_6_Designation,
+        mp.Level_7, emp7.name AS Level_7_Name, emp7.designation_name AS Level_7_Designation,
+        
+        ds.Customer_Code, ds.Customer_Name, ds.Pin_Code, ds.City, ds.District,
+        ds.Contact_Number, ds.Country, ds.Zone, ds.State, ds.Population_Strata_1,
+        ds.Population_Strata_2, ds.Country_Group, ds.GTM_TYPE, ds.SUPERSTOCKIST,
+        ds.STATUS, ds.Customer_Type_Code, ds.Sales_Code, ds.Customer_Type_Name,
+        ds.Customer_Group_Code, ds.Customer_Creation_Date, ds.Division_Code,
+        ds.Sector_Code, ds.State_Code, ds.Zone_Code, ds.Distribution_Channel_Code,
+        ds.Distribution_Channel_Name, ds.Customer_Group_Name, ds.Sales_Name,
+        ds.Division_Name, ds.Sector_Name,
+        mp.distributors_id
+    ');
+    
+    $this->db->from('maping mp');
+    $this->db->join('employee emp1', 'mp.Level_1 = emp1.pjp_code', 'left');
+    $this->db->join('employee emp2', 'mp.Level_2 = emp2.pjp_code', 'left');
+    $this->db->join('employee emp3', 'mp.Level_3 = emp3.pjp_code', 'left');
+    $this->db->join('employee emp4', 'mp.Level_4 = emp4.pjp_code', 'left');
+    $this->db->join('employee emp5', 'mp.Level_5 = emp5.pjp_code', 'left');
+    $this->db->join('employee emp6', 'mp.Level_6 = emp6.pjp_code', 'left');
+    $this->db->join('employee emp7', 'mp.Level_7 = emp7.pjp_code', 'left');
 
-    public function get_all_Maping_table_ajex_zone($level = null, $id = null, $levels = [])
-    {
-        $zone_query = $this->db->get('zone_permissions');
-       
-        $zone_permissions_result = $zone_query->result_array();
+    $this->db->join('distributors ds', 'mp.DB_Code = ds.Customer_Code 
+        AND IFNULL(mp.Sales_Code, "") = IFNULL(ds.Sales_Code, "") 
+        AND IFNULL(mp.Distribution_Channel_Code, "") = IFNULL(ds.Distribution_Channel_Code, "") 
+        AND IFNULL(mp.Division_Code, "") = IFNULL(ds.Division_Code, "") 
+        AND IFNULL(mp.Customer_Type_Code, "") = IFNULL(ds.Customer_Type_Code, "") 
+        AND IFNULL(mp.Customer_Group_Code, "") = IFNULL(ds.Customer_Group_Code, "")', 'left');
 
-        $zone_ids = [];
-        foreach ($zone_permissions_result as $permission) {
-            $decoded_ids = json_decode($permission['zone_id'], true);
-            if (is_array($decoded_ids) && !empty($decoded_ids)) {
-                $zone_ids = array_merge($zone_ids, $decoded_ids);
-            }
-        }
-
-        if (empty($zone_ids)) {
-            return [];
-        }
-
-        $chunked_zone_ids = array_chunk($zone_ids, 1000);
-
-        $this->db->select('d.Customer_Code, z.zone_id, d.Zone_Code');
-        $this->db->from('zone_permissions z');
-        $this->db->join('distributors d', 'd.Zone_Code IN (' . implode(',', array_map([$this->db, 'escape'], $chunked_zone_ids[0])) . ')', 'inner'); // Start with first chunk
-
-        $query = $this->db->get();
-       
-        $distributors_result = $query->result_array();
-
-        $customer_codes = array_column($distributors_result, 'Customer_Code');
-
-        if (empty($customer_codes)) {
-            return [];
-        }
-
-        $chunked_customer_codes = array_chunk($customer_codes, 1000);
-
-        $start_time = microtime(true);
-
-        $final_result = [];
-        foreach ($chunked_customer_codes as $chunk) {
-            $this->db->distinct();
-            $this->db->select('DB_Code, Level_1, Level_2, Level_3, Level_4, Level_5, Level_6, Level_7');
-            $this->db->where_in('DB_Code', $chunk);
-
-            if (!is_null($level) && !is_null($id)) {
-                $level_field = 'Level_' . $level;
-                $this->db->where($level_field, $id);
-            }
-
-            for ($i = 1; $i <= 7; $i++) {
-                $levelKey = 'Level_' . $i;
-                if (isset($levels[$levelKey])) {
-                    if ($i < $level) {
-                        $this->db->where($levelKey, $levels[$levelKey]);
-                    } elseif ($i == $level) {
-                        continue;
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-            $query = $this->db->get('maping');
-           
-            $result = $query->result_array();
-           
-            $final_result = array_merge($final_result, $result);
-        }
-
-        $end_time = microtime(true);
-
-        return $final_result;
+    // Apply Level Filter
+    if ($level !== null && $pjp_code !== null) {
+        $level_column = "mp.Level_" . intval($level);
+        $this->db->where($level_column, $pjp_code);
     }
+
+    // Fetch Zone Permissions for User
+    if ($user_id !== null) {
+        $this->db->join('zone_permissions zp', 'FIND_IN_SET(ds.Zone_Code, REPLACE(REPLACE(REPLACE(zp.zone_id, "[", ""), "]", ""), "\"", "")) > 0', 'inner');
+        $this->db->where('zp.user_id', $user_id);
+    }
+
+    $this->db->group_by('
+        mp.DB_Code, 
+        mp.Level_1, emp1.designation_name,
+        mp.Level_2, emp2.designation_name,
+        mp.Level_3, emp3.designation_name,
+        mp.Level_4, emp4.designation_name,
+        mp.Level_5, emp5.designation_name,
+        mp.Level_6, emp6.designation_name,
+        mp.Level_7, emp7.designation_name,
+        ds.Customer_Code, ds.Customer_Name, ds.Pin_Code, ds.City, ds.District,
+        ds.Contact_Number, ds.Country, ds.Zone, ds.State, ds.Population_Strata_1,
+        ds.Population_Strata_2, ds.Country_Group, ds.GTM_TYPE, ds.SUPERSTOCKIST,
+        ds.STATUS, ds.Customer_Type_Code, ds.Sales_Code, ds.Customer_Type_Name,
+        ds.Customer_Group_Code, ds.Customer_Creation_Date, ds.Division_Code,
+        ds.Sector_Code, ds.State_Code, ds.Zone_Code, ds.Distribution_Channel_Code,
+        ds.Distribution_Channel_Name, ds.Customer_Group_Name, ds.Sales_Name,
+        ds.Division_Name, ds.Sector_Name, mp.distributors_id
+    ');
+
+    $query = $this->db->get();
+    return $query->result_array();
+}
+
+    
+    
+    
+    
+    
+    
+    
 
 
 
