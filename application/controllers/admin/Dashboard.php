@@ -661,6 +661,7 @@ class Dashboard extends CI_Controller
             $data[] = array(
                 $AS_distributors->Customer_Name,
                 $AS_distributors->Customer_Code,
+
                 $AS_distributors->Pin_Code,
                 $AS_distributors->City,
                 $AS_distributors->District,
@@ -674,21 +675,27 @@ class Dashboard extends CI_Controller
                 $AS_distributors->GTM_TYPE,
                 $AS_distributors->SUPERSTOCKIST,
                 $AS_distributors->STATUS,
-                $AS_distributors->Sales_Name,
+
                 $AS_distributors->Sales_Code,
-                $AS_distributors->Customer_Type_Name,
-                $AS_distributors->Customer_Type_Code,
-                $AS_distributors->Customer_Group_Name,
-                $AS_distributors->Customer_Group_Code,
-                $AS_distributors->Division_Name,
+                $AS_distributors->Sales_Name,
+
+                $AS_distributors->Distribution_Channel_Code,
+                $AS_distributors->Distribution_Channel_Name,
+
                 $AS_distributors->Division_Code,
+                $AS_distributors->Division_Name,
+
+                $AS_distributors->Customer_Type_Code,
+                $AS_distributors->Customer_Type_Name,
+
+                $AS_distributors->Customer_Group_Code,
+                $AS_distributors->Customer_Group_Name,
+             
+                $AS_distributors->Customer_Creation_Date,
                 $AS_distributors->Sector_Name,
                 $AS_distributors->Sector_Code,
                 $AS_distributors->State_Code,
                 $AS_distributors->Zone_Code,
-                $AS_distributors->Distribution_Channel_Name,
-                $AS_distributors->Distribution_Channel_Code,
-                $AS_distributors->Customer_Creation_Date,
             );
         }
 
@@ -741,14 +748,13 @@ class Dashboard extends CI_Controller
 
         $zone_ids = array_unique($zone_ids);
 
-        // Get basic DataTables parameters
         $draw = $this->input->post('draw');
         $start = $this->input->post('start');
         $length = $this->input->post('length');
         $search = $this->input->post('search');
         $order = $this->input->post('order');
 
-        // Get filter parameters
+      
         $filters = array(
             'Sales_Code' => $this->input->post('Sales_Code'),
             'Distribution_Channel_Code' => $this->input->post('Distribution_Channel_Code'),
@@ -759,15 +765,15 @@ class Dashboard extends CI_Controller
             'Zone' => $this->input->post('Zone')
         );
 
-        // Remove null/empty values from filters
+       
         $filters = array_filter($filters, function ($value) {
             return $value !== null && $value !== '';
         });
 
-        // Fetch dynamic sortable columns
+   
         $sortable_columns = $this->get_table_columns('distributors');
 
-        // Extract sorting information
+       
         if (isset($order[0])) {
             $order_column_index = isset($order[0]['column']) ? $order[0]['column'] : 0;
             $order_direction = isset($order[0]['dir']) ? $order[0]['dir'] : 'asc';
@@ -776,11 +782,7 @@ class Dashboard extends CI_Controller
             $order_direction = 'asc';
         }
         $order_column = isset($sortable_columns[$order_column_index]) ? $sortable_columns[$order_column_index] : '';
-
-        // Get total records with filters
         $total_get_distributors = $this->Distributor_model->getTotal_distributors($search, $zone_ids, $filters);
-
-        // Get filtered records
         $distributors_s = $this->Distributor_model->get_distributors($start, $length, $search, $zone_ids, $order_column, $order_direction, $filters);
 
         $data = array();
@@ -794,6 +796,7 @@ class Dashboard extends CI_Controller
 
                 $AS_distributors->Customer_Name,
                 $AS_distributors->Customer_Code,
+
                 $AS_distributors->Pin_Code,
                 $AS_distributors->City,
                 $AS_distributors->District,
@@ -807,21 +810,28 @@ class Dashboard extends CI_Controller
                 $AS_distributors->GTM_TYPE,
                 $AS_distributors->SUPERSTOCKIST,
                 $AS_distributors->STATUS,
-                $AS_distributors->Customer_Type_Name,
-                $AS_distributors->Customer_Type_Code,
-                $AS_distributors->Sales_Name,
+
                 $AS_distributors->Sales_Code,
-                $AS_distributors->Customer_Group_Name,
-                $AS_distributors->Customer_Group_Code,
-                $AS_distributors->Customer_Creation_Date,
-                $AS_distributors->Division_Name,
+                $AS_distributors->Sales_Name,
+
+                $AS_distributors->Distribution_Channel_Code,
+                $AS_distributors->Distribution_Channel_Name,
+
                 $AS_distributors->Division_Code,
+                $AS_distributors->Division_Name,
+
+                $AS_distributors->Customer_Type_Code,
+                $AS_distributors->Customer_Type_Name,
+
+                $AS_distributors->Customer_Group_Code,
+                $AS_distributors->Customer_Group_Name,
+             
+                $AS_distributors->Customer_Creation_Date,
                 $AS_distributors->Sector_Name,
                 $AS_distributors->Sector_Code,
                 $AS_distributors->State_Code,
                 $AS_distributors->Zone_Code,
-                $AS_distributors->Distribution_Channel_Code,
-                $AS_distributors->Distribution_Channel_Name,
+          
             );
         }
 
@@ -2049,11 +2059,11 @@ class Dashboard extends CI_Controller
 
     public function hierarchydata_ajex()
     {
-        // Enable logging
+        
 
         header('Content-Type: application/json');
 
-        // Ensure user is logged in
+       
         $user_id = $this->session->userdata('back_user_id');
         if (!$user_id) {
             log_message('error', 'User not logged in. Redirecting to login.');
@@ -2065,16 +2075,9 @@ class Dashboard extends CI_Controller
         $start = $this->input->post('start', TRUE);
         $length = $this->input->post('length', TRUE);
         $search = $this->input->post('search', TRUE);
+        $order_column_index = $this->input->post('order[0][column]', TRUE);  
+        $order_dir = $this->input->post('order[0][dir]', TRUE);  
 
-        // Log input parameters
-
-        // Get the column index and sorting direction
-        $order_column_index = $this->input->post('order[0][column]', TRUE);  // Column index for sorting
-        $order_dir = $this->input->post('order[0][dir]', TRUE);  // Sorting direction (asc/desc)
-
-
-
-        // Map the column index to the actual column name
         $columns = [
             'Customer_Name',
             'Customer_Code',
@@ -2110,19 +2113,17 @@ class Dashboard extends CI_Controller
 
 
 
-        // Check if the index is valid
+       
 
 
-        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'Sales_Code'; // Default sorting by 'name'
+        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'Sales_Code'; 
 
-        // Apply sorting direction validation (either 'asc' or 'desc')
+     
         if (!in_array($order_dir, ['asc', 'desc'])) {
-            $order_dir = 'asc';  // Default to 'asc' if an invalid direction is passed
+            $order_dir = 'asc';  
         }
 
-        // Log sort parameters
-
-        // Filters for mapping data
+    
         $filters = [
             'Sales_Code' => $this->input->post('Sales_Code') ?: [],
             'Distribution_Channel_Code' => $this->input->post('Distribution_Channel_Code') ?: [],
@@ -2132,15 +2133,13 @@ class Dashboard extends CI_Controller
             'Population_Strata_2' => $this->input->post('Population_Strata_2') ?: []
         ];
 
-        // Log filters
 
-        // Get the total count for mapping data
         $all_mapping_data = $this->Maping_model->get_maping_d_count($search, $filters);
         $maping_data = $this->Maping_model->get_maping_d($start, $length, $search, $filters, $order_column, $order_dir);
 
 
 
-        // Ensure unique filtering logic
+    
         $unique_data = [];
         foreach ($maping_data as $item) {
             $unique_key = implode('|', [
@@ -2183,11 +2182,11 @@ class Dashboard extends CI_Controller
             }
         }
 
-        // Convert the unique data to values
+   
         $unique_data = array_values($unique_data);
 
 
-        // Prepare response
+
         $response = [
             'draw' => $draw,
             'recordsTotal' => count($all_mapping_data),

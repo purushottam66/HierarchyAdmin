@@ -626,159 +626,125 @@
                     orderable: false
                 },
                 {
-                    column: 'Customer_Name',
-                    title: 'Customer Name',
-                    defaultContent: 'N/A'
+                    columns: "Customer_Name",
+                    title: "Customer Name"
                 },
                 {
-                    column: 'Customer_Code',
-                    title: 'Customer Code',
-                    defaultContent: 'N/A'
+                    columns: "Customer_Code",
+                    title: "Customer Code"
                 },
                 {
-                    column: 'Pin_Code',
-                    title: 'Pin Code',
-                    defaultContent: 'N/A'
+                    columns: "Pin_Code",
+                    title: "Pin Code"
                 },
                 {
-                    column: 'City',
-                    title: 'City',
-                    defaultContent: 'N/A'
+                    columns: "City",
+                    title: "City"
                 },
                 {
-                    column: 'District',
-                    title: 'District',
-                    defaultContent: 'N/A'
+                    columns: "District",
+                    title: "District"
                 },
                 {
-                    column: 'Contact_Number',
-                    title: 'Contact Number',
-                    defaultContent: 'N/A'
+                    columns: "Contact_Number",
+                    title: "Contact Number"
                 },
                 {
-                    column: 'Country',
-                    title: 'Country',
-                    defaultContent: 'N/A'
+                    columns: "Country",
+                    title: "Country"
                 },
                 {
-                    column: 'Zone',
-                    title: 'Zone',
-                    defaultContent: 'N/A'
+                    columns: "Zone",
+                    title: "Zone"
                 },
                 {
-                    column: 'State',
-                    title: 'State',
-                    defaultContent: 'N/A'
+                    columns: "State",
+                    title: "State"
                 },
                 {
-                    column: 'Population_Strata_1',
-                    title: 'Population Strata 1',
-                    defaultContent: 'N/A'
+                    columns: "Population_Strata_1",
+                    title: "Population Strata 1"
                 },
                 {
-                    column: 'Population_Strata_2',
-                    title: 'Population Strata 2',
-                    defaultContent: 'N/A'
+                    columns: "Population_Strata_2",
+                    title: "Population Strata 2"
                 },
                 {
-                    column: 'Country_Group',
-                    title: 'Country_Group',
-                    defaultContent: 'N/A'
+                    columns: "Country_Group",
+                    title: "Country Group"
                 },
                 {
-                    column: 'GTM_TYPE',
-                    title: 'GTM_TYPE',
-                    defaultContent: 'N/A'
-                },
-
-                {
-                    column: 'SUPERSTOCKIST',
-                    title: 'SUPERSTOCKIST',
-                    defaultContent: 'N/A'
+                    columns: "GTM_TYPE",
+                    title: "GTM Type"
                 },
                 {
-                    column: 'STATUS',
-                    title: 'Status',
-                    defaultContent: 'N/A'
-                },
-
-
-
-                {
-                    column: 'Customer_Type_Name',
-                    title: 'Customer Type Name',
-                    defaultContent: 'N/A'
+                    columns: "SUPERSTOCKIST",
+                    title: "Superstockist"
                 },
                 {
-                    column: 'Customer_Type_Code',
-                    title: 'Customer Type Code',
-                    defaultContent: 'N/A'
+                    columns: "STATUS",
+                    title: "Status"
                 },
                 {
-                    column: 'Sales_Name',
-                    title: 'Sales Name',
-                    defaultContent: 'N/A'
+                    columns: "Sales_Code",
+                    title: "Sales_Code"
                 },
                 {
-                    column: 'Sales_Code',
-                    title: ' Sales Code',
-                    defaultContent: 'N/A'
+                    columns: "Sales_Name",
+                    title: "Sales_Name"
                 },
                 {
-                    column: 'Customer_Group_Name',
-                    title: 'Customer_Group_Name ',
-                    defaultContent: 'N/A'
+                    columns: "Distribution_Channel_Code",
+                    title: "Distribution Channel Code"
                 },
                 {
-                    column: 'Customer_Group_Code',
-                    title: 'Customer_Group_Code ',
-                    defaultContent: 'N/A'
+                    columns: "Distribution_Channel_Name",
+                    title: "Distribution Channel Name"
                 },
                 {
-                    column: 'Customer_Creation_Date',
-                    title: 'Customer_Creation_Date ',
-                    defaultContent: 'N/A'
+                    columns: "Division_Code",
+                    title: "Division Code"
                 },
                 {
-                    column: 'Division_Name',
-                    title: 'Division Name',
-                    defaultContent: 'N/A'
+                    columns: "Division_Name",
+                    title: "Division Name"
                 },
                 {
-                    column: 'Division_Code',
-                    title: 'Division Code',
-                    defaultContent: 'N/A'
+                    columns: "Customer_Type_Code",
+                    title: "Customer Type Code"
                 },
                 {
-                    column: 'Sector_Name',
-                    title: 'Sector Name',
-                    defaultContent: 'N/A'
+                    columns: "Customer_Type_Name",
+                    title: "Customer Type Name"
                 },
                 {
-                    column: 'Sector_Code',
-                    title: 'Sector Code',
-                    defaultContent: 'N/A'
+                    columns: "Customer_Group_Code",
+                    title: "Customer Group Code"
                 },
                 {
-                    column: 'State_Code',
-                    title: 'State Code',
-                    defaultContent: 'N/A'
+                    columns: "Customer_Group_Name",
+                    title: "Customer Group Name"
                 },
                 {
-                    column: 'Zone_Code',
-                    title: 'Zone Code',
-                    defaultContent: 'N/A'
+                    columns: "Customer_Creation_Date",
+                    title: "Customer Creation Date"
                 },
                 {
-                    column: 'Distribution_Channel_Code',
-                    title: 'Distribution Channel Code',
-                    defaultContent: 'N/A'
+                    columns: "Sector_Name",
+                    title: "Sector Name"
                 },
                 {
-                    column: 'Distribution_Channel_Name',
-                    title: 'Distribution Channel Name',
-                    defaultContent: 'N/A'
-                }
+                    columns: "Sector_Code",
+                    title: "Sector Code"
+                },
+                {
+                    columns: "State_Code",
+                    title: "State Code"
+                },
+                {
+                    columns: "Zone_Code",
+                    title: "Zone Code"
+                },
             ]
         });
     });

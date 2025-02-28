@@ -104,30 +104,46 @@
                     "data": "State",
                     "title": "State"
                 },
-                {
-                    "data": "Division_Name",
-                    "title": "Division Name"
-                },
+ 
                 {
                     "data": "Division_Code",
                     "title": "Division Code"
                 },
+
                 {
-                    "data": "Distribution_Channel_Name",
-                    "title": "Distribution Channel Name"
+                    "data": "Division_Name",
+                    "title": "Division Name"
                 },
+
                 {
-                    "data": "Distribution_Channel_Code",
-                    "title": "Distribution Channel Code"
+                    "data": "Sales_Code",
+                    "title": "Sales Code"
                 },
                 {
                     "data": "Sales_Name",
                     "title": "Sales Name"
                 },
+
                 {
-                    "data": "Sales_Code",
-                    "title": "Sales Code"
+                    "data": "Distribution_Channel_Code",
+                    "title": "Distribution Channel Code"
                 },
+                {
+                    "data": "Distribution_Channel_Name",
+                    "title": "Distribution Channel Name"
+                },
+
+                {
+                    "data": "Customer_Type_Code",
+                    "title": "Customer Type Code"
+                },
+                {
+                    "data": "Customer_Type_Name",
+                    "title": "Customer Type Name"
+                },
+  
+
+      
                 {
                     "data": "Customer_Group_Code",
                     "title": "Customer Group Code"
@@ -146,14 +162,9 @@
                     "data": "State_Code",
                     "title": "State Code"
                 },
-                {
-                    "data": "Customer_Type_Name",
-                    "title": "Customer Type Name"
-                },
-                {
-                    "data": "Customer_Type_Code",
-                    "title": "Customer Type Code"
-                },
+
+ 
+     
                 {
                     "data": "Sector_Code",
                     "title": "Sector Code"

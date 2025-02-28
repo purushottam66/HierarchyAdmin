@@ -187,12 +187,14 @@
                 processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">', // Custom loading message
             },
 
-            columnDefs: [{
-                    targets: [31, 32, 33, 34, ...Array.from({
-                        length: 45 - 34 + 1
-                    }, (_, i) => 35 + i)],
-                    orderable: false
-                }, // Disable sorting for specific columns
+            columnDefs: [
+                
+                // {
+                //     targets: [31, 32, 33, 34, ...Array.from({
+                //         length: 45 - 34 + 1
+                //     }, (_, i) => 35 + i)],
+                //     orderable: false
+                // }, 
                 {
                     className: 'text-center',
                     targets: '_all'
@@ -248,10 +250,10 @@
                     data: "Population_Strata_2",
                     title: "Population Strata 2"
                 },
-                // {
-                //     data: "Country_Group",
-                //     title: "Country Group"
-                // },
+                {
+                    data: "Country_Group",
+                    title: "Country Group"
+                },
                 {
                     data: "GTM_TYPE",
                     title: "GTM Type"
@@ -264,45 +266,20 @@
                     data: "STATUS",
                     title: "Status"
                 },
+
+       
+       
+    
                 {
-                    data: "Customer_Type_Name",
-                    title: "Customer Type Name"
+                    data: "Sales_Code",
+                    title: "Sales Code"
                 },
-                // {
-                //     data: "Customer_Type_Code",
-                //     title: "Customer Type Code"
-                // },
+
                 {
                     data: "Sales_Name",
                     title: "Sales Name"
                 },
-                // {
-                //     data: "Sales_Code",
-                //     title: "Sales Code"
-                // },
 
-
-                {
-                    data: "Customer_Creation_Date",
-                    title: "Customer Creation Date"
-                },
-
-                {
-                    data: "Sector_Name",
-                    title: "Sector Name"
-                },
-                {
-                    data: "Sector_Code",
-                    title: "Sector Code"
-                },
-                // {
-                //     data: "State_Code",
-                //     title: "State Code"
-                // },
-                // {
-                //     data: "Zone_Code",
-                //     title: "Zone Code"
-                // },
                 {
                     data: "Distribution_Channel_Code",
                     title: "Distribution Channel Code"
@@ -311,134 +288,173 @@
                     data: "Distribution_Channel_Name",
                     title: "Distribution Channel Name"
                 },
-                {
-                    data: "Customer_Group_Name",
-                    title: "Customer Group Name"
-                },
-                // {
-                //     data: "Customer_Group_Code",
-                //     title: "Customer Group Code"
-                // },
 
-                {
-                    data: "Division_Name",
-                    title: "Division Name"
-                },
+
                 {
                     data: "Division_Code",
                     title: "Division Code"
                 },
-                // {
-                //     data: "Level_1",
-                //     title: "Level 1"
-                // },
+                {
+                    data: "Division_Name",
+                    title: "Division Name"
+                },
+
+                
+       
+
+                {
+                    data: "Customer_Type_Code",
+                    title: "Customer Type Code"
+                },
+                {
+                    data: "Customer_Type_Name",
+                    title: "Customer Type Name"
+                },
+                {
+                    data: "Customer_Group_Code",
+                    title: "Customer Group Code"
+                },
+       
+                {
+                    data: "Customer_Group_Name",
+                    title: "Customer Group Name"
+                },
+
+                {
+                    data: "Customer_Creation_Date",
+                    title: "Customer Creation Date"
+                },
+
+       
+                {
+                    data: "Sector_Name",
+                    title: "Sector Name"
+                },
+                {
+                    data: "Sector_Code",
+                    title: "Sector Code"
+                },
+                {
+                    data: "State_Code",
+                    title: "State Code"
+                },
+                {
+                    data: "Zone_Code",
+                    title: "Zone Code"
+                },
+       
+
+
                 {
                     data: "Level_1_Name",
-                    title: "Level 1 Name"
+                    title: "Level 1 Name",
+                    orderable: false
                 },
                 {
                     data: "Level_1_Employer_Code",
-                    title: "Level 1 Employer Code"
+                    title: "Level 1 Employer Code",
+                    orderable: false
                 },
                 {
                     data: "Level_1_Designation_Name",
-                    title: "Level 1 Designation Name"
+                    title: "Level 1 Designation Name",
+                    orderable: false
                 },
-                // {
-                //     data: "Level_2",
-                //     title: "Level 2"
-                // },
+
                 {
                     data: "Level_2_Name",
-                    title: "Level 2 Name"
+                    title: "Level 2 Name",
+                    orderable: false
                 },
                 {
                     data: "Level_2_Employer_Code",
-                    title: "Level 2 Employer Code"
+                    title: "Level 2 Employer Code",
+                    orderable: false
                 },
                 {
                     data: "Level_2_Designation_Name",
-                    title: "Level 2 Designation Name"
+                    title: "Level 2 Designation Name",
+                    orderable: false
                 },
-                // {
-                //     data: "Level_3",
-                //     title: "Level 3"
-                // },
+
                 {
                     data: "Level_3_Name",
-                    title: "Level 3 Name"
+                    title: "Level 3 Name",
+                    orderable: false
                 },
                 {
                     data: "Level_3_Employer_Code",
-                    title: "Level 3 Employer Code"
+                    title: "Level 3 Employer Code",
+                    orderable: false
                 },
                 {
                     data: "Level_3_Designation_Name",
-                    title: "Level 3 Designation Name"
+                    title: "Level 3 Designation Name",
+                    orderable: false
                 },
-                // {
-                //     data: "Level_4",
-                //     title: "Level 4"
-                // },
+
                 {
                     data: "Level_4_Name",
-                    title: "Level 4 Name"
+                    title: "Level 4 Name",
+                    orderable: false
                 },
                 {
                     data: "Level_4_Employer_Code",
-                    title: "Level 4 Employer Code"
+                    title: "Level 4 Employer Code",
+                    orderable: false
                 },
                 {
                     data: "Level_4_Designation_Name",
-                    title: "Level 4 Designation Name"
+                    title: "Level 4 Designation Name",
+                    orderable: false
                 },
-                // {
-                //     data: "Level_5",
-                //     title: "Level 5"
-                // },
+
                 {
                     data: "Level_5_Name",
-                    title: "Level 5 Name"
+                    title: "Level 5 Name",
+                    orderable: false
                 },
                 {
                     data: "Level_5_Employer_Code",
-                    title: "Level 5 Employer Code"
+                    title: "Level 5 Employer Code",
+                    orderable: false
                 },
                 {
                     data: "Level_5_Designation_Name",
-                    title: "Level 5 Designation Name"
+                    title: "Level 5 Designation Name",
+                    orderable: false
                 },
-                // {
-                //     data: "Level_6",
-                //     title: "Level 6"
-                // },
+
                 {
                     data: "Level_6_Name",
-                    title: "Level 6 Name"
+                    title: "Level 6 Name",
+                    orderable: false
                 },
                 {
                     data: "Level_6_Employer_Code",
-                    title: "Level 6 Employer Code"
+                    title: "Level 6 Employer Code",
+                    orderable: false
                 },
                 {
                     data: "Level_6_Designation_Name",
-                    title: "Level 6 Designation Name"
+                    title: "Level 6 Designation Name",
+                    orderable: false
                 },
-                // {
-                //     data: "Level_7",
-                //     title: "Level 7"
-                // },
+
                 {
                     data: "Level_7_Name",
-                    title: "Level 7 Name"
+                    title: "Level 7 Name",
+                    orderable: false
                 },
                 {
                     data: "Level_7_Employer_Code",
-                    title: "Level 7 Employer Code"
+                    title: "Level 7 Employer Code",
+                    orderable: false
                 },
                 {
                     data: "Level_7_Designation_Name",
-                    title: "Level 7 Designation Name"
+                    title: "Level 7 Designation Name",
+                    orderable: false
                 },
 
 

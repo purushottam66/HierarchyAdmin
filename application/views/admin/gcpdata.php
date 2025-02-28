@@ -161,40 +161,48 @@
                     title: "Status"
                 },
                 {
-                    columns: "Customer_Type_Name",
-                    title: "Customer Type Name"
-                },
-                {
-                    columns: "Customer_Type_Code",
-                    title: "Customer Type Code"
+                    columns: "Sales_Code",
+                    title: "Sales_Code"
                 },
                 {
                     columns: "Sales_Name",
-                    title: "Sales Name"
+                    title: "Sales_Name"
                 },
                 {
-                    columns: "Sales_Code",
-                    title: "Sales Code"
+                    columns: "Distribution_Channel_Code",
+                    title: "Distribution Channel Code"
                 },
                 {
-                    columns: "Customer_Group_Name",
-                    title: "Customer Group Name"
+                    columns: "Distribution_Channel_Name",
+                    title: "Distribution Channel Name"
                 },
                 {
-                    columns: "Customer_Group_Code",
-                    title: "Customer Group Code"
-                },
-                {
-                    columns: "Customer_Creation_Date",
-                    title: "Customer Creation Date"
+                    columns: "Division_Code",
+                    title: "Division Code"
                 },
                 {
                     columns: "Division_Name",
                     title: "Division Name"
                 },
                 {
-                    columns: "Division_Code",
-                    title: "Division Code"
+                    columns: "Customer_Type_Code",
+                    title: "Customer Type Code"
+                },
+                {
+                    columns: "Customer_Type_Name",
+                    title: "Customer Type Name"
+                },
+                {
+                    columns: "Customer_Group_Code",
+                    title: "Customer Group Code"
+                },
+                {
+                    columns: "Customer_Group_Name",
+                    title: "Customer Group Name"
+                },
+                {
+                    columns: "Customer_Creation_Date",
+                    title: "Customer Creation Date"
                 },
                 {
                     columns: "Sector_Name",
@@ -211,14 +219,6 @@
                 {
                     columns: "Zone_Code",
                     title: "Zone Code"
-                },
-                {
-                    columns: "Distribution_Channel_Code",
-                    title: "Distribution Channel Code"
-                },
-                {
-                    columns: "Distribution_Channel_Name",
-                    title: "Distribution Channel Name"
                 },
 
             ]

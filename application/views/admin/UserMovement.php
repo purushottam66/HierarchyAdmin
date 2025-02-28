@@ -159,7 +159,7 @@
             .replace(/'/g, "&#039;");
     }
 
-   
+
 
     $(document).ready(function() {
         var table = $('#exampley').DataTable({
@@ -176,16 +176,16 @@
             serverSide: true,
 
             order: [
-                [0, 'asc'] 
+                [0, 'asc']
             ],
             dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
             buttons: [
-                
+
                 {
                     text: '<i class="fa fa-database"></i> Export  Data',
                     titleAttr: 'Export Filtered Data',
                     action: function() {
-                        // Retrieve selected values from the dropdowns
+
                         var customerGroupCode = $('#Customer_Group_Code').val() || [];
                         var customerTypeCode = $('#Customer_Type_Code').val() || [];
                         var distributionChannelCode = $('#Distribution_Channel_Code').val() || [];
@@ -194,10 +194,10 @@
                         var salesCode = $('#Sales_Code').val() || [];
                         var search = $('#dt-search-0').val();
 
-                        // Construct the query parameters
+
                         var params = new URLSearchParams();
 
-                        // Add each filter to the URL parameters if it has values
+
                         if (customerGroupCode.length > 0) {
                             params.append('Customer_Group_Code', JSON.stringify(customerGroupCode));
                         }
@@ -220,24 +220,24 @@
                             params.append('dt-search-0', JSON.stringify(search));
                         }
 
-                        // Construct the URL with the base URL and the query parameters
+
                         var url = '<?php echo base_url("admin/export_distributors_csv"); ?>?' + params.toString();
 
-                    
-                 
 
-                     
+
+
+
                         window.location.href = url;
                     }
                 }
-        
-        ],
+
+            ],
             ajax: {
                 url: "<?= site_url('admin/hierarchydata_ajex') ?>",
                 type: "POST",
                 data: function(d) {
-                    $.extend(d, getParams()); 
-                    d.search = $('#dt-search-0').val(); 
+                    $.extend(d, getParams());
+                    d.search = $('#dt-search-0').val();
                 },
                 dataSrc: function(json) {
 
@@ -256,7 +256,7 @@
                 },
             },
             language: {
-                processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">', 
+                processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">',
             },
             columns: [{
                     data: "id",
@@ -271,8 +271,20 @@
 
 
                 {
+                    data: "Sales_Code",
+                    title: "Sales Code"
+                },
+
+
+                {
                     data: "Sales_Name",
                     title: "Sales Name"
+                },
+
+
+                {
+                    data: "Distribution_Channel_Code",
+                    title: "Distribution Channel Code"
                 },
 
 
@@ -283,14 +295,32 @@
 
 
                 {
+                    data: "Division_Code",
+                    title: "Division Code"
+                },
+
+
+
+                {
                     data: "Division_Name",
                     title: "Division Name"
+                },
+
+                
+                {
+                    data: "Customer_Type_Code",
+                    title: "Customer Type Code"
                 },
 
 
                 {
                     data: "Customer_Type_Name",
                     title: "Customer Type Name"
+                },
+
+                {
+                    data: "Customer_Group_Code",
+                    title: "Customer Group Code"
                 },
 
                 {
@@ -354,41 +384,41 @@
                     title: "Level 7 Designation"
                 },
                 {
-    data: null,
-    title: "Actions",
-    orderable: false,
-    render: function(data, type, row) {
-        // PHP से permissions डेटा लेना
-        var permissions = <?php echo json_encode($permissions); ?>;
-        
-        let EmployeeMovementPermission = permissions.some(p => p.module_name === "User Movement" && p.edit === "yes");
+                    data: null,
+                    title: "Actions",
+                    orderable: false,
+                    render: function(data, type, row) {
 
-        function buildUrl(baseUrl, data) {
-            let params = new URLSearchParams();
-            for (let i = 1; i <= 7; i++) {
-                params.append(`id${i}`, data[`Emp_id${i}`] || 'N/A');
-            }
-            params.append("customer_name", data.Customer_Name || 'N/A');
-            return `${baseUrl}?${params.toString()}`;
-        }
+                        var permissions = <?php echo json_encode($permissions); ?>;
 
-        function createButton(url, text) {
-            return `<a href="${url}" class="btn btn-primary text-white setfont">${text}</a>`;
-        }
+                        let EmployeeMovementPermission = permissions.some(p => p.module_name === "User Movement" && p.edit === "yes");
 
-        if (!EmployeeMovementPermission) {
-            return `<div class="testone"><span class="text-danger fw-bold">No Permission</span></div>`;
-        }
+                        function buildUrl(baseUrl, data) {
+                            let params = new URLSearchParams();
+                            for (let i = 1; i <= 7; i++) {
+                                params.append(`id${i}`, data[`Emp_id${i}`] || 'N/A');
+                            }
+                            params.append("customer_name", data.Customer_Name || 'N/A');
+                            return `${baseUrl}?${params.toString()}`;
+                        }
 
-        return `
+                        function createButton(url, text) {
+                            return `<a href="${url}" class="btn btn-primary text-white setfont">${text}</a>`;
+                        }
+
+                        if (!EmployeeMovementPermission) {
+                            return `<div class="testone"><span class="text-danger fw-bold">No Permission</span></div>`;
+                        }
+
+                        return `
             <div class="testone">
                 ${createButton(buildUrl("<?= site_url('admin/emp_Left') ?>", data), "Left")}
                 ${createButton(buildUrl("<?= site_url('admin/emp_Transfer') ?>", data), "Transfer")}
                 ${createButton(buildUrl("<?= site_url('admin/emp_Promoted') ?>", data), "Promoted")}
             </div>
         `;
-    }
-},
+                    }
+                },
 
             ],
         });
@@ -407,6 +437,7 @@
     function fetchDataAndUpdate(params) {
         $('#exampley').DataTable().ajax.reload();
     }
+
     function getParams() {
         return {
             Sales_Code: $('#Sales_Code').val() || null,
@@ -444,7 +475,7 @@
         });
         salesCodeDropdown.selectpicker('refresh');
 
-        // Collect unique distribution channels
+
         var uniqueChannels = {};
         $.each(mapingData, function(index, item) {
             if (item.Distribution_Channel_Code) {
@@ -466,7 +497,7 @@
 
         distributionChannelDropdown.selectpicker('refresh');
 
-        // Collect unique division codes
+  
         var uniqueDivisions = {};
         $.each(mapingData, function(index, item) {
             if (item.Division_Code) {
@@ -483,7 +514,7 @@
         });
         divisionCodeDropdown.selectpicker('refresh');
 
-        // Collect unique customer types
+   
         var uniqueCustomerTypes = {};
         $.each(mapingData, function(index, item) {
             if (item.Customer_Type_Code) {
@@ -501,7 +532,7 @@
         });
         customerTypeDropdown.selectpicker('refresh');
 
-        // Collect unique customer groups
+   
         var uniqueCustomerGroups = {};
         $.each(mapingData, function(index, item) {
             if (item.Customer_Group_Code) {
@@ -518,7 +549,7 @@
         });
         customerGroupDropdown.selectpicker('refresh');
 
-        // Collect unique population strata
+      
         var uniquePopulationStrata = {};
         $.each(mapingData, function(index, item) {
             if (item.Population_Strata_2) {

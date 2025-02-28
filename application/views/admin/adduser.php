@@ -19,6 +19,13 @@
     }
 </style>
 
+<style>
+    .invalid-feedback {
+        display: none;
+        color: red;
+    }
+</style>
+
 
 
 <div class="app-main">
@@ -52,10 +59,12 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="email">Email</label>
-                                                <input type="email" id="email" class="form-control" name="email"
-                                                    placeholder="Enter Email" required>
+                                                <input type="email" id="email" class="form-control" name="email" placeholder="Enter Email" required>
+                                                <div class="invalid-feedback">Email must end with @adaniwilmar.in</div>
                                             </div>
                                         </div>
+
+
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="mobile">Mobile</label>
@@ -119,4 +128,24 @@
 
 <script>
     new DataTable('#example');
+</script>
+
+
+
+
+
+<script>
+    document.getElementById('email').addEventListener('input', function() {
+        var emailInput = this;
+        var emailValue = emailInput.value;
+        var feedback = emailInput.nextElementSibling;
+
+        if (emailValue.endsWith('@adaniwilmar.in')) {
+            emailInput.classList.remove('is-invalid');
+            feedback.style.display = 'none';
+        } else {
+            emailInput.classList.add('is-invalid');
+            feedback.style.display = 'block';
+        }
+    });
 </script>

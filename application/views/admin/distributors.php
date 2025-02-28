@@ -79,26 +79,26 @@
 
             ],
             order: [{
-                column: 0, // Sort by the first column
-                dir: "asc", // Ascending order
-            }], // Default sorting
+                column: 0, 
+                dir: "asc",
+            }], 
             ajax: {
-                url: "<?= site_url('admin/distributors_db_unmppd') ?>", // Ensure the URL is correct
+                url: "<?= site_url('admin/distributors_db_unmppd') ?>", 
                 type: "POST",
                 data: function(d) {
-                    d.search = $('#dt-search-0').val(); // Add custom search parameters if needed
-                    console.log("Sent Data: ", d); // Log data being sent to server
+                    d.search = $('#dt-search-0').val(); 
+                    console.log("Sent Data: ", d); 
                 },
                 dataSrc: function(json) {
-                    console.log("Received Response: ", json); // Debugging - log response
-                    return json.data; // Ensure API response has a 'data' property
+                    console.log("Received Response: ", json); 
+                    return json.data;
                 },
                 error: function(xhr, error, code) {
                     console.error("Ajax Error: ", {
                         xhr,
                         error,
                         code
-                    }); // Log error
+                    }); 
                     alert(`Error loading data: ${xhr.responseText || error}`);
                 },
             },
@@ -116,7 +116,7 @@
                 },
             ],
 
-            columns: [{
+            columns: [      {
                     columns: "Customer_Name",
                     title: "Customer Name"
                 },
@@ -176,39 +176,49 @@
                     columns: "STATUS",
                     title: "Status"
                 },
-
-                {
-                    columns: "Sales_Name",
-                    title: "Sales Name"
-                },
                 {
                     columns: "Sales_Code",
-                    title: "Sales Code"
+                    title: "Sales_Code"
                 },
                 {
-                    columns: "Customer_Type_Name",
-                    title: "Customer Type Name"
+                    columns: "Sales_Name",
+                    title: "Sales_Name"
+                },
+                {
+                    columns: "Distribution_Channel_Code",
+                    title: "Distribution Channel Code"
+                },
+                {
+                    columns: "Distribution_Channel_Name",
+                    title: "Distribution Channel Name"
+                },
+                {
+                    columns: "Division_Code",
+                    title: "Division Code"
+                },
+                {
+                    columns: "Division_Name",
+                    title: "Division Name"
                 },
                 {
                     columns: "Customer_Type_Code",
                     title: "Customer Type Code"
                 },
                 {
-                    columns: "Customer_Group_Name",
-                    title: "Customer Group Name"
+                    columns: "Customer_Type_Name",
+                    title: "Customer Type Name"
                 },
                 {
                     columns: "Customer_Group_Code",
                     title: "Customer Group Code"
                 },
-
                 {
-                    columns: "Division_Name",
-                    title: "Division Name"
+                    columns: "Customer_Group_Name",
+                    title: "Customer Group Name"
                 },
                 {
-                    columns: "Division_Code",
-                    title: "Division Code"
+                    columns: "Customer_Creation_Date",
+                    title: "Customer Creation Date"
                 },
                 {
                     columns: "Sector_Name",
@@ -225,19 +235,6 @@
                 {
                     columns: "Zone_Code",
                     title: "Zone Code"
-                },
-                {
-                    columns: "Distribution_Channel_Name",
-                    title: "Distribution Channel Name"
-                },
-                {
-                    columns: "Distribution_Channel_Code",
-                    title: "Distribution Channel Code"
-                },
-
-                {
-                    columns: "Customer_Creation_Date",
-                    title: "Customer Creation Date"
                 },
             ]
         });
