@@ -179,7 +179,7 @@
                         error: error,
                         code: code
                     });
-                    alert(`Error loading data: ${xhr.responseText || error}`);
+                    
                 },
             },
 

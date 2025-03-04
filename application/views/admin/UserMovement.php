@@ -232,12 +232,17 @@
                 }
 
             ],
+
+
             ajax: {
-                url: "<?= site_url('admin/hierarchydata_ajex') ?>",
+                url: "<?= site_url('admin/usermovement_ajex') ?>",
                 type: "POST",
                 data: function(d) {
                     $.extend(d, getParams());
                     d.search = $('#dt-search-0').val();
+
+console.log(d);
+
                 },
                 dataSrc: function(json) {
 
@@ -252,7 +257,7 @@
                         error: error,
                         code: code
                     });
-                    alert(`Error loading data: ${xhr.responseText || error}`);
+                   
                 },
             },
             language: {
@@ -266,122 +271,148 @@
 
                 {
                     data: "Customer_Code",
-                    title: "Customer Code"
+                    title: "Customer Code",
+                    name: "Customer_Code"
                 },
 
 
                 {
                     data: "Sales_Code",
-                    title: "Sales Code"
+                    title: "Sales Code",
+                    name: "Sales_Code",
+
                 },
 
 
                 {
                     data: "Sales_Name",
-                    title: "Sales Name"
+                    title: "Sales Name",
+                    name: "Sales_Name"
                 },
 
 
                 {
                     data: "Distribution_Channel_Code",
-                    title: "Distribution Channel Code"
+                    title: "Distribution Channel Code",
+                    name: "Distribution_Channel_Code"
                 },
 
 
                 {
                     data: "Distribution_Channel_Name",
-                    title: "Distribution Channel Name"
+                    title: "Distribution Channel Name",
+                    name: "Distribution_Channel_Name"
                 },
 
 
                 {
                     data: "Division_Code",
-                    title: "Division Code"
+                    title: "Division Code",
+                    name: "Division_Code"
                 },
 
 
 
                 {
                     data: "Division_Name",
-                    title: "Division Name"
+                    title: "Division Name",
+                    name: "Division_Name"
                 },
 
                 
                 {
                     data: "Customer_Type_Code",
-                    title: "Customer Type Code"
+                    title: "Customer Type Code",
+                    name: "Customer_Type_Code"
                 },
 
 
                 {
                     data: "Customer_Type_Name",
-                    title: "Customer Type Name"
+                    title: "Customer Type Name",
+                    name: "Customer_Type_Name"
                 },
 
                 {
                     data: "Customer_Group_Code",
-                    title: "Customer Group Code"
+                    title: "Customer Group Code",
+                    name: "Customer_Group_Code"
                 },
 
                 {
                     data: "Customer_Group_Name",
-                    title: "Customer Group Name"
+                    title: "Customer Group Name",
+                    name: "Customer_Group_Name"
                 },
                 {
                     data: "Level_1_Name",
-                    title: "Level 1 Name"
+                    title: "Level 1 Name",
+                    name: "Level_1_Name"
                 },
                 {
                     data: "Level_1_Designation_Name",
-                    title: "Level 1 Designation"
+                    title: "Level 1 Designation",
+                    name: "Level_1_Designation_Name"
                 },
                 {
                     data: "Level_2_Name",
-                    title: "Level 2 Name"
+                    title: "Level 2 Name",
+                    name: "Level_2_Name"
                 },
                 {
                     data: "Level_2_Designation_Name",
-                    title: "Level 2 Designation"
+                    title: "Level 2 Designation",
+                    name: "Level_2_Designation_Name"
                 },
                 {
                     data: "Level_3_Name",
-                    title: "Level 3 Name"
+                    title: "Level 3 Name",
+                    name: "Level_3_Name"
                 },
                 {
                     data: "Level_3_Designation_Name",
-                    title: "Level 3 Designation"
+                    title: "Level 3 Designation",
+                    name: "Level_3_Designation_Name"
                 },
                 {
                     data: "Level_4_Name",
-                    title: "Level 4 Name"
+                    title: "Level 4 Name",
+                    name: "Level_4_Name"
                 },
                 {
                     data: "Level_4_Designation_Name",
-                    title: "Level 4 Designation"
+                    title: "Level 4 Designation",
+                    name: "Level_4_Designation_Name"
                 },
                 {
                     data: "Level_5_Name",
-                    title: "Level 5 Name"
+                    title: "Level 5 Name",
+                    name: "Level_5_Name"
                 },
                 {
                     data: "Level_5_Designation_Name",
-                    title: "Level 5 Designation"
+                    title: "Level 5 Designation",
+                    name: "Level_5_Designation_Name"
                 },
                 {
                     data: "Level_6_Name",
-                    title: "Level 6 Name"
+                    title: "Level 6 Name",
+                    name: "Level_6_Name"
                 },
                 {
                     data: "Level_6_Designation_Name",
-                    title: "Level 6 Designation"
+                    title: "Level 6 Designation",
+                    name: "Level_6_Designation_Name"
                 },
                 {
                     data: "Level_7_Name",
-                    title: "Level 7 Name"
+                    title: "Level 7 Name",
+                    name: "Level_7_Name"
                 },
                 {
                     data: "Level_7_Designation_Name",
-                    title: "Level 7 Designation"
+                    title: "Level 7 Designation",
+                    name: "Level_7_Designation_Name"
                 },
                 {
                     data: null,

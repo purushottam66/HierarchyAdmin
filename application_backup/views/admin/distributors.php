@@ -85,7 +85,7 @@
                         error,
                         code
                     }); // Log error
-                    alert(`Error loading data: ${xhr.responseText || error}`);
+                    
                 },
             },
 

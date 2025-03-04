@@ -2041,6 +2041,131 @@ class Dashboard extends CI_Controller
 
 
 
+    public function usermovement_ajex()
+    {
+        
+
+        header('Content-Type: application/json');
+
+       
+        $user_id = $this->session->userdata('back_user_id');
+        if (!$user_id) {
+            log_message('error', 'User not logged in. Redirecting to login.');
+            redirect('admin/login');
+            return;
+        }
+
+        $draw = $this->input->post('draw');
+        $start = $this->input->post('start', TRUE);
+        $length = $this->input->post('length', TRUE);
+        $search = $this->input->post('search', TRUE);
+        $order_column_index = $this->input->post('order[0][column]', TRUE);  
+        $order_dir = $this->input->post('order[0][dir]', TRUE);  
+
+        $columns = [
+            'Customer_Code',
+            'Sales_Code',
+            'Sales_Name',
+            'Distribution_Channel_Code',
+            'Distribution_Channel_Name',
+            'Division_Code',
+            'Division_Name',
+            'Customer_Type_Code',
+            'Customer_Type_Name',
+            'Customer_Group_Code',
+            'Customer_Group_Name',
+      
+   
+        ];
+
+
+
+       
+
+
+        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : ''; 
+
+     
+        if (!in_array($order_dir, ['asc', 'desc'])) {
+            $order_dir = 'asc';  
+        }
+
+    
+        $filters = [
+            'Sales_Code' => $this->input->post('Sales_Code') ?: [],
+            'Distribution_Channel_Code' => $this->input->post('Distribution_Channel_Code') ?: [],
+            'Division_Code' => $this->input->post('Division_Code') ?: [],
+            'Customer_Type_Code' => $this->input->post('Customer_Type_Code') ?: [],
+            'Customer_Group_Code' => $this->input->post('Customer_Group_Code') ?: [],
+            'Population_Strata_2' => $this->input->post('Population_Strata_2') ?: []
+        ];
+
+
+        $all_mapping_data = $this->Maping_model->get_maping_d_count($search, $filters);
+        $maping_data = $this->Maping_model->get_maping_d($start, $length, $search, $filters, $order_column, $order_dir);
+
+
+
+    
+        $unique_data = [];
+        foreach ($maping_data as $item) {
+            $unique_key = implode('|', [
+                $item['Sales_Code'],
+                $item['Distribution_Channel_Code'],
+                $item['Distribution_Channel_Name'],
+                $item['Division_Code'],
+                $item['Division_Name'],
+                $item['Customer_Type_Code'],
+                $item['Customer_Type_Name'],
+                $item['Zone_Code'],
+                $item['Zone'],
+                $item['State_Code'],
+                $item['State'],
+                $item['City'],
+                $item['Customer_Group_Code'],
+                $item['Customer_Group_Name'],
+                $item['Population_Strata_2']
+            ]);
+
+            if (!isset($unique_data[$unique_key])) {
+                $unique_data[$unique_key] = [
+                    'Sales_Code' => $item['Sales_Code'],
+                    'Sales_Name' => $item['Sales_Name'],
+                    'Distribution_Channel_Code' => $item['Distribution_Channel_Code'],
+                    'Distribution_Channel_Name' => $item['Distribution_Channel_Name'],
+                    'Division_Code' => $item['Division_Code'],
+                    'Division_Name' => $item['Division_Name'],
+                    'Customer_Type_Code' => $item['Customer_Type_Code'],
+                    'Zone_Code' => $item['Zone_Code'],
+                    'Zone' => $item['Zone'],
+                    'State_Code' => $item['State_Code'],
+                    'State' => $item['State'],
+                    'City' => $item['City'],
+                    'Customer_Type_Name' => $item['Customer_Type_Name'],
+                    'Customer_Group_Code' => $item['Customer_Group_Code'],
+                    'Customer_Group_Name' => $item['Customer_Group_Name'],
+                    'Population_Strata_2' => $item['Population_Strata_2']
+                ];
+            }
+        }
+
+   
+        $unique_data = array_values($unique_data);
+
+
+
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => count($all_mapping_data),
+            'recordsFiltered' => count($all_mapping_data),
+            'data' => $maping_data,
+            'filter' => $unique_data
+        ];
+
+        echo json_encode($response);
+    }
+
+
 
 
 

@@ -76,7 +76,7 @@
                         error,
                         code
                     }); 
-                    alert(`Error loading data: ${xhr.responseText || error}`);
+                    
                 },
             },
 

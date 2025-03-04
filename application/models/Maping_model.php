@@ -369,6 +369,8 @@ class Maping_model extends CI_Model
             }
         }
 
+        
+
         if (!empty($search)) {
             $escaped_search = $this->db->escape_like_str($search);
             $this->db->group_start();

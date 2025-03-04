@@ -111,6 +111,8 @@ $route['admin/update_maping'] = 'admin/dashboard/update_maping';
 
 $route['admin/ajex_method_filter'] = 'admin/dashboard/ajex_method_filter';
 $route['admin/hierarchydata_ajex'] = 'admin/dashboard/hierarchydata_ajex';
+$route['admin/usermovement_ajex'] = 'admin/dashboard/usermovement_ajex';
+
 
 
 
