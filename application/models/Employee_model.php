@@ -586,7 +586,6 @@ class Employee_model extends CI_Model
 
 
 
-
     public function getTotal_employees($search = '')
     {
         if ($search) {
@@ -648,14 +647,34 @@ class Employee_model extends CI_Model
     }
 
 
-public function employee_csv()
-{
-    $this->db->select('id, name, email, mobile, employee_id, level, city, designation_name, designation_label_name, gender, employee_status')
-             ->from('employee e');
-
-    $query = $this->db->get();
-    return $query->result_array();
-}
+  public function employee_csv($search = '')
+  {
+      $this->db->select('id, name, email, mobile, employee_id, level,designation_name, designation_label_name, gender,   city, state, region')
+               ->from('employee e');
+  
+      if ($search) {
+          $this->db->group_start();
+          $this->db->like('e.name', $search);
+          $this->db->or_like('e.email', $search);
+          $this->db->or_like('e.mobile', $search);
+          $this->db->or_like('e.pjp_code', $search);
+          $this->db->or_like('e.employee_id', $search);
+          $this->db->or_like('e.level', $search);
+          $this->db->or_like('e.designation_name', $search);
+          $this->db->or_like('e.designation_label_name', $search);
+          $this->db->or_like('e.gender', $search);
+          $this->db->or_like('e.adhar_card', $search);
+          $this->db->or_like('e.district_code', $search);
+          $this->db->or_like('e.district', $search);
+          $this->db->or_like('e.city', $search);
+          $this->db->or_like('e.state', $search);
+          $this->db->or_like('e.region', $search);
+          $this->db->group_end();
+      }
+  
+      $query = $this->db->get();
+      return $query->result_array();
+  }
 
     public function get_employees_unmaped($start, $length, $search = '', $order_column = 'name', $order_dir = 'asc')
     {

@@ -240,22 +240,8 @@
                             params.append('dt-search-0', JSON.stringify(search));
                         }
 
-                        // Construct the URL with the base URL and the query parameters
+                  
                         var url = '<?php echo base_url("admin/export_distributors_csv"); ?>?' + params.toString();
-
-
-                        console.log("Sent Datasdgs:", {
-                            Customer_Group_Code: customerGroupCode,
-                            Customer_Type_Code: customerTypeCode,
-                            Distribution_Channel_Code: distributionChannelCode,
-                            Division_Code: divisionCode,
-                            Population_Strata_2: populationStrata2,
-                            Sales_Code: salesCode,
-                            Search: search
-                        });
-                        console.log("Export URL:", url);
-
-                        // Redirect to the constructed URL
                         window.location.href = url;
                     }
                 }

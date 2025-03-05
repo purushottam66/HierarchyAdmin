@@ -76,7 +76,13 @@ class Export_employee extends CI_Controller
     public function employee_csv()
     {
 
-        $data = $this->Employee_model->employee_csv();
+        $search = $this->input->get('dt-search-0');
+
+        $search = $search ? json_decode($search, true) : [];
+
+        log_message('debug', print_r($search, true));
+
+        $data = $this->Employee_model->employee_csv($search);
         $fileName = 'employee_data' . date('Ymd') . '.csv';
 
         header("Content-Type: text/csv");
@@ -90,11 +96,14 @@ class Export_employee extends CI_Controller
             'Mobile',
             'Employee ID',
             'Level',
-            'City',
             'Designation',
             'Designation Label',
             'Gender',
-            'Employee Status',
+      
+            'City',
+            'State',
+            'Region',
+       
 
      
         ]);
@@ -108,12 +117,15 @@ class Export_employee extends CI_Controller
                 $row['mobile'],
                 $row['employee_id'],
                 $row['level'],
-                $row['city'],
                 $row['designation_name'],
                 $row['designation_label_name'],
                 $row['gender'],
-                $row['employee_status'],
-    
+              
+            
+                $row['city'],
+                $row['state'],
+                $row['region'],
+              
             ]);
         }
 

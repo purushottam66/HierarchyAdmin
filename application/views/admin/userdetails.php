@@ -106,16 +106,16 @@
             </div>
 
             <?php if ($this->session->flashdata('success')): ?>
-                                        <div class="alert alert-success">
-                                            <?php echo $this->session->flashdata('success'); ?>
-                                        </div>
-                                    <?php endif; ?>
+                <div class="alert alert-success">
+                    <?php echo $this->session->flashdata('success'); ?>
+                </div>
+            <?php endif; ?>
 
-                                    <?php if ($this->session->flashdata('error')): ?>
-                                        <div class="alert alert-danger">
-                                            <?php echo $this->session->flashdata('error'); ?>
-                                        </div>
-                                    <?php endif; ?>
+            <?php if ($this->session->flashdata('error')): ?>
+                <div class="alert alert-danger">
+                    <?php echo $this->session->flashdata('error'); ?>
+                </div>
+            <?php endif; ?>
 
             <!-- <div class="dashhead-toolbar">
                 <div class="dashhead-toolbar-item"><a href="#">Hierarchy</a> / User Details
@@ -204,6 +204,8 @@
         let addEmployeePermission = permissions.some(p => p.module_name === "User Manager" && p.edit === "yes");
         let buttonsList = [];
 
+
+
         if (addEmployeePermission) {
             buttonsList.push({
                 text: '<i class="fa fa-plus"></i> Add Employee',
@@ -217,9 +219,21 @@
         buttonsList.push({
             text: '<i class="fa fa-download"></i> Export',
             titleAttr: 'Export',
-            action: function() {
-                window.location.href = '<?php echo base_url("admin/employee_csv"); ?>';
-            }
+       action: function() {
+           var search = $('#dt-search-0').val();
+           
+           // Initialize params before using it
+           var params = new URLSearchParams();
+       
+           if (search.length > 0) {
+               params.append('dt-search-0', JSON.stringify(search));
+           }
+       
+           var url = '<?php echo base_url("admin/employee_csv"); ?>?' + params.toString();
+           window.location.href = url;
+       
+           console.log(url);
+       }
         });
         var table = $('#example11').DataTable({
             paging: true,
@@ -285,7 +299,7 @@
         let switchWrapper = document.querySelector(`#switchActive${employeeId}, #switchInactive${employeeId}`).closest(".switches-container").querySelector(".switch-wrapper");
 
 
-        
+
         let previousStatus = inactiveRadio.checked ? "active" : "inactive";
 
         $.ajax({
@@ -298,27 +312,27 @@
             },
             success: function(data) {
 
-         
+
 
 
                 if (data.status == 'success') {
                     toastr.success(data.message);
 
                     if (newStatus === "active") {
-                    switchWrapper.style.transform = "translateX(0%)";
-                } else {
-                    switchWrapper.style.transform = "translateX(100%)";
-                }
+                        switchWrapper.style.transform = "translateX(0%)";
+                    } else {
+                        switchWrapper.style.transform = "translateX(100%)";
+                    }
                 } else if (data.status == 'error') {
                     toastr.error(data.message);
 
                     if (previousStatus === "active") {
-                    activeRadio.checked = true;
-                    switchWrapper.style.transform = "translateX(0%)";
-                } else {
-                    inactiveRadio.checked = true;
-                    switchWrapper.style.transform = "translateX(100%)";
-                }
+                        activeRadio.checked = true;
+                        switchWrapper.style.transform = "translateX(0%)";
+                    } else {
+                        inactiveRadio.checked = true;
+                        switchWrapper.style.transform = "translateX(100%)";
+                    }
                 } else {
                     toastr.info("Unexpected response status");
                 }
