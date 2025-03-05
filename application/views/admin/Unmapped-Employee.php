@@ -58,13 +58,15 @@
                                     style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center ">Name</th>
+                                        <th class="text-center ">Name</th>
                                             <th class="text-center ">employer name</th>
                                             <th class="text-center ">Email</th>
                                             <th class="text-center ">Contact No.</th>
                                             <th class="text-center ">employee_id</th>
                                             <th class="text-center ">level</th>
+                                            <th class="text-center ">state</th>
                                             <th class="text-center ">City</th>
+                                            <th class="text-center ">zone</th>
                                             <th class="text-center ">designation</th>
                                             <th class="text-center ">designation_label</th>
                                             <th class="text-center ">Gender</th>

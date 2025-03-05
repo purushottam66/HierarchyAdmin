@@ -263,11 +263,7 @@ console.log(d);
             language: {
                 processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">',
             },
-            columns: [{
-                    data: "id",
-                    title: "ID",
-                    visible: false
-                },
+            columns: [
 
                 {
                     data: "Customer_Code",

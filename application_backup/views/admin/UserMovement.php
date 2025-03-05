@@ -207,9 +207,24 @@
                     
                 },
             },
+
+            order: [{
+                column: 0, // Sort by the first column
+                dir: "asc", // Ascending order
+            }], // Default sorting
             language: {
                 processing: '<img class="spin-image" src="<?php echo base_url('admin/assets/Bloom_2.gif'); ?>" alt="Loading...">', // Custom loading message
             },
+
+            columnDefs: [{
+                    targets: '_all',
+                    orderable: true
+                },
+                {
+                    className: 'text-center',
+                    targets: '_all'
+                },
+            ],
             columns: [{
                     data: "id",
                     title: "ID",

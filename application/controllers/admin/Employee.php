@@ -75,7 +75,7 @@ class Employee extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             print_r("You do not have permission to access this page.");
             return;
@@ -170,7 +170,7 @@ class Employee extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             print_r("You do not have permission to access this page.");
             return;
@@ -195,7 +195,7 @@ class Employee extends CI_Controller
             return;
         }
 
-        
+
         if (!empty($postData['DB_Code'])) {
             foreach ($postData['DB_Code'] as $db_code_json) {
                 $db_code_data = json_decode($db_code_json, true);
@@ -210,7 +210,7 @@ class Employee extends CI_Controller
                         'distributors_id' => $db_code_data['distributors_id'] ?? null
                     ];
 
-                
+
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
@@ -225,7 +225,7 @@ class Employee extends CI_Controller
             }
         }
 
-  
+
         if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
             foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
                 $replace_db_code_data = json_decode($replace_db_code_json, true);
@@ -240,13 +240,13 @@ class Employee extends CI_Controller
                         'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
                     ];
 
-              
+
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
 
                     if (!empty($updateConditions)) {
-                     
+
                         $this->db->where($updateConditions);
                         $this->db->update('maping', [
                             "Level_{$postData['level']}" => $postData['Vacant']
@@ -258,7 +258,7 @@ class Employee extends CI_Controller
             log_message('info', 'Vacant data is empty or Replace_DB_Code is not provided. No updates made.');
         }
 
-    
+
         if ($this->db->trans_status() === FALSE) {
             echo json_encode(["status" => "error", "message" => "Failed to update mapping table."]);
         } else {
@@ -288,12 +288,12 @@ class Employee extends CI_Controller
 
         $this->db->trans_start();
 
-  
+
         if (!empty($postData['DB_Code'])) {
             foreach ($postData['DB_Code'] as $db_code_json) {
                 $db_code_data = json_decode($db_code_json, true);
                 if ($db_code_data) {
-            
+
                     $updateConditions = [
                         'DB_Code' => $db_code_data['Customer_Code'] ?? null,
                         'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
@@ -304,12 +304,12 @@ class Employee extends CI_Controller
                         'distributors_id' => $db_code_data['distributors_id'] ?? null
                     ];
 
-            
+
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
 
-                    if (count($updateConditions) === 7) { 
+                    if (count($updateConditions) === 7) {
                         $this->db->where($updateConditions);
                         $this->db->update('maping', [
                             "Level_{$postData['level']}" => $postData['set_pjp_code']
@@ -345,17 +345,17 @@ class Employee extends CI_Controller
             }
         }
 
-  
+
         if (!empty($postData['employee_data'])) {
             foreach ($postData['employee_data'] as $employee_data_json) {
                 $employee_data = json_decode($employee_data_json, true);
 
                 if ($employee_data) {
-      
+
                     $current_level = $postData['level'] ?? 1;
                     $level = ($current_level > 1) ? max(2, $current_level - 1) : $current_level;
 
-         
+
                     $updateConditions = [
                         'DB_Code' => $employee_data['Customer_Code'] ?? null,
                         'Sales_Code' => $employee_data['Sales_Code'] ?? null,
@@ -366,7 +366,7 @@ class Employee extends CI_Controller
                         'distributors_id' => $employee_data['distributors_id'] ?? null
                     ];
 
-       
+
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
@@ -397,7 +397,7 @@ class Employee extends CI_Controller
                         'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
                     ];
 
-        
+
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
@@ -442,7 +442,7 @@ class Employee extends CI_Controller
         $order_dir = $this->input->post('order')[0]['dir'];
 
         $columns = array(
-            0 => 'id', 
+            0 => 'id',
             1 => 'employer_code',
             2 => 'name',
             3 => 'mobile',
@@ -464,7 +464,7 @@ class Employee extends CI_Controller
             $order_dir
         );
 
- 
+
         $total_records = $this->Employee_model->get_total_employees_by_level($level, $search);
 
         $response = array(
@@ -480,7 +480,7 @@ class Employee extends CI_Controller
 
     public function dummmymaping__()
     {
-        
+
 
 
         $this->db->select('d.Customer_Code, d.Sales_Code, d.Distribution_Channel_Code, 
@@ -502,14 +502,14 @@ class Employee extends CI_Controller
 
                 $mapingQuery = $this->db->get();
 
-           
+
                 if ($mapingQuery->num_rows() > 0) {
                     $mapingId = $mapingQuery->row()->id;
-       
+
                     $this->db->delete('maping', ['id' => $mapingId]);
                 }
 
-         
+
                 $mappingData = [
                     'DB_Code' => $distributor->Customer_Code,
                     'Sales_Code' => $distributor->Sales_Code,
@@ -517,17 +517,17 @@ class Employee extends CI_Controller
                     'Division_Code' => $distributor->Division_Code,
                     'Customer_Type_Code' => $distributor->Customer_Type_Code,
                     'Customer_Group_Code' => $distributor->Customer_Group_Code,
-                    'pjp_code' => $pjp_codes[array_rand($pjp_codes)] 
+                    'pjp_code' => $pjp_codes[array_rand($pjp_codes)]
                 ];
 
-          
+
                 $this->db->insert('maping', $mappingData);
             }
 
-        
+
             echo json_encode(['status' => 'success', 'message' => 'Active distributors and corresponding mappings updated with pjp_code successfully.']);
         } else {
-        
+
             echo json_encode(['status' => 'error', 'message' => 'No active distributors found.']);
         }
     }
@@ -536,7 +536,7 @@ class Employee extends CI_Controller
 
     public function dummmymaping()
     {
-        
+
         $this->db->select('d.Customer_Code, d.Sales_Code, d.Distribution_Channel_Code, 
                            d.Division_Code, d.Customer_Type_Code, d.Customer_Group_Code');
         $this->db->from('distributors d');
@@ -550,20 +550,20 @@ class Employee extends CI_Controller
         ]);
         $query = $this->db->get();
 
- 
+
         log_message('info', 'Distributors Query Result: ' . json_encode($query->result()));
 
-        $totalMappingsAdded = 0; 
+        $totalMappingsAdded = 0;
 
         if ($query->num_rows() > 0) {
-        
+
             $mappingsToInsert = [];
 
             foreach ($query->result() as $distributor) {
 
                 log_message('info', 'Processing Distributor: ' . json_encode($distributor));
 
-   
+
                 $this->db->from('maping');
                 $this->db->where([
                     'DB_Code' => $distributor->Customer_Code,
@@ -580,7 +580,7 @@ class Employee extends CI_Controller
 
                 if ($existingMapping > 0) {
                     log_message('info', 'Mapping already exists for Distributor: ' . json_encode($distributor));
-                    continue; 
+                    continue;
                 }
 
 
@@ -600,15 +600,15 @@ class Employee extends CI_Controller
 
 
             if (!empty($mappingsToInsert)) {
-    
+
                 log_message('info', 'Inserting Mappings to Database: ' . json_encode($mappingsToInsert));
 
                 $this->db->insert_batch('maping', $mappingsToInsert);
 
-       
+
                 $totalMappingsAdded = count($mappingsToInsert);
 
-          
+
                 log_message('info', 'Total Mappings Added: ' . $totalMappingsAdded);
 
                 echo json_encode([
@@ -616,12 +616,12 @@ class Employee extends CI_Controller
                     'message' => $totalMappingsAdded . ' mappings added successfully.'
                 ]);
             } else {
-          
+
                 log_message('info', 'No new mappings to add.');
                 echo json_encode(['status' => 'error', 'message' => 'No new mappings to add.']);
             }
         } else {
-         
+
             log_message('error', 'No distributors found.');
             echo json_encode(['status' => 'error', 'message' => 'No distributors found.']);
         }
@@ -632,18 +632,18 @@ class Employee extends CI_Controller
 
     public function checkAndDeleteDistributor()
     {
-       
+
         $this->db->select('d.Customer_Code, d.Sales_Code, d.Distribution_Channel_Code, 
                        d.Division_Code, d.Customer_Type_Code, d.Customer_Group_Code');
-        $this->db->select('d.*'); 
+        $this->db->select('d.*');
         $this->db->from('distributors d');
-        $this->db->where('d.STATUS', 'INACTIVE');  
+        $this->db->where('d.STATUS', 'INACTIVE');
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
-         
+
             foreach ($query->result() as $distributor) {
-        
+
                 $this->db->select('m.id, m.DB_Code, m.Sales_Code, m.Distribution_Channel_Code, m.Division_Code, 
             m.Customer_Type_Code, m.Customer_Group_Code, m.Level_1, m.Level_2, m.Level_3, m.Level_4, m.Level_5, m.Level_6, m.Level_7');
                 $this->db->from('maping m');
@@ -656,10 +656,10 @@ class Employee extends CI_Controller
 
                 $mapingQuery = $this->db->get();
 
-          
+
                 if ($mapingQuery->num_rows() > 0) {
                     foreach ($mapingQuery->result_array() as $mapingData) {
-                    
+
                         $archivedData = [
                             'DB_Code' => $mapingData['DB_Code'],
                             'Sales_Code' => $mapingData['Sales_Code'],
@@ -700,7 +700,7 @@ class Employee extends CI_Controller
                             'Division_Name' => $distributor->Division_Name,
                             'Sector_Name' => $distributor->Sector_Name,
 
-                            'deleted_at' => date('Y-m-d H:i:s') 
+                            'deleted_at' => date('Y-m-d H:i:s')
                         ];
 
                         for ($i = 1; $i <= 7; $i++) {
@@ -713,8 +713,8 @@ class Employee extends CI_Controller
                             if ($employeeQuery->num_rows() > 0) {
                                 $employeeData = $employeeQuery->row_array();
                                 $employeeData = $employeeQuery->row_array();
-                                $archivedData['Level_' . $i . '_employee_name'] = $employeeData['name']; 
-                                $archivedData['Level_' . $i . '_employee_code'] = $employeeData['employer_code']; 
+                                $archivedData['Level_' . $i . '_employee_name'] = $employeeData['name'];
+                                $archivedData['Level_' . $i . '_employee_code'] = $employeeData['employer_code'];
                                 $archivedData['Level_' . $i . '_employee_designation'] = $employeeData['designation_name']; // designation_name
                                 $archivedData['Level_' . $i . '_employee_employer'] = $employeeData['employer_name']; // employer_name
                                 $archivedData['Level_' . $i . '_employee_id'] = $employeeData['id'];
@@ -737,7 +737,7 @@ class Employee extends CI_Controller
 
             echo json_encode(['status' => 'success', 'message' => 'Inactive distributors and corresponding mappings deleted successfully.']);
         } else {
-      
+
             echo json_encode(['status' => 'error', 'message' => 'No inactive distributors found.']);
         }
     }
@@ -751,7 +751,7 @@ class Employee extends CI_Controller
         }
         $postData = $this->input->post();
 
-  
+
         if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
             echo json_encode([
                 "status" => "error",
@@ -760,7 +760,7 @@ class Employee extends CI_Controller
             return;
         }
 
-    
+
         $this->db->trans_start();
 
 
@@ -769,7 +769,7 @@ class Employee extends CI_Controller
                 $db_code_data = json_decode($db_code_json, true);
 
                 if ($db_code_data) {
-               
+
                     $updateConditions = [
                         'DB_Code' => $db_code_data['Customer_Code'] ?? null,
                         'Sales_Code' => $db_code_data['Sales_Code'] ?? null,
@@ -780,7 +780,7 @@ class Employee extends CI_Controller
                         'distributors_id' => $db_code_data['distributors_id'] ?? null
                     ];
 
-             
+
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
@@ -807,7 +807,7 @@ class Employee extends CI_Controller
 
         $new_level = ($level > 1) ? max(2, $level - 1) : $level;
 
-    
+
         if ($pjp_code && $level) {
             $employee = $this->db->where([
                 'pjp_code' => $pjp_code,
@@ -1005,7 +1005,7 @@ class Employee extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             print_r("You do not have permission to access this page.");
             return;
@@ -1081,7 +1081,7 @@ class Employee extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             print_r("You do not have permission to access this page.");
             return;
@@ -1440,7 +1440,21 @@ class Employee extends CI_Controller
         $order_dir = $this->input->get('order[0][dir]', TRUE);
 
 
-        $columns = ['name', 'employer_name', 'email', 'mobile', 'pjp_code', 'employee_id', 'level', 'city', 'designation_name', 'designation_label_name', 'gender', 'employee_status'];
+        $columns = [
+            'name',
+            'employer_name',
+            'email',
+            'mobile',
+            'employee_id',
+            'level',
+            'state',
+            'city',
+            'region',
+            'designation',
+            'designation_name',
+            'gender',
+            'employee_status',
+        ];
         $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'name';
 
 
@@ -1462,7 +1476,9 @@ class Employee extends CI_Controller
                 $AS_employee->mobile,
                 $AS_employee->employee_id,
                 $AS_employee->level,
+                $AS_employee->state,
                 $AS_employee->city,
+                $AS_employee->region,
                 $AS_employee->designation_name,
                 $AS_employee->designation_label_name,
                 !empty($AS_employee->gender) ? $AS_employee->gender : 'Non',
@@ -1503,11 +1519,28 @@ class Employee extends CI_Controller
         $search = $this->input->post('search', TRUE);
         $order_column = $this->input->post('order[0][column]', TRUE); // Get the column index for sorting
         $order_dir = $this->input->post('order[0][dir]', TRUE); // Get the direction for sorting
-
+        log_message('debug', 'Order Column Index: ' . $order_column);
+        log_message('debug', 'Order Direction: ' . $order_dir);
         // Map the column index to the actual column name (You can adjust this mapping based on your table columns)
-        $columns = ['name', 'email', 'mobile', 'pjp_code', 'employee_id', 'level', 'designation_name', 'designation_label_name', 'gender', 'employee_status', 'created_at'];
-        $order_column_name = isset($columns[$order_column]) ? $columns[$order_column] : 'name'; // Default sorting by 'name'
+        $columns = [
+            'name',
+            'employer_name',
+            'email',
+            'mobile',
+            'employee_id',
+            'level',
+            'state',
+            'city',
+            'region',
+            'designation',
+            'designation_name',
+            'gender',
+            'employee_status',
+        ];
+        $order_column_name = isset($columns[$order_column]) ? $columns[$order_column] : 'name';
 
+        log_message('debug', 'Order Column: ' . $order_column_name);
+        log_message('debug', 'Order Direction: ' . $order_dir);
         // Fetch total employee count and paginated employees
         $total_get_employee = $this->Employee_model->getTotal_employees($search);
         $employee_s = $this->Employee_model->get_employees($start, $length, $search, $order_column_name, $order_dir);
@@ -1565,10 +1598,10 @@ class Employee extends CI_Controller
                     </div>
                 </div>
             ' : '<span class="text-danger fw-bold">No Permission</span>'; // Show "No Permission" if edit is denied
-        
+
             // Action buttons should be hidden if the user lacks edit permission
             $action_buttons = '<div class="d-flex">';
-            
+
             if ($has_edit_permission) {
                 $action_buttons .= '
                     <a href="' . site_url('admin/Employeeedit/' . $AS_employee->id) . '" class="btn btn-primary setfont">
@@ -1591,11 +1624,11 @@ class Employee extends CI_Controller
                         <i class="fa-solid fa-trash fa-fw"></i>
                     </a>';
             }
-        
 
-          
 
-                
+
+
+
             $action_buttons .= '
                 
          
@@ -1604,7 +1637,7 @@ class Employee extends CI_Controller
             
             
             ';
-        
+
             $data[] = [
                 $AS_employee->name,
                 $AS_employee->employer_name,
@@ -1618,11 +1651,11 @@ class Employee extends CI_Controller
                 $AS_employee->designation_name,
                 $AS_employee->designation_label_name,
                 !empty($AS_employee->gender) ? $AS_employee->gender : 'Non',
-                $status_switch, // Show status switch only if permission is granted
-                $action_buttons // Show edit/delete buttons only if permission is granted
+                $status_switch,
+                $action_buttons
             ];
         }
-        
+
 
 
         $output = [
@@ -1706,7 +1739,7 @@ class Employee extends CI_Controller
         $data['employee_city'] = $employee_city;
         $data['employee_region'] = $employee_region;
 
-        
+
 
 
 
@@ -1718,136 +1751,137 @@ class Employee extends CI_Controller
 
 
 
-    
-        public function updateEmployeeStatus() {
-            $back_user_id = $this->session->userdata('back_user_id');
-            if (!$back_user_id) {
-                redirect('admin/login');
-            }
-    
-            $id = $this->input->post('employee_id', TRUE);
-            $employee_status = $this->input->post('employee_status', TRUE);
-    
+
+    public function updateEmployeeStatus()
+    {
+        $back_user_id = $this->session->userdata('back_user_id');
+        if (!$back_user_id) {
+            redirect('admin/login');
+        }
+
+        $id = $this->input->post('employee_id', TRUE);
+        $employee_status = $this->input->post('employee_status', TRUE);
+
+        date_default_timezone_set('Asia/Kolkata');
+
+        log_message('debug', 'Employee ID: ' . $id);
+        log_message('debug', 'Employee Status: ' . $employee_status);
+
+        if (empty($id) || empty($employee_status)) {
+            log_message('error', 'Invalid input data');
+            echo json_encode(['status' => 'error', 'message' => 'Invalid input data']);
+            return;
+        }
+
+        // Get the pjp_code of the employee
+        $pjp_code = $this->Employee_model->get_pjp_code_by_employee_id($id);
+        log_message('debug', 'pjp_code: ' . $pjp_code);
+
+        if (!$pjp_code) {
+            log_message('error', 'Failed to retrieve Employee ');
+            echo json_encode(['status' => 'error', 'message' => 'Failed to retrieve Employee ']);
+            return;
+        }
+
+        // Check if pjp_code is mapped to levels 1 to 7
+        $is_mapped = $this->Maping_model->is_pjp_code_mapped_to_levels($pjp_code);
+
+        if ($is_mapped) {
+            log_message('info', 'Status change not allowed: Employee is already mapped');
+            echo json_encode(['status' => 'error', 'message' => 'Status change not allowed: Employee is already mapped ']);
+            return;
+        }
+
+        // Normalize employee_status
+        $employee_status = ucfirst(strtolower($employee_status));
+
+        $data = ['employee_status' => $employee_status];
+
+        // Set date for active/inactive status
+        if ($employee_status === 'Active') {
+            $data['active_date'] = date('Y-m-d H:i:s');
+        } elseif ($employee_status === 'Inactive') {
+            $data['inactive_date'] = date('Y-m-d H:i:s');
+        }
+
+        log_message('debug', 'Update data: ' . print_r($data, true));
+
+        $result = $this->Employee_model->update_employee($id, $data);
+
+        if ($result) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => "Employee status successfully updated to {$employee_status}."
+            ]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public function submit_employee_edit($id)
+    {
+        $back_user_id = $this->session->userdata('back_user_id');
+        if (!$back_user_id) {
+            redirect('admin/login');
+        }
+
+        // Load form validation library
+        //$this->load->library('form_validation');
+
+        // Validation Rules
+        $this->form_validation->set_rules('name', 'Name', 'required|trim|min_length[3]');
+        $this->form_validation->set_rules('employer_name', 'Employer Name', 'required|trim');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
+        $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|min_length[10]|max_length[10]');
+        $this->form_validation->set_rules('dob', 'Date of Birth', 'required');
+        $this->form_validation->set_rules('employer_code', 'Employer Code', 'required');
+        $this->form_validation->set_rules('adhar_card', 'Aadhar Card', 'required|numeric|min_length[12]|max_length[12]');
+        $this->form_validation->set_rules('gender', 'Gender', 'required');
+        $this->form_validation->set_rules('designation', 'Designation', 'required');
+        $this->form_validation->set_rules('designation_label', 'Designation Label', 'required');
+        $this->form_validation->set_rules('address', 'Address', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) {
+            // If validation fails, reload the edit page with errors
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('admin/Employeeedit/' . $id);
+        } else {
+            // If validation passes, update the employee data
             date_default_timezone_set('Asia/Kolkata');
-    
-            log_message('debug', 'Employee ID: ' . $id);
-            log_message('debug', 'Employee Status: ' . $employee_status);
-    
-            if (empty($id) || empty($employee_status)) {
-                log_message('error', 'Invalid input data');
-                echo json_encode(['status' => 'error', 'message' => 'Invalid input data']);
-                return;
-            }
-    
-            // Get the pjp_code of the employee
-            $pjp_code = $this->Employee_model->get_pjp_code_by_employee_id($id);
-            log_message('debug', 'pjp_code: ' . $pjp_code);
-    
-            if (!$pjp_code) {
-                log_message('error', 'Failed to retrieve Employee ');
-                echo json_encode(['status' => 'error', 'message' => 'Failed to retrieve Employee ']);
-                return;
-            }
-    
-            // Check if pjp_code is mapped to levels 1 to 7
-            $is_mapped = $this->Maping_model->is_pjp_code_mapped_to_levels($pjp_code);
-    
-            if ($is_mapped) {
-                log_message('info', 'Status change not allowed: Employee is already mapped');
-                echo json_encode(['status' => 'error', 'message' => 'Status change not allowed: Employee is already mapped ']);
-                return;
-            }
-    
-            // Normalize employee_status
-            $employee_status = ucfirst(strtolower($employee_status)); 
-    
-            $data = ['employee_status' => $employee_status];
-    
-            // Set date for active/inactive status
-            if ($employee_status === 'Active') {
-                $data['active_date'] = date('Y-m-d H:i:s');
-            } elseif ($employee_status === 'Inactive') {
-                $data['inactive_date'] = date('Y-m-d H:i:s');
-            }
-    
-            log_message('debug', 'Update data: ' . print_r($data, true));
-    
-            $result = $this->Employee_model->update_employee($id, $data);
-    
-            if ($result) {
-                echo json_encode([
-                    'status' => 'success',
-                    'message' => "Employee status successfully updated to {$employee_status}."
-                ]);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
-            }
+
+            $updatedData = [
+                'name' => $this->input->post('name'),
+                'employer_name' => $this->input->post('employer_name'),
+                'email' => $this->input->post('email'),
+                'mobile' => $this->input->post('mobile'),
+                'dob' => $this->input->post('dob'),
+                'employer_code' => $this->input->post('employer_code'),
+                'adhar_card' => $this->input->post('adhar_card'),
+                'gender' => $this->input->post('gender'),
+                'designation' => $this->input->post('designation'),
+                'designation_label' => $this->input->post('designation_label'),
+                'designation_name' => $this->input->post('designation_name'),
+                'designation_label_name' => $this->input->post('designation_label_name'),
+                'address' => $this->input->post('address'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+
+            $this->Employee_model->update_employee($id, $updatedData);
+            $this->session->set_flashdata('success', 'Employee details updated successfully.');
+            redirect('admin/userdetails');
         }
-    
-    
-    
+    }
 
-
-
-
-
-
-
-
-        public function submit_employee_edit($id)
-        {
-            $back_user_id = $this->session->userdata('back_user_id');
-            if (!$back_user_id) {
-                redirect('admin/login');
-            }
-        
-            // Load form validation library
-            //$this->load->library('form_validation');
-        
-            // Validation Rules
-            $this->form_validation->set_rules('name', 'Name', 'required|trim|min_length[3]');
-            $this->form_validation->set_rules('employer_name', 'Employer Name', 'required|trim');
-            $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
-            $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|min_length[10]|max_length[10]');
-            $this->form_validation->set_rules('dob', 'Date of Birth', 'required');
-            $this->form_validation->set_rules('employer_code', 'Employer Code', 'required');
-            $this->form_validation->set_rules('adhar_card', 'Aadhar Card', 'required|numeric|min_length[12]|max_length[12]');
-            $this->form_validation->set_rules('gender', 'Gender', 'required');
-            $this->form_validation->set_rules('designation', 'Designation', 'required');
-            $this->form_validation->set_rules('designation_label', 'Designation Label', 'required');
-            $this->form_validation->set_rules('address', 'Address', 'required|trim');
-        
-            if ($this->form_validation->run() == FALSE) {
-                // If validation fails, reload the edit page with errors
-                $this->session->set_flashdata('error', validation_errors());
-                redirect('admin/Employeeedit/' . $id);
-            } else {
-                // If validation passes, update the employee data
-                date_default_timezone_set('Asia/Kolkata');
-        
-                $updatedData = [
-                    'name' => $this->input->post('name'),
-                    'employer_name' => $this->input->post('employer_name'),
-                    'email' => $this->input->post('email'),
-                    'mobile' => $this->input->post('mobile'),
-                    'dob' => $this->input->post('dob'),
-                    'employer_code' => $this->input->post('employer_code'),
-                    'adhar_card' => $this->input->post('adhar_card'),
-                    'gender' => $this->input->post('gender'),
-                    'designation' => $this->input->post('designation'),
-                    'designation_label' => $this->input->post('designation_label'),
-                    'designation_name' => $this->input->post('designation_name'),
-                    'designation_label_name' => $this->input->post('designation_label_name'),
-                    'address' => $this->input->post('address'),
-                    'updated_at' => date('Y-m-d H:i:s')
-                ];
-        
-                $this->Employee_model->update_employee($id, $updatedData);
-                $this->session->set_flashdata('success', 'Employee details updated successfully.');
-                redirect('admin/userdetails');
-            }
-        }
-        
 
 
     public function view_employee($id)
@@ -1909,31 +1943,30 @@ class Employee extends CI_Controller
     public function delete_employee($id)
     {
         $back_user_id = $this->session->userdata('back_user_id');
-    
+
         if (!$back_user_id) {
             redirect('admin/login');
         }
-    
+
         // Get the pjp_code of the employee
         $pjp_code = $this->Employee_model->get_pjp_code_by_employee_id($id);
-    
+
         if (!$pjp_code) {
             $this->session->set_flashdata('error', 'Failed to retrieve PJP Code.');
             redirect('admin/userdetails');
             return;
         }
-    
+
         // Check if pjp_code is mapped to levels 1 to 7
         $is_mapped = $this->Maping_model->is_pjp_code_mapped_to_levels($pjp_code);
-    
+
         if ($is_mapped) {
             $this->session->set_flashdata('error', ' Deletion of this user is not allowed as the user is mapped to the distributor..');
         } else {
             $this->Employee_model->delete_employee($id);
             $this->session->set_flashdata('success', 'Employee deleted successfully.');
         }
-    
+
         redirect('admin/userdetails');
     }
-    
 }

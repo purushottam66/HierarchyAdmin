@@ -55,28 +55,25 @@
                 }
 
             ],
-            order: [{
-                column: 0, 
-                dir: "asc", 
-            }], 
+
             ajax: {
-                url: "<?= site_url('admin/distributors_db') ?>", 
+                url: "<?= site_url('admin/distributors_db') ?>",
                 type: "POST",
                 data: function(d) {
-                    d.search = $('#dt-search-0').val(); 
+                    d.search = $('#dt-search-0').val();
                     console.log("Sent Data: ", d);
                 },
                 dataSrc: function(json) {
-                    console.log("Received Response: ", json); 
-                    return json.data; 
+                    console.log("Received Response: ", json);
+                    return json.data;
                 },
                 error: function(xhr, error, code) {
                     console.error("Ajax Error: ", {
                         xhr,
                         error,
                         code
-                    }); 
-                    
+                    });
+
                 },
             },
 
@@ -97,9 +94,11 @@
 
                 {
                     columns: "id",
-                    title: "id"
+                    title: "id",
+                    orderable: false // Disable sorting for this column
+
                 },
-                
+
                 {
                     columns: "Customer_Name",
                     title: "Customer Name"

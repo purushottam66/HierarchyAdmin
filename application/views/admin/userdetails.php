@@ -195,6 +195,8 @@
 
 
 
+
+
 <script>
     $(document).ready(function() {
 
@@ -211,11 +213,12 @@
                 }
             });
         }
+
         buttonsList.push({
-            text: '<i class="fa fa-user-times"></i> Unmapped Employee',
-            titleAttr: 'Unmapped Employee',
+            text: '<i class="fa fa-download"></i> Export',
+            titleAttr: 'Export',
             action: function() {
-                window.location.href = '<?php echo base_url("admin/Unmapped_Employee"); ?>';
+                window.location.href = '<?php echo base_url("admin/employee_csv"); ?>';
             }
         });
         var table = $('#example11').DataTable({

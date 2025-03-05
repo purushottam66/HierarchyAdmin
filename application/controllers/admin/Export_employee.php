@@ -72,4 +72,57 @@ class Export_employee extends CI_Controller
 
 
 
+
+    public function employee_csv()
+    {
+
+        $data = $this->Employee_model->employee_csv();
+        $fileName = 'employee_data' . date('Ymd') . '.csv';
+
+        header("Content-Type: text/csv");
+        header("Content-Disposition: attachment; filename=$fileName");
+
+        $output = fopen('php://output', 'w');
+        fputcsv($output, [
+            'ID',
+            'Name',
+            'Email',
+            'Mobile',
+            'Employee ID',
+            'Level',
+            'City',
+            'Designation',
+            'Designation Label',
+            'Gender',
+            'Employee Status',
+
+     
+        ]);
+
+        // Write data rows
+        foreach ($data as $row) {
+            fputcsv($output, [
+                $row['id'],
+                $row['name'],
+                $row['email'],
+                $row['mobile'],
+                $row['employee_id'],
+                $row['level'],
+                $row['city'],
+                $row['designation_name'],
+                $row['designation_label_name'],
+                $row['gender'],
+                $row['employee_status'],
+    
+            ]);
+        }
+
+      
+        fclose($output);
+        exit;
+    }
+
+
+
+
 }

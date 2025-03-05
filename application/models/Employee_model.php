@@ -68,7 +68,7 @@ class Employee_model extends CI_Model
         $this->db->select('id, name, email, mobile, designation, level, pjp_code, employer_code, district, state, designation_name, city');
         $this->db->from('employee');
         $this->db->where('level', $level);
-    
+
         // Apply search filter
         if (!empty($search)) {
             $this->db->group_start();
@@ -81,22 +81,22 @@ class Employee_model extends CI_Model
             $this->db->or_like('city', $search);
             $this->db->group_end();
         }
-    
-  
+
+
         $this->db->order_by($sort_by, $sort_order);
-    
+
 
         $this->db->limit($limit, $offset);
-    
+
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
     public function get_total_employees_by_level($level, $search = null)
     {
         $this->db->from('employee');
         $this->db->where('level', $level);
-    
+
         if (!empty($search)) {
             $this->db->group_start();
             $this->db->like('name', $search);
@@ -108,11 +108,11 @@ class Employee_model extends CI_Model
             $this->db->or_like('city', $search);
             $this->db->group_end();
         }
-    
+
         return $this->db->count_all_results();
     }
-    
-    
+
+
     public function get_employees_by_Emp_id($Emp_id)
     {
 
@@ -198,11 +198,11 @@ class Employee_model extends CI_Model
         $this->db->select('id, name, vacant_status, email, pjp_code, employer_code, employee_id, designation_name, designation_label_name, employee_status, state, level, City');
         $this->db->from('employee');
         $this->db->where('level', $level);
-    
+
         if (!empty($pjpCode)) {
             $this->db->where('pjp_code !=', $pjpCode);
         }
-    
+
         if (!empty($search)) {
             $this->db->group_start();
             $this->db->like('id', $search);
@@ -220,23 +220,23 @@ class Employee_model extends CI_Model
             $this->db->or_like('City', $search);
             $this->db->group_end();
         }
-    
+
         $this->db->limit($limit, $offset);
-        
+
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
     public function get_employees_by_Emp_level_emp_Promoted($level, $pjpCode, $search, $limit, $offset)
     {
         $this->db->select('id, name, vacant_status, email, pjp_code, employer_code, employee_id, designation_name, designation_label_name, employee_status, state, level, City');
         $this->db->from('employee');
         $this->db->where_in('level', [$level, $level + 1]);
-    
+
         if (!empty($pjpCode)) {
             $this->db->where('pjp_code !=', $pjpCode);
         }
-    
+
         if (!empty($search)) {
             $this->db->group_start();
             $this->db->like('id', $search);
@@ -254,22 +254,22 @@ class Employee_model extends CI_Model
             $this->db->or_like('City', $search);
             $this->db->group_end();
         }
-    
+
         $this->db->limit($limit, $offset);
-        
+
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
     public function get_employees_count($level, $pjpCode, $search)
     {
         $this->db->from('employee');
         $this->db->where('level', $level);
-    
+
         if (!empty($pjpCode)) {
             $this->db->where('pjp_code !=', $pjpCode);
         }
-    
+
         if (!empty($search)) {
             $this->db->group_start();
             $this->db->like('id', $search);
@@ -287,13 +287,14 @@ class Employee_model extends CI_Model
             $this->db->or_like('City', $search);
             $this->db->group_end();
         }
-    
+
         return $this->db->count_all_results();
     }
-    
-    
 
-    public function get_pjp_code_by_employee_id($employee_id) {
+
+
+    public function get_pjp_code_by_employee_id($employee_id)
+    {
         $this->db->select('pjp_code');
         $this->db->from('employee');
         $this->db->where('id', $employee_id);
@@ -302,7 +303,7 @@ class Employee_model extends CI_Model
         if ($query->num_rows() > 0) {
             return $query->row()->pjp_code;
         } else {
-            return null; 
+            return null;
         }
     }
 
@@ -518,8 +519,9 @@ class Employee_model extends CI_Model
     {
         $this->db->from('employee');
 
- 
+
         if ($search) {
+
             $this->db->group_start()
                 ->like('name', $search)
                 ->or_like('email', $search)
@@ -531,20 +533,51 @@ class Employee_model extends CI_Model
                 ->or_like('designation_label_name', $search)
                 ->or_like('gender', $search)
                 ->or_like('employee_status', $search)
+                ->or_like('vacant_status', $search)
+                ->or_like('dob', $search)
+                ->or_like('employer_code', $search)
+                ->or_like('employer_name', $search)
+                ->or_like('adhar_card', $search)
+                ->or_like('designation', $search)
+                ->or_like('created_at', $search)
+                ->or_like('updated_at', $search)
+                ->or_like('active_date', $search)
+                ->or_like('inactive_date', $search)
+                ->or_like('town', $search)
+                ->or_like('district_code', $search)
+                ->or_like('district', $search)
+                ->or_like('city', $search)
+                ->or_like('state', $search)
+                ->or_like('region', $search)
+                ->or_like('address', $search)
                 ->group_end();
         }
 
-    
-        $valid_columns = ['name', 'email', 'mobile', 'pjp_code', 'employee_id', 'level', 'designation_name', 'designation_label_name', 'gender', 'employee_status', 'created_at'];
+
+        $valid_columns = [
+            'name',
+            'employer_name',
+            'email',
+            'mobile',
+            'employee_id',
+            'level',
+            'state',
+            'city',
+            'region',
+            'designation',
+            'designation_name',
+            'gender',
+            'employee_status',
+        ];
         if (!in_array($order_column, $valid_columns)) {
-            $order_column = 'name'; 
+            $order_column = 'name';
         }
 
 
         if (in_array($order_dir, ['asc', 'desc'], true)) {
             $this->db->order_by($order_column, $order_dir);
         } else {
-        
+
             $this->db->order_by('name', 'asc');
         }
 
@@ -568,6 +601,23 @@ class Employee_model extends CI_Model
             $this->db->or_like('designation_label_name', $search);
             $this->db->or_like('gender', $search);
             $this->db->or_like('employee_status', $search);
+            $this->db->or_like('vacant_status', $search);
+            $this->db->or_like('dob', $search);
+            $this->db->or_like('employer_code', $search);
+            $this->db->or_like('employer_name', $search);
+            $this->db->or_like('adhar_card', $search);
+            $this->db->or_like('designation', $search);
+            $this->db->or_like('created_at', $search);
+            $this->db->or_like('updated_at', $search);
+            $this->db->or_like('active_date', $search);
+            $this->db->or_like('inactive_date', $search);
+            $this->db->or_like('town', $search);
+            $this->db->or_like('district_code', $search);
+            $this->db->or_like('district', $search);
+            $this->db->or_like('city', $search);
+            $this->db->or_like('state', $search);
+            $this->db->or_like('region', $search);
+            $this->db->or_like('address', $search);
         }
 
         $query = $this->db->select('COUNT(*) as total_get_employee')->get('employee');
@@ -583,21 +633,29 @@ class Employee_model extends CI_Model
     {
 
         $this->db->select('e.*')
-        ->from('employee e')
-        ->where('e.employee_status', 'active')
-        ->join('maping m', 'e.pjp_code = m.Level_1 OR e.pjp_code = m.Level_2 OR e.pjp_code = m.Level_3 OR e.pjp_code = m.Level_4 OR e.pjp_code = m.Level_5 OR e.pjp_code = m.Level_6 OR e.pjp_code = m.Level_7', 'left')
-        ->where('m.Level_1 IS NULL')
-        ->where('m.Level_2 IS NULL')
-        ->where('m.Level_3 IS NULL')
-        ->where('m.Level_4 IS NULL')
-        ->where('m.Level_5 IS NULL')
-        ->where('m.Level_6 IS NULL')
-        ->where('m.Level_7 IS NULL');
+            ->from('employee e')
+            ->where('e.employee_status', 'active')
+            ->join('maping m', 'e.pjp_code = m.Level_1 OR e.pjp_code = m.Level_2 OR e.pjp_code = m.Level_3 OR e.pjp_code = m.Level_4 OR e.pjp_code = m.Level_5 OR e.pjp_code = m.Level_6 OR e.pjp_code = m.Level_7', 'left')
+            ->where('m.Level_1 IS NULL')
+            ->where('m.Level_2 IS NULL')
+            ->where('m.Level_3 IS NULL')
+            ->where('m.Level_4 IS NULL')
+            ->where('m.Level_5 IS NULL')
+            ->where('m.Level_6 IS NULL')
+            ->where('m.Level_7 IS NULL');
         $query = $this->db->get();
         return $query->result_array();
-        
     }
 
+
+public function employee_csv()
+{
+    $this->db->select('id, name, email, mobile, employee_id, level, city, designation_name, designation_label_name, gender, employee_status')
+             ->from('employee e');
+
+    $query = $this->db->get();
+    return $query->result_array();
+}
 
     public function get_employees_unmaped($start, $length, $search = '', $order_column = 'name', $order_dir = 'asc')
     {
@@ -633,21 +691,36 @@ class Employee_model extends CI_Model
             $this->db->group_end();
         }
 
-        
-        $valid_columns = ['name', 'email', 'mobile', 'pjp_code', 'employee_id', 'level', 'designation_name', 'designation_label_name', 'gender', 'employee_status', 'created_at'];
+
+
+        $valid_columns = [
+            'name',
+            'employer_name',
+            'email',
+            'mobile',
+            'employee_id',
+            'level',
+            'state',
+            'city',
+            'region',
+            'designation',
+            'designation_name',
+            'gender',
+            'employee_status',
+        ];
         if (!in_array($order_column, $valid_columns)) {
-            $order_column = 'name'; 
+            $order_column = 'name';
         }
 
-     
+
         if (in_array($order_dir, ['asc', 'desc'], true)) {
             $this->db->order_by($order_column, $order_dir);
         } else {
-         
+
             $this->db->order_by('name', 'asc');
         }
 
-      
+
         return $this->db->limit($length, $start)->get();
     }
 

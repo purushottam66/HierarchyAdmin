@@ -743,6 +743,8 @@ class Dashboard extends CI_Controller
         $search = $this->input->post('search');
         $order = $this->input->post('order');
 
+        log_message('info', 'Order: ' . json_encode($order));
+
       
         $filters = array(
             'Sales_Code' => $this->input->post('Sales_Code'),
@@ -771,6 +773,10 @@ class Dashboard extends CI_Controller
             $order_direction = 'asc';
         }
         $order_column = isset($sortable_columns[$order_column_index]) ? $sortable_columns[$order_column_index] : '';
+
+        log_message('info', 'Order Column: ' . $order_column);
+        log_message('info', 'Order Direction: ' . $order_direction);
+        log_message('info', 'Filters: ' . json_encode($filters));
         $total_get_distributors = $this->Distributor_model->getTotal_distributors($search, $zone_ids, $filters);
         $distributors_s = $this->Distributor_model->get_distributors($start, $length, $search, $zone_ids, $order_column, $order_direction, $filters);
 
@@ -2060,7 +2066,10 @@ class Dashboard extends CI_Controller
         $length = $this->input->post('length', TRUE);
         $search = $this->input->post('search', TRUE);
         $order_column_index = $this->input->post('order[0][column]', TRUE);  
-        $order_dir = $this->input->post('order[0][dir]', TRUE);  
+        $order_dir = $this->input->post('order[0][dir]', TRUE); 
+        
+        log_message('debug', 'Order Column Index: ' . $order_column_index);
+        log_message('debug', 'Order Direction: ' . $order_dir);
 
         $columns = [
             'Customer_Code',
@@ -2085,7 +2094,8 @@ class Dashboard extends CI_Controller
 
         $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : ''; 
 
-     
+        log_message('debug', 'Order Column: ' . $order_column);
+        log_message('debug', 'Order Direction: ' . $order_dir);
         if (!in_array($order_dir, ['asc', 'desc'])) {
             $order_dir = 'asc';  
         }
@@ -2192,6 +2202,9 @@ class Dashboard extends CI_Controller
         $order_column_index = $this->input->post('order[0][column]', TRUE);  
         $order_dir = $this->input->post('order[0][dir]', TRUE);  
 
+        log_message('debug', 'Order Column Index: ' . $order_column_index);
+        log_message('debug', 'Order Direction: ' . $order_dir);
+
         $columns = [
             'Customer_Name',
             'Customer_Code',
@@ -2208,21 +2221,26 @@ class Dashboard extends CI_Controller
             'GTM_TYPE',
             'SUPERSTOCKIST',
             'STATUS',
+            'Sales_Code',
+            'Sales_Name',
             'Customer_Type_Name',
             'Customer_Type_Code',
-            'Sales_Name',
-            'Sector_Code',
-            'Sales_Code',
-            'Customer_Group_Name',
-            'Customer_Group_Code',
-            'Customer_Creation_Date',
-            'Division_Name',
-            'Division_Code',
-            'State_Code',
-            'Zone_Code',
             'Distribution_Channel_Code',
             'Distribution_Channel_Name',
+   
+            'Division_Code',
+            'Division_Name',
+            'Customer_Type_Code ',
+            'Customer_Type_Name',
+          
+            'Customer_Group_Code',
+            'Customer_Group_Name',
+            'Customer_Creation_Date',
+            
             'Sector_Name',
+            'Sector_Code',
+            'State_Code',
+            'Zone_Code',
         ];
 
 
@@ -2232,6 +2250,8 @@ class Dashboard extends CI_Controller
 
         $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'Sales_Code'; 
 
+     log_message('debug', 'Order Column: ' . $order_column);
+     log_message('debug', 'Order Direction: ' . $order_dir);
      
         if (!in_array($order_dir, ['asc', 'desc'])) {
             $order_dir = 'asc';  

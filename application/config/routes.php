@@ -171,7 +171,7 @@ $route['admin/Unmapped_Employee'] = 'admin/Employee/Unmapped_Employee';
 
 $route['admin/Unmapped_Employee_csv'] = 'admin/Export_employee/Unmapped_Employee_csv';
 
-
+$route['admin/employee_csv'] = 'admin/Export_employee/employee_csv';
 
 $route['admin/employeedata'] = 'admin/Employee/employeedata';
 
