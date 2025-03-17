@@ -4,10 +4,7 @@
             <div class="dashhead-titles">
                 <h3 class="dashhead-title">Un Mapped Distributors</h3>
             </div>
-            <!-- <div class="dashhead-toolbar">
-                <div class="dashhead-toolbar-item"><a href="#">Hierarchy</a> / Un Mapped Distributors
-                </div>
-            </div> -->
+
         </div>
     </header>
     <div class="main-content bg-clouds">
@@ -56,22 +53,10 @@
                     text: '<i class="fa fa-database"></i> Export  Data',
                     titleAttr: 'Export Filtered Data',
                     action: function() {
-                        var zoneSelect = $('#zoneSelect').val() || [];
-                        var State_Code = $('#State_Code').val() || [];
-                        var City = $('#City').val() || [];
+           
 
                         var params = new URLSearchParams();
-                        if (zoneSelect.length > 0) {
-                            params.append('zoneSelect', JSON.stringify(zoneSelect));
-                        }
-                        if (State_Code.length > 0) {
-                            params.append('State_Code', JSON.stringify(State_Code));
-                        }
-                        if (City.length > 0) {
-                            params.append('City', JSON.stringify(City));
-                        }
-
-
+                
                         var url = '<?php echo base_url("admin/unmapped_distributors_csv"); ?>?' + params.toString();
                         window.location.href = url;
                     }

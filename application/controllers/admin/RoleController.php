@@ -420,6 +420,9 @@ public function create_user()
         redirect('admin/login');
     }
 
+    // Log the input data
+    log_message('info', 'Input data: ' . json_encode($this->input->post()));
+
     // Set validation rules
     $this->form_validation->set_rules('name', 'Name', 'required|trim|min_length[3]');
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]|callback_email_domain_check');
@@ -437,8 +440,12 @@ public function create_user()
         }
 
         $error_message .= "</ul>";
+
+        // Log validation errors
+        log_message('error', 'Validation errors: ' . json_encode($errors));
+
         $this->session->set_flashdata('error', $error_message);
-        redirect('admin/role');
+        redirect('admin/Adduser');
     } else {
         $data = [
             'name' => $this->input->post('name', true),
@@ -450,24 +457,35 @@ public function create_user()
             'created_date' => date('Y-m-d H:i:s')
         ];
 
+        // Log the data being inserted
+        log_message('info', 'Data to be inserted: ' . json_encode($data));
+
         $user_id = $this->Role_model->create_user($data);
 
         if ($user_id) {
+            // Log success
+            log_message('info', 'User created successfully with ID: ' . $user_id);
+
             $this->session->set_flashdata('success', 'User created successfully.');
             redirect('admin/role');
         } else {
+            // Log failure
+            log_message('error', 'User creation failed.');
+
             $this->session->set_flashdata('error', 'User creation failed. Please try again.');
-            redirect('admin/role');
+            redirect('admin/Adduser');
         }
     }
 }
 
+
 public function email_domain_check($email)
 {
-    if (substr($email, -14) === '@adaniwilmar.in') {
+    $domain = '@adaniwilmar.in';
+    if (substr($email, -strlen($domain)) === $domain) {
         return TRUE;
     } else {
-        $this->form_validation->set_message('email_domain_check', 'The {field} field must end with @adaniwilmar.in');
+        $this->form_validation->set_message('email_domain_check', 'The {field} field must end with ' . $domain);
         return FALSE;
     }
 }

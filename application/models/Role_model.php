@@ -248,8 +248,13 @@ class Role_model extends CI_Model
     }
 
 
-    public function getInactiveMappings($search = '', $orderColumnIndex = 0, $orderDirection = 'asc', $length = 10, $start = 0)
+    public function getInactiveMappings($zone_ids, $search = '', $orderColumnIndex = 0, $orderDirection = 'asc', $length = 10, $start = 0)
     {
+
+
+
+
+
         $columns = [
             'a.DB_Code',
             'a.Distribution_Channel_Code',
@@ -259,10 +264,12 @@ class Role_model extends CI_Model
             'a.Customer_Group_Code',
         ];
 
-        $this->db->select('*'); // Select all columns from archived_maping table
-        $this->db->from('archived_maping a'); // Fetch from the archived_maping table
+        $this->db->select('*');
+        $this->db->from('archived_maping a');
 
-        // Apply search filter if provided
+        $this->db->where_in('a.Zone_Code', $zone_ids);
+
+
         if (!empty($search)) {
             $this->db->group_start()
                 ->like('a.DB_Code', $search)
@@ -281,25 +288,27 @@ class Role_model extends CI_Model
                 ->group_end();
         }
 
-        // Sorting
+
         $this->db->order_by($columns[$orderColumnIndex], $orderDirection);
-
-        // Pagination
         $this->db->limit($length, $start);
-
         return $this->db->get()->result_array();
     }
 
-    public function getTotalRecords()
+    public function getTotalRecords( $zone_ids)
     {
         $this->db->from('archived_maping');
-        return $this->db->count_all_results();
+
+        $this->db->where_in('archived_maping.Zone_Code', $zone_ids);
+        return $this->db->count_all_results();   
+
+
     }
 
-    public function getFilteredRecords($search = '')
+    public function getFilteredRecords( $zone_ids ,$search = '')
     {
         $this->db->from('archived_maping');
-        // Apply search filters if necessary
+        $this->db->where_in('archived_maping.Zone_Code', $zone_ids);
+     
         if (!empty($search)) {
             $this->db->group_start()
                 ->like('DB_Code', $search)

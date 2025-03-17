@@ -7,6 +7,11 @@
         background-color: #cccccc;
     }
 
+    .mgscd-menu aside.app-side ul.nav.nav-sub>li a {
+    padding-left: 12px !important;
+}
+
+
 
     #ooooo.nav>li {
         list-style: none;

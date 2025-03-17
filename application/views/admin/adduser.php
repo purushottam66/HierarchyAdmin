@@ -45,6 +45,32 @@
                 <div class="col-md-12">
                     <div class="box shadow-2dp b-r-2">
                         <div class="box-body">
+                            
+
+                        <?php if ($this->session->flashdata('message')): ?>
+                            <div class="alert alert-info">
+                                <?php echo $this->session->flashdata('message'); ?>
+                            </div>
+                        <?php endif; ?>
+
+
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <div class="alert alert-success">
+                                <?php echo $this->session->flashdata('success'); ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($this->session->flashdata('error')): ?>
+                            <div class="alert alert-danger">
+                                <?php echo $this->session->flashdata('error'); ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- 
+                        <?php if ($this->session->flashdata('message')): ?>
+                            <div class="alert alert-<?php echo $this->session->flashdata('message_type'); ?>">
+                                <?php echo $this->session->flashdata('message'); ?>
+                            </div>
+                        <?php endif; ?> -->
                             <div class="form-container">
                                 <form action="<?php echo site_url('admin/create'); ?>" method="post">
                                     <div class="row">

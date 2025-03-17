@@ -14,6 +14,7 @@ class Employee extends CI_Controller
         $this->load->library('email');
 
         $this->load->model('Maping_model');
+        $this->load->model('Zone_model');
         $this->load->model('Distributor_model');
     }
     public function Employee()
@@ -906,18 +907,46 @@ class Employee extends CI_Controller
         }
     }
 
-    // ... rest of your code remains the same ...
+
 
     public function pjp_code_emp_Left()
     {
+
+
+      
+
+       
+        $user_id = $this->session->userdata('back_user_id');
+        if (!$user_id) {
+            log_message('error', 'User not logged in. Redirecting to login.');
+            redirect('admin/login');
+            return;
+        }
+
+        $zone_permissions = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+        $zone_ids = [];
+        foreach ($zone_permissions as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
+     
+
+
+        
         $level = $this->input->post('level');
         $pjp_code = $this->input->post('pjp_code');
-        $search = $this->input->post('search');  // Search Query
-        $limit = $this->input->post('limit') ?? 20; // Default 20 records
-        $page = $this->input->post('page') ?? 1; // Default page 1
-        $offset = ($page - 1) * $limit; // Calculate offset
+        $search = $this->input->post('search');  
+        $limit = $this->input->post('limit') ?? 20; 
+        $page = $this->input->post('page') ?? 1; 
+        $offset = ($page - 1) * $limit; 
 
-        $result = $this->Maping_model->get_pjp_code_by_level($level, $pjp_code, $limit, $offset, $search);
+        $result = $this->Maping_model->get_pjp_code_by_level( $zone_ids, $level, $pjp_code, $limit, $offset, $search);
 
         echo json_encode([
             'status' => 'success',

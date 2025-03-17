@@ -507,30 +507,7 @@
 
     });
 
-    // Function to fetch data and update DataTable
-
-
-
-    // $('#zoneSelect').change(function() {
-    //     $('#State_Code').empty();
-    //     $('#City').empty();
-    //     fetchDataAndUpdate(getParams());
-    // });
-
-    // $('#State_Code').change(function() {
-    //     $('#City').empty();
-    //     fetchDataAndUpdate(getParams());
-    // });
-
-    // $('#City').change(function() {
-    //     fetchDataAndUpdate(getParams());
-    // });
-
-
-
-
-
-
+  
 
 
     function getParams() {

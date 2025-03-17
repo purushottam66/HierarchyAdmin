@@ -655,6 +655,12 @@
                 var designationName = $(this).attr('data-designation_name');
                 var name = $(this).attr('data-name');
 
+                console.log(selectedLevel);
+                
+
+                console.log(selectedPjpCode);
+                
+
                 let mydata =
                     `${selectedData.name}  (${selectedData.id}) (${selectedData.emp_city}) (${selectedData.level})`;
                 $('#selectedEmployees').val(mydata);

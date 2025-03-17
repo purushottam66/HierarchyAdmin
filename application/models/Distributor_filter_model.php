@@ -18,10 +18,17 @@ class Distributor_filter_model extends CI_Model
      * @return array Unique values for hierarchy filters
      */
 
-    public function get_filtered_distributors($params = [])
+    public function get_filtered_distributors($zone_ids, $params = [])
     {
+
+        if (empty($zone_ids) || !is_array($zone_ids)) {
+            return ['data' => [], 'total_count' => 0];
+        }
         $this->db->select('Sales_Code, Sales_Name, Distribution_Channel_Code, Distribution_Channel_Name, Division_Code, Division_Name, Customer_Type_Code, Customer_Type_Name, Customer_Group_Code, Customer_Group_Name, Population_Strata_2,Zone_Code,Zone , State_Code, State, City');
         $this->db->from('distributors');
+
+        $this->db->where_in('distributors.Zone_Code', $zone_ids);
+
 
         if (empty($params)) {
             $this->db->select('Sales_Code, Sales_Name');

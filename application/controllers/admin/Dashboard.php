@@ -83,12 +83,28 @@ class Dashboard extends CI_Controller
 
     public function zone()
     {
-        $data['zone'] = $this->Distributor_model->get_all_zones();
+       
         $user_id = $this->session->userdata('back_user_id');
 
         if (!$user_id) {
             redirect('admin/login');
         }
+
+
+        $data['zone_permissions'] = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+        $zone_ids = [];
+        foreach ($data['zone_permissions'] as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
+
+
 
         if ($user_id) {
             $data['user'] = $this->Role_model->get_user_by_id($user_id);
@@ -103,7 +119,7 @@ class Dashboard extends CI_Controller
             $data['permissions'] = [];
         }
 
-   
+
         $has_view_permission = false;
 
         foreach ($data['permissions'] as $permission) {
@@ -120,8 +136,8 @@ class Dashboard extends CI_Controller
 
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
+        $data['zone'] = $this->Distributor_model->get_all_zones($zone_ids);
 
-   
         $this->load->view('admin/header', $data);
         $this->load->view('admin/zone');
         $this->load->view('admin/footer', $data);
@@ -173,7 +189,7 @@ class Dashboard extends CI_Controller
 
 
 
-    
+
 
 
 
@@ -189,6 +205,33 @@ class Dashboard extends CI_Controller
             redirect('admin/login');
         }
 
+
+
+        $user_id = $this->session->userdata('back_user_id');
+
+
+        if (!$user_id) {
+            redirect('admin/login');
+            return;
+        }
+
+        $data['zone_permissions'] = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+
+        $zone_ids = [];
+        foreach ($data['zone_permissions'] as $permission) {
+            if (isset($permission['zone_id'])) {
+
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
+        if (empty($zone_ids) || !is_array($zone_ids)) {
+            return ['data' => [], 'total_count' => 0];
+        }
 
 
         $rawInput = file_get_contents('php://input');
@@ -273,6 +316,10 @@ class Dashboard extends CI_Controller
                 AND ds.Customer_Type_Code = mp.Customer_Type_Code
                 AND ds.Customer_Group_Code = mp.Customer_Group_Code', 'inner');
 
+            if (!empty($zone_ids)) {
+                $this->db->where_in('ds.Zone_Code', $zone_ids);
+            }
+
             $this->db->join('employee emp1', 'emp1.pjp_code = mp.Level_1 AND emp1.level = 1', 'left');
 
             // For Level_2
@@ -351,7 +398,7 @@ class Dashboard extends CI_Controller
         log_message('info', 'Level: ' . $level . ', ID: ' . $pjp_code);
 
 
-        $result = $this->Maping_model->get_all_Maping_table_ajex_zone($level, $pjp_code , $user_id);
+        $result = $this->Maping_model->get_all_Maping_table_ajex_zone($level, $pjp_code, $user_id);
 
         // Output the result as JSON
         header('Content-Type: application/json');
@@ -600,20 +647,9 @@ class Dashboard extends CI_Controller
             return;
         }
 
-        // Get zone permissions
-        $data['zone_permissions'] = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
 
-        $zone_ids = [];
-        foreach ($data['zone_permissions'] as $permission) {
-            if (isset($permission['zone_id'])) {
-                $decoded_ids = json_decode($permission['zone_id'], true);
-                if (is_array($decoded_ids)) {
-                    $zone_ids = array_merge($zone_ids, $decoded_ids);
-                }
-            }
-        }
 
-        $zone_ids = array_unique($zone_ids);
+
 
         // Retrieve DataTable parameters
         $draw = $this->input->post('draw');
@@ -635,17 +671,32 @@ class Dashboard extends CI_Controller
         }
         $order_column = isset($sortable_columns[$order_column_index]) ? $sortable_columns[$order_column_index] : '';
 
+        // Get zone permissions
+        $data['zone_permissions'] = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
 
-        // Fetch total records and filtered records
-        $total_get_distributors = $this->Distributor_model->getTotal_distributors_unmapped($search, $zone_ids);
+        $zone_ids = [];
+        foreach ($data['zone_permissions'] as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
 
-        $distributors_s = $this->Distributor_model->get_distributors_unmapped($start, $length, $search, $zone_ids, $order_column, $order_direction);
+
+
+
+
+        $total_get_distributors = $this->Distributor_model->getTotal_distributors_unmapped($zone_ids, $search);
+
+        $distributors_s = $this->Distributor_model->get_distributors_unmapped($zone_ids, $start, $length, $search,  $order_column, $order_direction);
 
         $data = array();
         foreach ($distributors_s->result() as $AS_distributors) {
             $row = [];
             foreach ($sortable_columns as $column) {
-                $row[] = isset($AS_distributors->$column) ? $AS_distributors->$column : ''; // Dynamically populate row
+                $row[] = isset($AS_distributors->$column) ? $AS_distributors->$column : '';
             }
             $data[] = array(
                 $AS_distributors->Customer_Name,
@@ -679,7 +730,7 @@ class Dashboard extends CI_Controller
 
                 $AS_distributors->Customer_Group_Code,
                 $AS_distributors->Customer_Group_Name,
-             
+
                 $AS_distributors->Customer_Creation_Date,
                 $AS_distributors->Sector_Name,
                 $AS_distributors->Sector_Code,
@@ -693,7 +744,7 @@ class Dashboard extends CI_Controller
             'recordsTotal' => $total_get_distributors,
             'recordsFiltered' => $total_get_distributors,
             'data' => $data,
-            'columns' => $sortable_columns // This will send the column titles to the DataTable
+            'columns' => $sortable_columns
 
         );
 
@@ -735,7 +786,7 @@ class Dashboard extends CI_Controller
             }
         }
 
-        $zone_ids = array_unique($zone_ids);
+       // $zone_ids = array_unique($zone_ids);
 
         $draw = $this->input->post('draw');
         $start = $this->input->post('start');
@@ -743,9 +794,8 @@ class Dashboard extends CI_Controller
         $search = $this->input->post('search');
         $order = $this->input->post('order');
 
-        log_message('info', 'Order: ' . json_encode($order));
 
-      
+
         $filters = array(
             'Sales_Code' => $this->input->post('Sales_Code'),
             'Distribution_Channel_Code' => $this->input->post('Distribution_Channel_Code'),
@@ -756,15 +806,15 @@ class Dashboard extends CI_Controller
             'Zone' => $this->input->post('Zone')
         );
 
-       
+
         $filters = array_filter($filters, function ($value) {
             return $value !== null && $value !== '';
         });
 
-   
+
         $sortable_columns = $this->get_table_columns('distributors');
 
-       
+
         if (isset($order[0])) {
             $order_column_index = isset($order[0]['column']) ? $order[0]['column'] : 0;
             $order_direction = isset($order[0]['dir']) ? $order[0]['dir'] : 'asc';
@@ -774,11 +824,9 @@ class Dashboard extends CI_Controller
         }
         $order_column = isset($sortable_columns[$order_column_index]) ? $sortable_columns[$order_column_index] : '';
 
-        log_message('info', 'Order Column: ' . $order_column);
-        log_message('info', 'Order Direction: ' . $order_direction);
-        log_message('info', 'Filters: ' . json_encode($filters));
-        $total_get_distributors = $this->Distributor_model->getTotal_distributors($search, $zone_ids, $filters);
-        $distributors_s = $this->Distributor_model->get_distributors($start, $length, $search, $zone_ids, $order_column, $order_direction, $filters);
+
+        $total_get_distributors = $this->Distributor_model->getTotal_distributors( $zone_ids,$search,  $filters);
+        $distributors_s = $this->Distributor_model->get_distributors($zone_ids, $start, $length, $search,  $order_column, $order_direction, $filters);
 
         $data = array();
         foreach ($distributors_s->result() as $AS_distributors) {
@@ -820,13 +868,13 @@ class Dashboard extends CI_Controller
 
                 $AS_distributors->Customer_Group_Code,
                 $AS_distributors->Customer_Group_Name,
-             
+
                 $AS_distributors->Customer_Creation_Date,
                 $AS_distributors->Sector_Name,
                 $AS_distributors->Sector_Code,
                 $AS_distributors->State_Code,
                 $AS_distributors->Zone_Code,
-          
+
             );
         }
 
@@ -1629,25 +1677,25 @@ class Dashboard extends CI_Controller
 
     public function designations_ajex()
     {
-      
-        $designation_id = $this->input->post('id'); 
-        
+
+        $designation_id = $this->input->post('id');
+
         $this->load->model('Designation_model');
-    
+
         if ($designation_id) {
-            
+
             $designations = $this->Designation_model->get_designation_by_id($designation_id);
         } else {
-         
+
             $designations = $this->Designation_model->get_all_designations();
         }
-    
-      
+
+
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($designations));
     }
-    
+
 
 
 
@@ -1924,6 +1972,18 @@ class Dashboard extends CI_Controller
             return;
         }
 
+        $zone_permissions = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+        $zone_ids = [];
+        foreach ($zone_permissions as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
         // Pagination parameters
         $draw = $this->input->POST('draw');
         $start = $this->input->POST('start', TRUE);
@@ -1985,8 +2045,8 @@ class Dashboard extends CI_Controller
         ];
 
         // Fetch all data with filters
-        $all_mapping_data = $this->Maping_model->get_maping_d_count($search, $filters);
-        $maping_data = $this->Maping_model->get_maping_d($start, $length, $search, $filters, $order_column_name, $order_dir);
+        $all_mapping_data = $this->Maping_model->get_maping_d_count($zone_ids, $search, $filters);
+        $maping_data = $this->Maping_model->get_maping_d($zone_ids, $start, $length, $search, $filters, $order_column_name, $order_dir);
 
         // Apply unique filtering (as in your earlier implementation)
         $unique_data = [];
@@ -2049,11 +2109,11 @@ class Dashboard extends CI_Controller
 
     public function usermovement_ajex()
     {
-        
+
 
         header('Content-Type: application/json');
 
-       
+
         $user_id = $this->session->userdata('back_user_id');
         if (!$user_id) {
             log_message('error', 'User not logged in. Redirecting to login.');
@@ -2061,13 +2121,25 @@ class Dashboard extends CI_Controller
             return;
         }
 
+        $zone_permissions = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+        $zone_ids = [];
+        foreach ($zone_permissions as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
         $draw = $this->input->post('draw');
         $start = $this->input->post('start', TRUE);
         $length = $this->input->post('length', TRUE);
         $search = $this->input->post('search', TRUE);
-        $order_column_index = $this->input->post('order[0][column]', TRUE);  
-        $order_dir = $this->input->post('order[0][dir]', TRUE); 
-        
+        $order_column_index = $this->input->post('order[0][column]', TRUE);
+        $order_dir = $this->input->post('order[0][dir]', TRUE);
+
         log_message('debug', 'Order Column Index: ' . $order_column_index);
         log_message('debug', 'Order Direction: ' . $order_dir);
 
@@ -2083,24 +2155,24 @@ class Dashboard extends CI_Controller
             'Customer_Type_Name',
             'Customer_Group_Code',
             'Customer_Group_Name',
-      
-   
+
+
         ];
 
 
 
-       
 
 
-        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : ''; 
+
+        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : '';
 
         log_message('debug', 'Order Column: ' . $order_column);
         log_message('debug', 'Order Direction: ' . $order_dir);
         if (!in_array($order_dir, ['asc', 'desc'])) {
-            $order_dir = 'asc';  
+            $order_dir = 'asc';
         }
 
-    
+
         $filters = [
             'Sales_Code' => $this->input->post('Sales_Code') ?: [],
             'Distribution_Channel_Code' => $this->input->post('Distribution_Channel_Code') ?: [],
@@ -2111,12 +2183,12 @@ class Dashboard extends CI_Controller
         ];
 
 
-        $all_mapping_data = $this->Maping_model->get_maping_d_count($search, $filters);
-        $maping_data = $this->Maping_model->get_maping_d($start, $length, $search, $filters, $order_column, $order_dir);
+        $all_mapping_data = $this->Maping_model->get_maping_d_count($zone_ids, $search, $filters);
+        $maping_data = $this->Maping_model->get_maping_d($zone_ids, $start, $length, $search, $filters, $order_column, $order_dir);
 
 
 
-    
+
         $unique_data = [];
         foreach ($maping_data as $item) {
             $unique_key = implode('|', [
@@ -2159,7 +2231,7 @@ class Dashboard extends CI_Controller
             }
         }
 
-   
+
         $unique_data = array_values($unique_data);
 
 
@@ -2183,11 +2255,9 @@ class Dashboard extends CI_Controller
 
     public function hierarchydata_ajex()
     {
-        
+
 
         header('Content-Type: application/json');
-
-       
         $user_id = $this->session->userdata('back_user_id');
         if (!$user_id) {
             log_message('error', 'User not logged in. Redirecting to login.');
@@ -2195,15 +2265,32 @@ class Dashboard extends CI_Controller
             return;
         }
 
+
+        $zone_permissions = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+        $zone_ids = [];
+        foreach ($zone_permissions as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
+        //log_message('debug', 'Zone IDs: ' . json_encode($zone_ids));
+
+
+
+
         $draw = $this->input->post('draw');
         $start = $this->input->post('start', TRUE);
         $length = $this->input->post('length', TRUE);
         $search = $this->input->post('search', TRUE);
-        $order_column_index = $this->input->post('order[0][column]', TRUE);  
-        $order_dir = $this->input->post('order[0][dir]', TRUE);  
+        $order_column_index = $this->input->post('order[0][column]', TRUE);
+        $order_dir = $this->input->post('order[0][dir]', TRUE);
 
-        log_message('debug', 'Order Column Index: ' . $order_column_index);
-        log_message('debug', 'Order Direction: ' . $order_dir);
+
 
         $columns = [
             'Customer_Name',
@@ -2227,37 +2314,28 @@ class Dashboard extends CI_Controller
             'Customer_Type_Code',
             'Distribution_Channel_Code',
             'Distribution_Channel_Name',
-   
+
             'Division_Code',
             'Division_Name',
             'Customer_Type_Code ',
             'Customer_Type_Name',
-          
+
             'Customer_Group_Code',
             'Customer_Group_Name',
             'Customer_Creation_Date',
-            
+
             'Sector_Name',
             'Sector_Code',
             'State_Code',
             'Zone_Code',
         ];
 
-
-
-       
-
-
-        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'Sales_Code'; 
-
-     log_message('debug', 'Order Column: ' . $order_column);
-     log_message('debug', 'Order Direction: ' . $order_dir);
-     
+        $order_column = isset($columns[$order_column_index]) ? $columns[$order_column_index] : 'Sales_Code';
         if (!in_array($order_dir, ['asc', 'desc'])) {
-            $order_dir = 'asc';  
+            $order_dir = 'asc';
         }
 
-    
+
         $filters = [
             'Sales_Code' => $this->input->post('Sales_Code') ?: [],
             'Distribution_Channel_Code' => $this->input->post('Distribution_Channel_Code') ?: [],
@@ -2268,12 +2346,10 @@ class Dashboard extends CI_Controller
         ];
 
 
-        $all_mapping_data = $this->Maping_model->get_maping_d_count($search, $filters);
-        $maping_data = $this->Maping_model->get_maping_d($start, $length, $search, $filters, $order_column, $order_dir);
+        $all_mapping_data = $this->Maping_model->get_maping_d_count($zone_ids, $search, $filters);
+        $maping_data = $this->Maping_model->get_maping_d($zone_ids, $start, $length, $search, $filters, $order_column, $order_dir);
 
 
-
-    
         $unique_data = [];
         foreach ($maping_data as $item) {
             $unique_key = implode('|', [
@@ -2316,11 +2392,8 @@ class Dashboard extends CI_Controller
             }
         }
 
-   
+
         $unique_data = array_values($unique_data);
-
-
-
         $response = [
             'draw' => $draw,
             'recordsTotal' => count($all_mapping_data),
@@ -2479,19 +2552,43 @@ class Dashboard extends CI_Controller
 
     public function fetchInactiveMappings()
     {
+
+
+        $user_id = $this->session->userdata('back_user_id');
+
+        if (!$user_id) {
+            redirect('admin/login');
+            return;
+        }
+
+        // Get zone permissions
+        $data['zone_permissions'] = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+        $zone_ids = [];
+        foreach ($data['zone_permissions'] as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
+
+
         if ($this->input->is_ajax_request()) {
             $search = $this->input->post('search')['value'] ?? '';
             $orderColumnIndex = $this->input->post('order')[0]['column'] ?? 0;
             $orderDirection = $this->input->post('order')[0]['dir'] ?? 'asc';
-            $length = $this->input->post('length') ?? 10; // Records per page
-            $start = $this->input->post('start') ?? 0; // Offset
+            $length = $this->input->post('length') ?? 10;
+            $start = $this->input->post('start') ?? 0;
 
-            $dataTableData = $this->Role_model->getInactiveMappings($search, $orderColumnIndex, $orderDirection, $length, $start);
+            $dataTableData = $this->Role_model->getInactiveMappings($zone_ids, $search, $orderColumnIndex, $orderDirection, $length, $start);
 
             $response = [
-                'draw' => intval($this->input->post('draw')), // DataTables draw count
-                'recordsTotal' => $this->Role_model->getTotalRecords(), // Total records in the database
-                'recordsFiltered' => $this->Role_model->getFilteredRecords($search), // Filtered records count
+                'draw' => intval($this->input->post('draw')),
+                'recordsTotal' => $this->Role_model->getTotalRecords($zone_ids),
+                'recordsFiltered' => $this->Role_model->getFilteredRecords($zone_ids, $search),
                 'data' => $dataTableData,
             ];
 

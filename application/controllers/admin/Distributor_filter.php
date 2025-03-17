@@ -10,12 +10,16 @@ class Distributor_filter extends CI_Controller {
         $this->load->model('Distributor_filter_model');
         $this->load->model('Role_model');
         $this->load->model('Distributor_model');
+        $this->load->model('Zone_model');
         
         // Load necessary libraries
         $this->load->library('form_validation');
     }
 
     public function get_hierarchy_filter_options() {
+
+
+
         // Validate user authentication
         $user_id = $this->session->userdata('back_user_id');
         if (!$user_id) {
@@ -25,9 +29,24 @@ class Distributor_filter extends CI_Controller {
                 ->set_output(json_encode(['error' => 'Unauthorized']));
             return;
         }
+
     
         // Load Distributor Model
         $this->load->model('Distributor_filter_model');
+        $data['zone_permissions'] = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+
+        $zone_ids = [];
+        foreach ($data['zone_permissions'] as $permission) {
+            if (isset($permission['zone_id'])) {
+
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+    
     
         // Fetch filter parameters from GET request
         $params = [
@@ -45,7 +64,7 @@ class Distributor_filter extends CI_Controller {
         ];
     
         // Fetch data from Distributor_model based on filters
-        $data = $this->Distributor_filter_model->get_filtered_distributors($params);
+        $data = $this->Distributor_filter_model->get_filtered_distributors($zone_ids , $params);
     
         // Return JSON response
         $this->output

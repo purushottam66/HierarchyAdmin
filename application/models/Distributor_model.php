@@ -37,7 +37,7 @@ class Distributor_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
 
 
 
@@ -251,9 +251,16 @@ class Distributor_model extends CI_Model
     }
 
 
-    public function get_all_zones()
+    public function get_all_zones($zone_ids)
     {
+
+
+        if (empty($zone_ids)) {
+            return [];
+        }
+
         $this->db->select('Zone_Code, Zone');
+        $this->db->where_in('Zone_Code', $zone_ids);
         $this->db->group_by('Zone_Code');
         $query = $this->db->get('distributors');
 
@@ -695,8 +702,12 @@ class Distributor_model extends CI_Model
 
 
 
-    public function get_distributors($start, $length, $search = '', $zone_ids = [], $order_column = '', $order_direction = '', $filters = [])
+    public function get_distributors($zone_ids, $start, $length, $search = '',  $order_column = '', $order_direction = '', $filters = [])
     {
+
+        if (empty($zone_ids)) {
+            return $this->db->query("SELECT * FROM distributors WHERE 1=0");
+        }
         // Start building the query
         $this->db->from('distributors'); // Specify the table name
 
@@ -788,8 +799,15 @@ class Distributor_model extends CI_Model
 
 
 
-    public function getTotal_distributors($search = '', $zone_ids = [], $filters = [])
+    public function getTotal_distributors($zone_ids, $search = '',  $filters = [])
     {
+
+        if (empty($zone_ids)) {
+            return 0;
+        }
+
+
+
         $this->db->from('distributors');
 
         // Filter by zone if zone_ids are provided
@@ -862,32 +880,31 @@ class Distributor_model extends CI_Model
     }
 
 
-    
 
 
 
-    public function get_distributors_unmapped($start, $length, $search = '', $zone_ids = [], $order_column = '', $order_direction = '')
+
+    public function get_distributors_unmapped($zone_ids, $start, $length, $search = '',  $order_column = '', $order_direction = '')
     {
-       
-        if (!is_array($zone_ids)) {
-            $zone_ids = [];
+        if (empty($zone_ids)) {
+            return $this->db->query("SELECT * FROM distributors WHERE 1=0");
         }
 
-      
+
         $search = is_string($search) ? $search : '';
 
 
         $this->db->select('d.*');
         $this->db->from('distributors d');
 
-    
+        $this->db->where('d.Customer_Code NOT IN (SELECT DB_Code FROM maping)');
         if (!empty($zone_ids)) {
             $this->db->where_in('d.Zone_Code', $zone_ids);
         }
 
-       
+
         if (!empty($search)) {
-            $this->db->group_start(); 
+            $this->db->group_start();
             $this->db->like('d.Customer_Name', $search);
             $this->db->or_like('d.Customer_Code', $search);
             $this->db->or_like('d.Pin_Code', $search);
@@ -919,40 +936,47 @@ class Distributor_model extends CI_Model
             $this->db->group_end(); // End grouping
         }
 
-       
+
         $valid_columns = ['Customer_Name', 'Customer_Code', 'Pin_Code', 'City', 'District', 'Zone', 'State', 'Population_Strata_1', 'Population_Strata_2', 'Country_Group', 'GTM_TYPE', 'SUPERSTOCKIST', 'STATUS', 'Sales_Code', 'Customer_Type_Name'];
         if (!in_array($order_column, $valid_columns)) {
-            $order_column = 'Customer_Name'; 
+            $order_column = 'Customer_Name';
         }
 
-     
+
         $this->db->order_by($order_column, $order_direction);
 
-  
+
         $this->db->limit($length, $start);
 
-    
+
         $query = $this->db->get();
 
         // Debugging: Check the SQL query being executed
-       // log_message('debug', 'SQL Query: ' . $this->db->last_query());
+        // log_message('debug', 'SQL Query: ' . $this->db->last_query());
 
-     
+
         return $query;
     }
 
 
 
-    public function getTotal_distributors_unmapped($search = '', $zone_ids = [])
+    public function getTotal_distributors_unmapped($zone_ids, $search = '')
     {
+
+        if (empty($zone_ids)) {
+            return 0;
+        }
+
         $this->db->select('d.*');
 
         $this->db->from('distributors d');
 
-        $this->db->where('d.Customer_Code NOT IN (SELECT DB_Code FROM maping)');
+   
 
+
+        $this->db->where('d.Customer_Code NOT IN (SELECT DB_Code FROM maping)');
         if (!empty($zone_ids)) {
-            $this->db->where_in('d.Zone_Code', $zone_ids);
+            $this->db->where_in('Zone_Code', $zone_ids);
         }
 
         if ($search) {
