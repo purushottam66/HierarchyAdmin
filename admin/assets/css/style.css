@@ -1006,7 +1006,3 @@ ul {
   color: rgb(255, 255, 255);
   color: rgb(var(--dt-row-selected-text));
 } */
-
-.hidden-db-code{
-  width: 1200px !important;
-}

@@ -1779,7 +1779,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu .box-body {
-	padding: 10px 12px;
+	padding: 10px 15px;
 	border-bottom-left-radius: inherit;
 	border-bottom-right-radius: inherit;
 	-webkit-flex: 1 1 auto !important;
