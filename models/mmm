@@ -1,2 +1,0 @@
-CREATE INDEX idx_maping_distributor ON maping (DB_Code, Sales_Code, Distribution_Channel_Code, Division_Code, Customer_Type_Code, Customer_Group_Code);
-CREATE INDEX idx_distributor ON distributors (Customer_Code, Sales_Code, Distribution_Channel_Code, Division_Code, Customer_Type_Code, Customer_Group_Code);
