@@ -1352,6 +1352,19 @@ class Dashboard extends CI_Controller
             $data['permissions'] = [];
         }
 
+        $has_view_permission = false;
+        foreach ($data['permissions'] as $permission) {
+            if ($permission['module_name'] === 'User Movement' && $permission['view'] === 'yes') {
+                $has_view_permission = true;
+                break;
+            }
+        }
+
+        if (!$has_view_permission) {
+             redirect('admin/Access_denied');
+            exit;
+        }
+
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
         // echo json_encode($data['permissions']);

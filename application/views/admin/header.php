@@ -8,6 +8,8 @@
     <title>Masters</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
+    <meta http-equiv="Cache-Control" content="no-store" />
+
 
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="<?php echo base_url('admin/assets/img/ms-icon-144x144.png'); ?>">

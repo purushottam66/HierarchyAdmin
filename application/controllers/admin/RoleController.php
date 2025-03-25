@@ -99,7 +99,6 @@ class RoleController extends CI_Controller
         }
 
 
-
         $hasPermission = false;
         if (!empty($data['permissions']) && is_array($data['permissions'])) {
             foreach ($data['permissions'] as $p) {
