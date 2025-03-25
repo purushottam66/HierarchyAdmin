@@ -41,9 +41,7 @@
                                                 </tr>
                                             <?php endforeach; ?>
                                         <?php else: ?>
-                                            <tr>
-                                                <td colspan="2">No zone found</td>
-                                            </tr>
+                              
                                         <?php endif; ?>
                                     </tbody>
                                 </table>

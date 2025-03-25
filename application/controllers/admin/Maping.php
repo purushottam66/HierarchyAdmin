@@ -167,7 +167,7 @@ class Maping extends CI_Controller
 
      
         if (!$hasPermission) {
-            print_r("You do not have permission to access this page.");
+            redirect('admin/Access_denied');
             return;
         }
 

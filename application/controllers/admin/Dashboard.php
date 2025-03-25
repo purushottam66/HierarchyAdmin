@@ -130,7 +130,8 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+           
+             redirect('admin/Access_denied');
             exit;
         }
 
@@ -914,7 +915,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
 
@@ -948,7 +949,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
 
@@ -1004,7 +1005,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
 
@@ -1052,7 +1053,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
 
@@ -1099,7 +1100,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
 
@@ -1224,7 +1225,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
 

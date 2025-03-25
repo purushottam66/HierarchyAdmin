@@ -251,8 +251,10 @@ class Role_model extends CI_Model
     public function getInactiveMappings($zone_ids, $search = '', $orderColumnIndex = 0, $orderDirection = 'asc', $length = 10, $start = 0)
     {
 
-
-
+        if (empty($zone_ids)) {
+            return 0;
+        }
+        
 
 
         $columns = [
@@ -296,6 +298,13 @@ class Role_model extends CI_Model
 
     public function getTotalRecords( $zone_ids)
     {
+
+
+        if (empty($zone_ids)) {
+            return 0;
+        }
+        
+
         $this->db->from('archived_maping');
 
         $this->db->where_in('archived_maping.Zone_Code', $zone_ids);
@@ -306,6 +315,12 @@ class Role_model extends CI_Model
 
     public function getFilteredRecords( $zone_ids ,$search = '')
     {
+
+        
+        if (empty($zone_ids)) {
+            return 0;
+        }
+        
         $this->db->from('archived_maping');
         $this->db->where_in('archived_maping.Zone_Code', $zone_ids);
      

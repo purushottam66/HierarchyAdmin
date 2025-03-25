@@ -60,7 +60,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
@@ -78,7 +78,7 @@ class Employee extends CI_Controller
 
 
         if (!$hasPermission) {
-            print_r("You do not have permission to access this page.");
+            redirect('admin/Access_denied');
             return;
         }
 
@@ -173,7 +173,7 @@ class Employee extends CI_Controller
 
 
         if (!$hasPermission) {
-            print_r("You do not have permission to access this page.");
+            redirect('admin/Access_denied');
             return;
         }
 
@@ -1036,7 +1036,7 @@ class Employee extends CI_Controller
 
 
         if (!$hasPermission) {
-            print_r("You do not have permission to access this page.");
+            redirect('admin/Access_denied');
             return;
         }
 
@@ -1112,7 +1112,7 @@ class Employee extends CI_Controller
 
 
         if (!$hasPermission) {
-            print_r("You do not have permission to access this page.");
+            redirect('admin/Access_denied');
             return;
         }
 
@@ -1394,7 +1394,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
@@ -1443,7 +1443,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
@@ -1739,7 +1739,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
 
@@ -1952,7 +1952,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-            echo "<h3>Access Denied: You do not have permission to view this page.</h3>";
+             redirect('admin/Access_denied');
             exit;
         }
 

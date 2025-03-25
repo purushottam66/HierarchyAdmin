@@ -204,7 +204,7 @@
         </div>
         <div class="row justify-content-center py-0">
             <div class="col-md-7 col-12 p-0 mt-0 text-center">
-                <img src="<?= base_url("assets/welcome.png") ?>" width="500" alt="...">
+                <img src="<?= base_url("admin/assets/logo_1.png") ?>" width="500" alt="...">
                 <div class="login-img">
                     <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel"
                         data-bs-wrap="true" data-bs-interval="2000">

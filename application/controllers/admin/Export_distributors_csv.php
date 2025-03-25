@@ -15,6 +15,7 @@ class Export_distributors_csv extends CI_Controller
         $this->load->model('Employee_model');
         $this->load->library('email');
 
+        $this->load->model('Zone_model');
         $this->load->model('Maping_model');
         $this->load->model('Distributor_model');
     }
@@ -23,7 +24,29 @@ class Export_distributors_csv extends CI_Controller
     public function unmapped_distributors_csv()
     {
 
-        $data = $this->Distributor_model->unmapped_Distributors_csv();
+        $user_id = $this->session->userdata('back_user_id');
+
+        if (!$user_id) {
+            redirect('admin/login');
+            return;
+        }
+
+        $data['zone_permissions'] = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+        $zone_ids = [];
+        foreach ($data['zone_permissions'] as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
+
+
+
+        $data = $this->Distributor_model->unmapped_Distributors_csv($zone_ids);
         $fileName = 'distributor_data' . date('Ymd') . '.csv';
 
         header("Content-Type: text/csv");
@@ -111,7 +134,28 @@ class Export_distributors_csv extends CI_Controller
     public function distributors_csv()
     {
 
-        $data = $this->Distributor_model->get_all_distributors();
+        $user_id = $this->session->userdata('back_user_id');
+
+        if (!$user_id) {
+            redirect('admin/login');
+            return;
+        }
+
+        $data['zone_permissions'] = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+        $zone_ids = [];
+        foreach ($data['zone_permissions'] as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
+
+
+        $data = $this->Distributor_model->get_all_distributors_csv($zone_ids);
         $fileName = 'distributor_data' . date('Ymd') . '.csv';
 
         header("Content-Type: text/csv");
@@ -197,6 +241,26 @@ class Export_distributors_csv extends CI_Controller
 
     public function export_distributors_csv()
     {
+
+        $user_id = $this->session->userdata('back_user_id');
+
+        if (!$user_id) {
+            redirect('admin/login');
+            return;
+        }
+
+        $data['zone_permissions'] = $this->Zone_model->get_zone_permissions_by_user_id($user_id);
+
+        $zone_ids = [];
+        foreach ($data['zone_permissions'] as $permission) {
+            if (isset($permission['zone_id'])) {
+                $decoded_ids = json_decode($permission['zone_id'], true);
+                if (is_array($decoded_ids)) {
+                    $zone_ids = array_merge($zone_ids, $decoded_ids);
+                }
+            }
+        }
+
        
         $customer_group_code = $this->input->get('Customer_Group_Code');
         $customer_type_code = $this->input->get('Customer_Type_Code');
@@ -225,7 +289,7 @@ class Export_distributors_csv extends CI_Controller
         $city = $city ? json_decode($city, true) : [];
         $search = $search ? json_decode($search, true) : [];
 
-        $data = $this->Distributor_model->get_all_distributors_filtered(
+        $data = $this->Distributor_model->get_all_distributors_filtered($zone_ids,
             $customer_group_code,
             $customer_type_code,
             $distribution_channel_code,

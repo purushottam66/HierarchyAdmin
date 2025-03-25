@@ -28,11 +28,18 @@ class Distributor_model extends CI_Model
     }
 
 
-    public function unmapped_Distributors_csv()
+    public function unmapped_Distributors_csv($zone_ids)
     {
+
+        if (empty($zone_ids)) {
+            return [];
+        }
+        
+
         $this->db->select('d.*');
         $this->db->from('distributors d');
         $this->db->join('maping m', 'd.Customer_Code = m.DB_Code', 'left');
+        $this->db->where_in('Zone_Code', $zone_ids);
         $this->db->where('m.DB_Code IS NULL'); // Select only unmapped distributors
         $query = $this->db->get();
         return $query->result_array();
@@ -58,11 +65,37 @@ class Distributor_model extends CI_Model
         return $query->result_array();
     }
 
-
-
-
-    public function get_all_distributors_filtered($customer_group_code = [], $customer_type_code = [], $distribution_channel_code = [], $division_code = [], $population_strata_2 = [], $sales_code = [], $zone = [], $state_code = [], $city = [], $search = [])
+    
+    public function get_all_distributors_csv($zone_ids)
     {
+
+        if (empty($zone_ids)) {
+            return [];
+        }
+        
+        $this->db->select('*');
+        $this->db->from('distributors d');
+        $this->db->where_in('Zone_Code', $zone_ids);
+
+
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
+
+
+    public function get_all_distributors_filtered($zone_ids ,$customer_group_code = [], $customer_type_code = [], $distribution_channel_code = [], $division_code = [], $population_strata_2 = [], $sales_code = [], $zone = [], $state_code = [], $city = [], $search = [])
+    {
+
+        if (empty($zone_ids)) {
+            return [];
+        }
+        
+        
+
+
         $this->db->select('
         mp.id,
         mp.DB_Code,
@@ -158,6 +191,10 @@ class Distributor_model extends CI_Model
         $this->db->join('employee emp6', 'emp6.pjp_code = mp.Level_6 AND emp6.level = 6', 'left');
         $this->db->join('employee emp7', 'emp7.pjp_code = mp.Level_7 AND emp7.level = 7', 'left');
 
+        if (!empty($zone_ids)) {
+            $this->db->where_in('ds.Zone_Code', $zone_ids);
+        }
+
         if (!empty($customer_group_code)) {
             $this->db->where_in('mp.Customer_Group_Code', $customer_group_code);
         }
@@ -197,10 +234,6 @@ class Distributor_model extends CI_Model
 
         if (!empty($search)) {
             $search = $this->db->escape_like_str($search);
-
-            // log_message('debug', 'Search applied with escaped term: ' . $search);
-            // log_message('debug', 'Building search query...');
-
             $escaped_search = $this->db->escape_like_str($search);
             $this->db->group_start();
             $this->db->like('ds.Customer_Code', $escaped_search);
@@ -233,8 +266,6 @@ class Distributor_model extends CI_Model
             $this->db->or_like('ds.Sales_Name', $escaped_search);
             $this->db->or_like('ds.Division_Name', $escaped_search);
             $this->db->or_like('ds.Sector_Name', $escaped_search);
-
-
             $this->db->or_like('emp1.name', $escaped_search);
             $this->db->or_like('emp2.name', $escaped_search);
             $this->db->or_like('emp3.name', $escaped_search);
@@ -256,8 +287,9 @@ class Distributor_model extends CI_Model
 
 
         if (empty($zone_ids)) {
-            return [];
+            return 0;
         }
+        
 
         $this->db->select('Zone_Code, Zone');
         $this->db->where_in('Zone_Code', $zone_ids);
