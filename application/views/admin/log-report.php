@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" class="rel">
+
+
 <div class="app-main">
     <header class="main-heading shadow-2dp">
         <div class="dashhead bg-white">
@@ -14,7 +17,7 @@
                     <div class="box shadow-2dp b-r-2">
                         <div class="box-body">
                             <div class="table-responsive">
-                                <table id="example" class="table table-bordered table-hover text-center">
+                                <table id="example__" class="display nowrap table table-bordered table-hover text-center" style="width:100%">
                                     <thead>
                                         <tr>
                                    
@@ -56,3 +59,20 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example__').DataTable({
+            paging: true,
+            searching: true,
+            info: true,
+            autoWidth: false,  
+            responsive: true,  
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100]
+        });
+    });
+</script>
