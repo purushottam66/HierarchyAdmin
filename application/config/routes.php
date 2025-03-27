@@ -69,6 +69,7 @@ $route['admin/mapinglist'] = 'admin/Maping/mapinglist';
 
 $route['admin/submit_maping'] = 'admin/Maping/submit_maping';
 $route['admin/gcpdata'] = 'admin/dashboard/gcpdata';
+$route['admin/logreport'] = 'admin/dashboard/logreport';
 $route['admin/hierarchydata'] = 'admin/dashboard/hierarchydata';
 $route['admin/UserMovement'] = 'admin/dashboard/hierarchydata__';
 

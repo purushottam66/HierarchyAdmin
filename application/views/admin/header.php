@@ -425,6 +425,26 @@
                                     <?php endforeach; ?>
                                 <?php endif; ?>
 
+
+
+                                <?php if (!empty($permissions)) : ?>
+                                    <?php foreach ($permissions as $permission) : ?>
+                                        <?php if ($permission['module_name'] == 'Log Report' && $permission['view'] == 'yes') : ?>
+                                            <li>
+                                                <a class="<?php echo ($current_page == 'admin/logreport') ? 'active' : ''; ?>"
+                                                    href="<?php echo base_url('admin/logreport'); ?>">
+                                                    <span class="nav-icon">
+                                                        <img src="<?php echo base_url('admin/assets/icons/cron.png'); ?>" alt=""
+                                                            style="height:20px">
+                                                    </span>
+                                                    <span class="nav-title">Log Report</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-divider"></li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
                                 <li>
                                     <a href="<?php echo base_url('admin/logout'); ?>">
                                         <span class="nav-icon">

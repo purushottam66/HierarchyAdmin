@@ -1239,6 +1239,55 @@ class Dashboard extends CI_Controller
     }
 
 
+    public function logreport()
+    {
+        $user_id = $this->session->userdata('back_user_id');
+
+        if (!$user_id) {
+            redirect('admin/login');
+            return;
+        }
+
+
+        $data['division'] = $this->Distributor_model->get_unique_Division_Name();
+        if ($user_id) {
+            $data['user'] = $this->Role_model->get_user_by_id($user_id);
+            if ($data['user']) {
+
+                $data['permissions'] = $this->Role_model->get_permissions_by_role($user_id);
+            } else {
+                $data['permissions'] = [];
+            }
+        } else {
+            $data['user'] = null;
+            $data['permissions'] = [];
+        }
+
+
+        $has_view_permission = false;
+
+        foreach ($data['permissions'] as $permission) {
+            if ($permission['module_name'] === 'Log Report' && $permission['view'] === 'yes') {
+                $has_view_permission = true;
+                break;
+            }
+        }
+
+        if (!$has_view_permission) {
+             redirect('admin/Access_denied');
+            exit;
+        }
+
+
+        $data['user'] = $this->Role_model->get_user_by_id($user_id);
+        $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
+
+        $this->load->view('admin/header', $data);
+        $this->load->view('admin/log-report', $data);
+        $this->load->view('admin/footer', $data);
+    }
+
+
 
     public function hierarchydata()
     {
@@ -2428,6 +2477,7 @@ class Dashboard extends CI_Controller
 
 
 
+    
 
 
 

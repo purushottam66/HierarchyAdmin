@@ -1347,14 +1347,14 @@ GROUP BY
         return null;
     }
 
-    public function get_pjp_code_by_level($zone_ids, $level, $pjp_code, $limit = 20, $offset = 0, $search = '')
+    public function get_pjp_code_by_level( $level, $pjp_code, $limit = 20, $offset = 0, $search = '')
     {
 
 
 
-        if (empty($zone_ids) || !is_array($zone_ids)) {
-            return ['data' => [], 'total_count' => 0];
-        }
+        // if (empty($zone_ids) || !is_array($zone_ids)) {
+        //     return ['data' => [], 'total_count' => 0];
+        // }
 
 
         $level_column = 'Level_' . intval($level);
@@ -1376,9 +1376,9 @@ GROUP BY
 
         $this->db->where("m.$level_column", $pjp_code);
 
-        if (!empty($zone_ids)) {
-            $this->db->where_in('d.Zone_Code', $zone_ids);
-        }
+        // if (!empty($zone_ids)) {
+        //     $this->db->where_in('d.Zone_Code', $zone_ids);
+        // }
 
         // Apply search if provided
         if (!empty($search)) {

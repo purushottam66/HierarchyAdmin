@@ -320,7 +320,7 @@
                                         </div>
 
                                         <input type="hidden" id="password" class="selectpicker form-control"
-                                            name="password" value="123456789" placeholder="Enter Password" required>
+                                            name="password" value="test@test" placeholder="Enter Password" required>
 
 
                                     </div>

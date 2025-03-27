@@ -946,7 +946,7 @@ class Employee extends CI_Controller
         $page = $this->input->post('page') ?? 1; 
         $offset = ($page - 1) * $limit; 
 
-        $result = $this->Maping_model->get_pjp_code_by_level( $zone_ids, $level, $pjp_code, $limit, $offset, $search);
+        $result = $this->Maping_model->get_pjp_code_by_level(  $level, $pjp_code, $limit, $offset, $search);
 
         echo json_encode([
             'status' => 'success',

@@ -45,27 +45,27 @@
                 <div class="col-md-12">
                     <div class="box shadow-2dp b-r-2">
                         <div class="box-body">
-                            
-
-                        <?php if ($this->session->flashdata('message')): ?>
-                            <div class="alert alert-info">
-                                <?php echo $this->session->flashdata('message'); ?>
-                            </div>
-                        <?php endif; ?>
 
 
-                        <?php if ($this->session->flashdata('success')): ?>
-                            <div class="alert alert-success">
-                                <?php echo $this->session->flashdata('success'); ?>
-                            </div>
-                        <?php endif; ?>
-                        <?php if ($this->session->flashdata('error')): ?>
-                            <div class="alert alert-danger">
-                                <?php echo $this->session->flashdata('error'); ?>
-                            </div>
-                        <?php endif; ?>
+                            <?php if ($this->session->flashdata('message')): ?>
+                                <div class="alert alert-info">
+                                    <?php echo $this->session->flashdata('message'); ?>
+                                </div>
+                            <?php endif; ?>
 
-                        <!-- 
+
+                            <?php if ($this->session->flashdata('success')): ?>
+                                <div class="alert alert-success">
+                                    <?php echo $this->session->flashdata('success'); ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($this->session->flashdata('error')): ?>
+                                <div class="alert alert-danger">
+                                    <?php echo $this->session->flashdata('error'); ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- 
                         <?php if ($this->session->flashdata('message')): ?>
                             <div class="alert alert-<?php echo $this->session->flashdata('message_type'); ?>">
                                 <?php echo $this->session->flashdata('message'); ?>
@@ -118,10 +118,13 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="password">Password</label>
-                                                <input type="text" id="password" max="8" class="form-control" name="password"
-                                                    placeholder="Enter Password" required>
+                                                <input type="password" id="password" maxlength="20" class="form-control" name="password"
+                                                    placeholder="Enter Password" required
+                                                    pattern="(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}">
+                                                <small>Password must be 8 characters long, include 1 uppercase, 1 number, and 1 special character.</small>
                                             </div>
                                         </div>
+
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="address">Address</label>
@@ -174,4 +177,17 @@
             feedback.style.display = 'block';
         }
     });
+</script>
+
+<script>
+document.getElementById("password").addEventListener("input", function() {
+    let password = this.value;
+    let regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/;
+    
+    if (!regex.test(password)) {
+        this.setCustomValidity("Password must be 8 characters long, include 1 uppercase letter, 1 number, and 1 special character.");
+    } else {
+        this.setCustomValidity("");
+    }
+});
 </script>

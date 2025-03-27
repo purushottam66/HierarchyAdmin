@@ -21,6 +21,7 @@
     <!-- Custom CSS -->
 
     <link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeBUgErAAAAAAwrosAa8FxTc-wOxtt0c7L92iyl"></script>
 
 
 
@@ -172,6 +173,14 @@
     <script src="<?php echo base_url('assets/js/imagesloaded.pkgd.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/js/validator.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/js/main.js'); ?>"></script>
+
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LeBUgErAAAAAOfYtqGLbNXP_YO2KcIWq8NzHBXv', { action: 'submit' }).then(function(token) {
+                document.getElementById('recaptchaToken').value = token;
+            });
+        });
+    </script>
 
 
 </body>

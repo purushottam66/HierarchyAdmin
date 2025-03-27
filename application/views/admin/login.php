@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/style.css'); ?>">
 
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeBUgErAAAAAAwrosAa8FxTc-wOxtt0c7L92iyl"></script>
+
 
 
     <style>
@@ -267,6 +269,7 @@
 
 
                     <form action="<?php echo base_url('admin/login'); ?>" method="post" id="form">
+                 
                         <div class="login-logo align-items-center text-center pb-1">
                             <img class="logo_imgsw" style="width: 50%;" src="assets/image.png" alt="Login Logo">
                         </div>
@@ -384,6 +387,15 @@
                 submitButton.disabled = true;
             }
         }
+    </script>
+
+    
+<script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LeBUgErAAAAAOfYtqGLbNXP_YO2KcIWq8NzHBXv', { action: 'submit' }).then(function(token) {
+                document.getElementById('recaptchaToken').value = token;
+            });
+        });
     </script>
 
 </body>
