@@ -12,6 +12,8 @@ class Dashboard extends CI_Controller
         $this->load->model('Role_model');
         $this->load->model('Zone_model');
 
+        $this->load->model('Log_report');
+
 
         $this->load->model('Distributor_model');
 
@@ -1243,13 +1245,15 @@ class Dashboard extends CI_Controller
     {
         $user_id = $this->session->userdata('back_user_id');
 
+       
+
         if (!$user_id) {
             redirect('admin/login');
             return;
         }
 
 
-        $data['division'] = $this->Distributor_model->get_unique_Division_Name();
+        $data['log'] = $this->Log_report->get_all_Log_report();
         if ($user_id) {
             $data['user'] = $this->Role_model->get_user_by_id($user_id);
             if ($data['user']) {
@@ -1262,6 +1266,9 @@ class Dashboard extends CI_Controller
             $data['user'] = null;
             $data['permissions'] = [];
         }
+
+
+     
 
 
         $has_view_permission = false;

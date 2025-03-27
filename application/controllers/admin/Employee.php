@@ -13,6 +13,9 @@ class Employee extends CI_Controller
         $this->load->model('Employee_model');
         $this->load->library('email');
 
+
+        $this->load->model('Log_report');
+
         $this->load->model('Maping_model');
         $this->load->model('Zone_model');
         $this->load->model('Distributor_model');
@@ -60,7 +63,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
@@ -913,9 +916,9 @@ class Employee extends CI_Controller
     {
 
 
-      
 
-       
+
+
         $user_id = $this->session->userdata('back_user_id');
         if (!$user_id) {
             log_message('error', 'User not logged in. Redirecting to login.');
@@ -935,18 +938,18 @@ class Employee extends CI_Controller
             }
         }
 
-     
 
 
-        
+
+
         $level = $this->input->post('level');
         $pjp_code = $this->input->post('pjp_code');
-        $search = $this->input->post('search');  
-        $limit = $this->input->post('limit') ?? 20; 
-        $page = $this->input->post('page') ?? 1; 
-        $offset = ($page - 1) * $limit; 
+        $search = $this->input->post('search');
+        $limit = $this->input->post('limit') ?? 20;
+        $page = $this->input->post('page') ?? 1;
+        $offset = ($page - 1) * $limit;
 
-        $result = $this->Maping_model->get_pjp_code_by_level(  $level, $pjp_code, $limit, $offset, $search);
+        $result = $this->Maping_model->get_pjp_code_by_level($level, $pjp_code, $limit, $offset, $search);
 
         echo json_encode([
             'status' => 'success',
@@ -1285,6 +1288,11 @@ class Employee extends CI_Controller
     {
         $back_user_id = $this->session->userdata('back_user_id');
 
+        $user_name = $this->session->userdata('user_name');
+
+
+
+
         if (!$back_user_id) {
             redirect('admin/login');
         }
@@ -1350,8 +1358,21 @@ class Employee extends CI_Controller
             'created_at' => date('Y-m-d H:i:s')
         );
 
+
+
         // Insert employee data
         if ($this->Employee_model->insert_employee($data)) {
+
+            // $log_data = array(
+            //     'table_name' => 'User',
+            //     'key_id' => $employee_id,
+            //     'variable' => 'Email',
+            //     'old_value' => $email,
+            //     'new_value' => $email,
+            //     'timestamp' => date('Y-m-d H:i:s'),
+            //     'updated_by' =>   $user_name
+            // );
+            // $this->Log_report->create_log($log_data);
             echo json_encode(['status' => 'success', 'message' => 'Employee added successfully.']);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Failed to add employee.']);
@@ -1394,7 +1415,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
@@ -1443,7 +1464,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
@@ -1739,7 +1760,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -1860,6 +1881,8 @@ class Employee extends CI_Controller
     public function submit_employee_edit($id)
     {
         $back_user_id = $this->session->userdata('back_user_id');
+
+        $user_name = $this->session->userdata('user_name');
         if (!$back_user_id) {
             redirect('admin/login');
         }
@@ -1888,6 +1911,9 @@ class Employee extends CI_Controller
             // If validation passes, update the employee data
             date_default_timezone_set('Asia/Kolkata');
 
+            $oldData = $this->Employee_model->get_employee_by_id($id);
+
+
             $updatedData = [
                 'name' => $this->input->post('name'),
                 'employer_name' => $this->input->post('employer_name'),
@@ -1905,7 +1931,27 @@ class Employee extends CI_Controller
                 'updated_at' => date('Y-m-d H:i:s')
             ];
 
+
+        
+            $log_entries = [];
+            foreach ($updatedData as $key => $new_value) {
+                if (isset($oldData[$key]) && $oldData[$key] != $new_value) { 
+                    $log_entries[] = [
+                        'table_name' => 'User',
+                        'key_id' => $id,
+                        'variable' => $key,
+                        'old_value' => $oldData[$key],
+                        'new_value' => $new_value,
+                        'timestamp' => date('Y-m-d H:i:s'),
+                        'updated_by' => $user_name
+                    ];
+                }
+            }
+
             $this->Employee_model->update_employee($id, $updatedData);
+            if (!empty($log_entries)) {
+                $this->Log_report->create_multiple_logs($log_entries);
+            }
             $this->session->set_flashdata('success', 'Employee details updated successfully.');
             redirect('admin/userdetails');
         }
@@ -1952,7 +1998,7 @@ class Employee extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
