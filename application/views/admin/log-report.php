@@ -72,7 +72,16 @@
             autoWidth: false,  
             responsive: true,  
             pageLength: 10,
-            lengthMenu: [10, 25, 50, 100]
+            lengthMenu: [10, 25, 50, 100],
+            dom: '<"d-flex bd-highlight"<"p-2 flex-grow-1 bd-highlight"l><"p-2 bd-highlight"f><"p-2 bd-highlight"B>>t<"bottom"ip><"clear">',
+
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: 'Download CSV',
+                    title: 'Log_Report'
+                }
+            ]
         });
     });
 </script>
