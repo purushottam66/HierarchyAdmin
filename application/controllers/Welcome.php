@@ -238,42 +238,112 @@ class Welcome extends CI_Controller
     }
 
 
-
     public function loginuser()
     {
-        $email = $this->input->post('email');
+        date_default_timezone_set('Asia/Kolkata'); // Set the time zone
+    
+        // Retrieve form data
+        $email    = $this->input->post('email');
         $password = $this->input->post('password');
-
+        $recaptchaResponse = $this->input->post('g-recaptcha-response');
+    
         if (empty($email) || empty($password)) {
             $this->session->set_flashdata('error', 'Email and Password are required.');
             redirect('login');
         }
-        $user = $this->Employee_model->get_user_by_email_password($email, $password);
-
+    
+        // Validate reCAPTCHA response
+        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
+        if (!$recaptchaResult['success']) {
+            $this->session->set_flashdata('error', 'reCAPTCHA verification failed. Please try again.');
+            redirect('login');
+        }
+    
+        // Continue with user login (fetch user by email, verify password, etc.)
+        $user = $this->Employee_model->get_user_by_email($email);
         if ($user) {
-
-            if ($user->employee_status == 'active') {
-
+            if ($user->employee_status != 'active') {
+                $this->session->set_flashdata('error', 'Your account is inactive. Please contact admin.');
+                redirect('login');
+            }
+            if (password_verify($password, $user->password)) {
+                // Reset failed attempts on successful login
+                $this->Employee_model->reset_login_attempts($user->id);
+                // Set session data
                 $session_data = array(
                     'frant_user_id' => $user->id,
-                    'user_name' => $user->name,
-                    'pjp_code' => $user->pjp_code,
-                    'email' => $user->email,
-                    'level' => $user->level,
-                    'logged_in' => true
+                    'user_name'     => $user->name,
+                    'pjp_code'      => $user->pjp_code,
+                    'email'         => $user->email,
+                    'level'         => $user->level,
+                    'logged_in'     => true
                 );
                 $this->session->set_userdata($session_data);
                 redirect('/');
             } else {
-                $this->session->set_flashdata('error', 'Your account is inactive. Please contact admin.');
-                redirect('login');
+                // Handle failed login (you can add your failed attempt logic here)
+                $this->handle_failed_login($user->id, $user->failed_attempts);
             }
         } else {
-
             $this->session->set_flashdata('error', 'Invalid email or password.');
             redirect('login');
         }
     }
+    
+    /**
+     * Verify reCAPTCHA token using Google's siteverify endpoint.
+     */
+    private function verifyRecaptcha($token)
+    {
+        $secretKey = '6LeBggIrAAAAADdgzrYnYjdRokkHTPPG-jwRatGw'; // Replace with your reCAPTCHA secret key
+        $verifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
+    
+        // Prepare POST data
+        $postData = http_build_query([
+            'secret'   => $secretKey,
+            'response' => $token
+        ]);
+    
+        // Use file_get_contents with a stream context to POST the data
+        $contextOptions = [
+            'http' => [
+                'method'  => 'POST',
+                'header'  => "Content-Type: application/x-www-form-urlencoded\r\n",
+                'content' => $postData
+            ]
+        ];
+        $context = stream_context_create($contextOptions);
+        $response = file_get_contents($verifyUrl, false, $context);
+        return json_decode($response, true);
+    }
+    
+    
+
+    private function handle_failed_login($user_id, $failed_attempts)
+    {
+        date_default_timezone_set('Asia/Kolkata'); // Set timezone
+        $new_attempts = $failed_attempts + 1;
+        $lock_time = null;
+        $status = 'active'; // Default status remains active
+    
+        if ($new_attempts >= 3 && $new_attempts < 6) {
+            $lock_time = date('Y-m-d H:i:s', strtotime('+1 hour')); // Lock for 1 hour
+        } elseif ($new_attempts >= 6 && $new_attempts < 9) {
+            $lock_time = date('Y-m-d H:i:s', strtotime('+4 hours')); // Lock for 4 hours
+        } elseif ($new_attempts >= 9 && $new_attempts < 12) {
+            $lock_time = date('Y-m-d H:i:s', strtotime('+24 hours')); // Lock for 24 hours
+        } elseif ($new_attempts >= 12) {
+            $status = 'inactive'; // Permanently lock the account
+        }
+    
+        // Update failed attempts, lock time, and status
+        $this->Employee_model->update_login_attempts($user_id, $new_attempts, $lock_time, $status);
+    
+        $this->session->set_flashdata('error', 'Invalid email or password.');
+        redirect('login');
+    }
+    
+
 
 
 

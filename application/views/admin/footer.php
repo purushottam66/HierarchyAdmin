@@ -33,7 +33,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: rgba(255, 255, 255, 0.4); /* Semi-transparent background */
+        background: rgba(255, 255, 255, 0.4);
+        /* Semi-transparent background */
         width: 100vw;
         height: 100vh;
     }
@@ -48,6 +49,7 @@
         from {
             transform: rotate(0deg);
         }
+
         to {
             transform: rotate(360deg);
         }
@@ -56,8 +58,10 @@
     /* Blur effect for body */
     .blurred {
         filter: blur(5px);
-        pointer-events: none; /* Disable clicks */
-        user-select: none; /* Disable text selection */
+        pointer-events: none;
+        /* Disable clicks */
+        user-select: none;
+        /* Disable text selection */
     }
 </style>
 
@@ -181,7 +185,7 @@
 
         var menuPaths = [
             'admin/zone',
- 
+
             'admin/salesorg',
             'admin/distributionchannel',
             'admin/division',
@@ -236,6 +240,8 @@
         });
     });
 </script>
+
+
 
 
 </body>

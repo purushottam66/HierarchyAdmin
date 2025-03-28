@@ -21,10 +21,9 @@
     <!-- Custom CSS -->
 
     <link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
-    <script src="https://www.google.com/recaptcha/api.js?render=6LeBUgErAAAAAAwrosAa8FxTc-wOxtt0c7L92iyl"></script>
 
 
-
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LeBggIrAAAAAGG4rxNONrTxW-5HahxgedGGUBOe"></script>
 
 </head>
 
@@ -123,20 +122,23 @@
                         <div class="fxt-form">
 
                             <?php if ($this->session->flashdata('error')): ?>
-                            <div class="alert alert-danger">
-                                <?php echo $this->session->flashdata('error'); ?>
-                            </div>
+                                <div class="alert alert-danger">
+                                    <?php echo $this->session->flashdata('error'); ?>
+                                </div>
                             <?php endif; ?>
                             <?php if ($this->session->flashdata('success')): ?>
-                            <div class="alert alert-success">
-                                <?php echo $this->session->flashdata('success'); ?>
-                            </div>
+                                <div class="alert alert-success">
+                                    <?php echo $this->session->flashdata('success'); ?>
+                                </div>
                             <?php endif; ?>
 
 
                             <br>
-                            <form action="<?php echo base_url('Welcome/loginuser'); ?>" method="post"
+                            <form id="loginForm" action="<?php echo base_url('Welcome/loginuser'); ?>" method="post"
                                 autocomplete="off">
+
+                                <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+
                                 <div class="form-group">
                                     <input type="email" id="email" autocomplete="new-email" class="form-control"
                                         name="email" placeholder="Enter Email" required="required">
@@ -174,10 +176,16 @@
     <script src="<?php echo base_url('assets/js/validator.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 
+
+
     <script>
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6LeBUgErAAAAAOfYtqGLbNXP_YO2KcIWq8NzHBXv', { action: 'submit' }).then(function(token) {
-                document.getElementById('recaptchaToken').value = token;
+    
+        grecaptcha.enterprise.ready(function() {
+            grecaptcha.enterprise.execute('6LeBggIrAAAAAGG4rxNONrTxW-5HahxgedGGUBOe', {
+                action: 'login'
+            }).then(function(token) {
+          
+                document.getElementById('g-recaptcha-response').value = token;
             });
         });
     </script>

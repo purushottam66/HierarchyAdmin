@@ -12,10 +12,8 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/style.css'); ?>">
 
-    <script src="https://www.google.com/recaptcha/api.js?render=6LeBUgErAAAAAAwrosAa8FxTc-wOxtt0c7L92iyl"></script>
 
-
-
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LeBggIrAAAAAGG4rxNONrTxW-5HahxgedGGUBOe"></script>
     <style>
         #submitButton {
             background-color: #444444;
@@ -269,7 +267,10 @@
 
 
                     <form action="<?php echo base_url('admin/login'); ?>" method="post" id="form">
-                 
+
+                    <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+
+
                         <div class="login-logo align-items-center text-center pb-1">
                             <img class="logo_imgsw" style="width: 50%;" src="assets/image.png" alt="Login Logo">
                         </div>
@@ -335,6 +336,8 @@
     <script src="<?php echo base_url('admin/assets/js/imagesloaded.pkgd.min.js'); ?>"></script>
     <script src="<?php echo base_url('admin/assets/js/validator.min.js'); ?>"></script>
     <script src="<?php echo base_url('admin/assets/js/main.js'); ?>"></script>
+  
+
 
 
 
@@ -389,11 +392,17 @@
         }
     </script>
 
-    
+
+
+
 <script>
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6LeBUgErAAAAAOfYtqGLbNXP_YO2KcIWq8NzHBXv', { action: 'submit' }).then(function(token) {
-                document.getElementById('recaptchaToken').value = token;
+
+        grecaptcha.enterprise.ready(function() {
+            grecaptcha.enterprise.execute('6LeBggIrAAAAAGG4rxNONrTxW-5HahxgedGGUBOe', {
+                action: 'login'
+            }).then(function(token) {
+        
+                document.getElementById('g-recaptcha-response').value = token;
             });
         });
     </script>

@@ -140,4 +140,34 @@ class User_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+
+    public function get_user_by_email($email)
+{
+    return $this->db->where('email', $email)->get('users')->row_array();
+}
+
+public function update_login_attempts($user_id, $failed_attempts, $lock_time, $status)
+{
+    $data = [
+        'failed_attempts' => $failed_attempts,
+        'status' => $status // Update account status (0 = disabled)
+    ];
+
+    if ($lock_time) {
+        $data['lock_until'] = date('Y-m-d H:i:s', strtotime($lock_time));
+    }
+
+    $this->db->where('id', $user_id)->update('users', $data);
+}
+
+
+public function reset_login_attempts($user_id)
+{
+    $this->db->where('id', $user_id)->update('users', [
+        'failed_attempts' => 0,
+        'lock_until' => null
+    ]);
+}
+
 }
