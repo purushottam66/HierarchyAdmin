@@ -7,6 +7,12 @@ class RoleController extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+
+
+        $this->output->set_header('X-Content-Type-Options: nosniff');
+        
+        $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+        $this->output->set_header('X-XSS-Protection: 1; mode=block');
         $this->load->library('session');
         $this->load->model('Role_model');
         $this->load->library('form_validation');
@@ -15,8 +21,6 @@ class RoleController extends CI_Controller
         $this->load->helper('form');
         $this->load->model('Zone_model');
         $this->load->model('Distributor_model');
-
-
     }
 
 
@@ -45,7 +49,7 @@ class RoleController extends CI_Controller
             $data['permissions'] = [];
         }
 
-        
+
         $hasPermission = false;
         if (!empty($data['permissions']) && is_array($data['permissions'])) {
             foreach ($data['permissions'] as $p) {
@@ -56,7 +60,7 @@ class RoleController extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             redirect('admin/Access_denied');
             return;
@@ -109,13 +113,13 @@ class RoleController extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             redirect('admin/Access_denied');
             return;
         }
 
-        
+
 
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
@@ -173,7 +177,7 @@ class RoleController extends CI_Controller
         //     }
         // }
 
-     
+
         // if (!$hasPermission) {
         //     redirect('admin/Access_denied');
         //     return;
@@ -236,7 +240,7 @@ class RoleController extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             redirect('admin/Access_denied');
             return;
@@ -288,7 +292,7 @@ class RoleController extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             redirect('admin/Access_denied');
             return;
@@ -397,7 +401,7 @@ class RoleController extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             redirect('admin/Access_denied');
             return;
@@ -410,84 +414,84 @@ class RoleController extends CI_Controller
 
 
 
-public function create_user()
-{
-    $back_user_id = $this->session->userdata('back_user_id');
+    public function create_user()
+    {
+        $back_user_id = $this->session->userdata('back_user_id');
 
-    if (!$back_user_id) {
-        $this->session->set_flashdata('error', 'Please log in to continue.');
-        redirect('admin/login');
-    }
-
-    // Log the input data
-    log_message('info', 'Input data: ' . json_encode($this->input->post()));
-
-    // Set validation rules
-    $this->form_validation->set_rules('name', 'Name', 'required|trim|min_length[3]');
-    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]|callback_email_domain_check');
-    $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|min_length[10]|max_length[15]');
-    $this->form_validation->set_rules('address', 'Address', 'required|trim|min_length[5]');
-    $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
-    $this->form_validation->set_rules('role', 'Role', 'required|numeric');
-
-    if ($this->form_validation->run() == FALSE) {
-        $errors = $this->form_validation->error_array();
-        $error_message = "<ul>";
-
-        foreach ($errors as $field => $error) {
-            $error_message .= "<li><strong>" . ucfirst($field) . ":</strong> " . $error . "</li>";
+        if (!$back_user_id) {
+            $this->session->set_flashdata('error', 'Please log in to continue.');
+            redirect('admin/login');
         }
 
-        $error_message .= "</ul>";
+        // Log the input data
+        log_message('info', 'Input data: ' . json_encode($this->input->post()));
 
-        // Log validation errors
-        log_message('error', 'Validation errors: ' . json_encode($errors));
+        // Set validation rules
+        $this->form_validation->set_rules('name', 'Name', 'required|trim|min_length[3]');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]|callback_email_domain_check');
+        $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|min_length[10]|max_length[15]');
+        $this->form_validation->set_rules('address', 'Address', 'required|trim|min_length[5]');
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
+        $this->form_validation->set_rules('role', 'Role', 'required|numeric');
 
-        $this->session->set_flashdata('error', $error_message);
-        redirect('admin/Adduser');
-    } else {
-        $data = [
-            'name' => $this->input->post('name', true),
-            'email' => $this->input->post('email', true),
-            'mobile' => $this->input->post('mobile', true),
-            'address' => $this->input->post('address', true),
-            'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-            'role_id' => $this->input->post('role', true),
-            'created_date' => date('Y-m-d H:i:s')
-        ];
+        if ($this->form_validation->run() == FALSE) {
+            $errors = $this->form_validation->error_array();
+            $error_message = "<ul>";
 
-        // Log the data being inserted
-        log_message('info', 'Data to be inserted: ' . json_encode($data));
+            foreach ($errors as $field => $error) {
+                $error_message .= "<li><strong>" . ucfirst($field) . ":</strong> " . $error . "</li>";
+            }
 
-        $user_id = $this->Role_model->create_user($data);
+            $error_message .= "</ul>";
 
-        if ($user_id) {
-            // Log success
-            log_message('info', 'User created successfully with ID: ' . $user_id);
+            // Log validation errors
+            log_message('error', 'Validation errors: ' . json_encode($errors));
 
-            $this->session->set_flashdata('success', 'User created successfully.');
-            redirect('admin/role');
-        } else {
-            // Log failure
-            log_message('error', 'User creation failed.');
-
-            $this->session->set_flashdata('error', 'User creation failed. Please try again.');
+            $this->session->set_flashdata('error', $error_message);
             redirect('admin/Adduser');
+        } else {
+            $data = [
+                'name' => $this->input->post('name', true),
+                'email' => $this->input->post('email', true),
+                'mobile' => $this->input->post('mobile', true),
+                'address' => $this->input->post('address', true),
+                'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+                'role_id' => $this->input->post('role', true),
+                'created_date' => date('Y-m-d H:i:s')
+            ];
+
+            // Log the data being inserted
+            log_message('info', 'Data to be inserted: ' . json_encode($data));
+
+            $user_id = $this->Role_model->create_user($data);
+
+            if ($user_id) {
+                // Log success
+                log_message('info', 'User created successfully with ID: ' . $user_id);
+
+                $this->session->set_flashdata('success', 'User created successfully.');
+                redirect('admin/role');
+            } else {
+                // Log failure
+                log_message('error', 'User creation failed.');
+
+                $this->session->set_flashdata('error', 'User creation failed. Please try again.');
+                redirect('admin/Adduser');
+            }
         }
     }
-}
 
 
-public function email_domain_check($email)
-{
-    $domain = '@adaniwilmar.in';
-    if (substr($email, -strlen($domain)) === $domain) {
-        return TRUE;
-    } else {
-        $this->form_validation->set_message('email_domain_check', 'The {field} field must end with ' . $domain);
-        return FALSE;
+    public function email_domain_check($email)
+    {
+        $domain = '@adaniwilmar.in';
+        if (substr($email, -strlen($domain)) === $domain) {
+            return TRUE;
+        } else {
+            $this->form_validation->set_message('email_domain_check', 'The {field} field must end with ' . $domain);
+            return FALSE;
+        }
     }
-}
 
 
 

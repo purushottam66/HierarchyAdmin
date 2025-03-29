@@ -22,8 +22,10 @@
 
     <link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
 
-
     <script src="https://www.google.com/recaptcha/enterprise.js?render=6LeBggIrAAAAAGG4rxNONrTxW-5HahxgedGGUBOe"></script>
+
+
+    <!-- <script src= <?php echo base_url('admin/assets/js//enterprise.js?render=6LeBggIrAAAAAGG4rxNONrTxW-5HahxgedGGUBOe'); ?>></script> -->
 
 </head>
 

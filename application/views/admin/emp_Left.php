@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" class="rel">
+  <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/buttons.dataTables.css'); ?>">
 
 <style>
     .btnss {
@@ -336,7 +336,7 @@
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>
 
 
 

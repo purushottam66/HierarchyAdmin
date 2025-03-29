@@ -20,18 +20,14 @@
     <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/vendor.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/dashboard-menu-theme-default.css'); ?>">
 
-    <link rel='stylesheet' href='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.css'>
+    <link rel='stylesheet' href=  "<?php echo base_url('admin/assets/css/sweet-alert.css'); ?>">
 
     <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/dataTables.dataTables.css'); ?>">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" class="rel">
+    <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/buttons.dataTables.css'); ?>">
 
-    <link rel='stylesheet'
-        href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css'>
-
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-   
-
-
+    <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/bootstrap-select.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/toastr.min.css'); ?>">
+    <!-- <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/style.css'); ?>"> -->
 
 
 
@@ -451,7 +447,7 @@
                                 <li>
                                     <a href="<?php echo base_url('admin/logout'); ?>">
                                         <span class="nav-icon">
-                                            <img src="https://cdn1.iconfinder.com/data/icons/heroicons-ui/24/logout-512.png"
+                                            <img src= <?php echo base_url('admin/assets/7612790.png'); ?>
                                                 alt="" style="height:30px">
                                         </span>
                                         <span class="nav-title btn btn-danger setfont_Logout">Logout</span>

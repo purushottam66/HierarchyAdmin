@@ -278,7 +278,8 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>
+
 
 <script>
     $(document).ready(function() {
@@ -434,7 +435,7 @@
                     $('#designation_label').empty();
 
                     $('#designation_label_name').val(response.Designation_Label);
-              
+
 
                     if (response.id) {
                         $('#designation_label').append('<option value="' + response.id + '" data-name="' + response.id + '">' + response.Designation_Label + '</option>');

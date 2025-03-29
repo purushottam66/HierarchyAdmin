@@ -10,7 +10,15 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php/$1 [L]
+
+    # Allow everything in Content-Security-Policy (CSP)
+    Header always set Content-Security-Policy "default-src * 'unsafe-inline' 'unsafe-eval';"
+
+
+    
 </IfModule>
+
+
 
 # Increase max input vars
 php_value max_input_vars 10000

@@ -1,5 +1,5 @@
-<!-- <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" class="rel"> -->
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" class="rel">
+<!-- <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/dataTables.dataTables.css'); ?>"> -->
+  <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/buttons.dataTables.css'); ?>">
 
 
 
@@ -134,11 +134,11 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="<?php echo base_url('admin/assets/css/sweetalert2.min.css'); ?>">
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+<script src="<?php echo base_url('admin/assets/js/sweetalert2.min.js'); ?>"></script>
 
 
 <script>

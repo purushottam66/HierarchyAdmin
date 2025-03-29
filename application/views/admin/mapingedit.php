@@ -29,7 +29,7 @@
 
 
 <div class="app-main">
-    <header class="main-heading shadow-2dp">    
+    <header class="main-heading shadow-2dp">
         <div class="dashhead bg-white">
             <div class="dashhead-titles">
                 <h3 class="dashhead-title">Hierarchy Edit</h3>
@@ -342,8 +342,8 @@
 
                                     <button type="submit" class="btn btnss ">Submit</button> &#8202;
                                     <a href="#" class="href" onclick="history.back(); return false;">
-    <button type="button" class="btn btnss bg-danger">Back</button>
-</a>
+                                        <button type="button" class="btn btnss bg-danger">Back</button>
+                                    </a>
 
 
                                     <br><br>
@@ -373,4 +373,4 @@
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>

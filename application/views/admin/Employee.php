@@ -196,7 +196,7 @@
                                                 <label for="level">Level</label>
                                                 <select class="selectpicker  form-control" id="level" name="level"
                                                     required>
-                                                  
+
                                                     <?php foreach ($level as $levels): ?>
                                                         <option value="<?php echo $levels['level_id']; ?>">
                                                             <?php echo $levels['level_name']; ?></option>
@@ -258,7 +258,7 @@
 
 
 
-              
+
 
 
 
@@ -343,9 +343,11 @@
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>
+<script src="<?php echo base_url('admin/assets/js/sweetalert2.js'); ?>"></script>
+
+
+
 <script>
     $(document).ready(function() {
         $('#employeeForm').on('submit', function(e) {

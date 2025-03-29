@@ -166,10 +166,11 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+<link rel="stylesheet" href="<?php echo base_url('admin/assets/css/sweetalert2.min.css'); ?>">
+<script src="<?php echo base_url('admin/assets/js/sweetalert2.min.js'); ?>"></script>
 
 <script>
     $(document).on('click', '.delete-btn', function() {
@@ -219,21 +220,21 @@
         buttonsList.push({
             text: '<i class="fa fa-download"></i> Export',
             titleAttr: 'Export',
-       action: function() {
-           var search = $('#dt-search-0').val();
-           
-           // Initialize params before using it
-           var params = new URLSearchParams();
-       
-           if (search.length > 0) {
-               params.append('dt-search-0', JSON.stringify(search));
-           }
-       
-           var url = '<?php echo base_url("admin/employee_csv"); ?>?' + params.toString();
-           window.location.href = url;
-       
-           console.log(url);
-       }
+            action: function() {
+                var search = $('#dt-search-0').val();
+
+                // Initialize params before using it
+                var params = new URLSearchParams();
+
+                if (search.length > 0) {
+                    params.append('dt-search-0', JSON.stringify(search));
+                }
+
+                var url = '<?php echo base_url("admin/employee_csv"); ?>?' + params.toString();
+                window.location.href = url;
+
+                console.log(url);
+            }
         });
         var table = $('#example11').DataTable({
             paging: true,

@@ -8,15 +8,7 @@
     <title>Sales Hierarchy</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <link rel="apple-touch-icon" sizes="57x57" href="assets/img/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="assets/img/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="assets/img/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="assets/img/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="assets/img/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="assets/img/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="assets/img/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-icon-180x180.png">
+
     <link rel="icon" type="image/png" sizes="192x192" href="assets/img/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon-96x96.png">
@@ -30,8 +22,9 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/css/fontawesome/all.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/vendor.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/dashboard-menu-theme-default.css'); ?>">
-    <!-- <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css'> -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="<?php echo base_url('assets/css/dataTables.bootstrap5.css'); ?>">
+
+    
 
 
     <style>
@@ -720,8 +713,10 @@
     <script src="<?php echo base_url('assets/js/mgsdashboard.js'); ?>"></script>
 
 
-    <script src='https://cdn.datatables.net/2.0.8/js/dataTables.js'></script>
-    <script src='https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js'></script>
+
+    <script src="<?php echo base_url('assets/js/dataTables.js'); ?>"></script>
+    <script src="<?php echo base_url('assets/js/dataTables.bootstrap5.js'); ?>"></script>
+
 
 
 

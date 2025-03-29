@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" class="rel">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" class="rel">
+<link rel="stylesheet" href="<?php echo base_url('admin/assets/css/dataTables.dataTables.css'); ?>">
+<link rel="stylesheet" href="<?php echo base_url('admin/assets/css/buttons.dataTables.css'); ?>">
 
 
 <style>
@@ -154,7 +154,8 @@
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>
+
 
 
 
@@ -303,7 +304,7 @@
                         error: error,
                         code: code
                     });
-                    
+
                 },
             },
             columns: [{
