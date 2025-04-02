@@ -10,9 +10,9 @@ class Login extends CI_Controller
         parent::__construct();
 
         $this->output->set_header('X-Content-Type-Options: nosniff');
-        	//
-            $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
-            $this->output->set_header('X-XSS-Protection: 1; mode=block');
+        //
+        $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+        $this->output->set_header('X-XSS-Protection: 1; mode=block');
         $this->load->model('User_model');
         $this->load->library('email');
     }

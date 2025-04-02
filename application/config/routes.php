@@ -18,8 +18,8 @@ $route['update-password'] = 'welcome/update_password';
 
 
 
-$route['admin/login'] = 'admin/Login/index'; // Directly maps to the login method of the Login controller
-$route['admin'] = 'admin/Login'; // Maps '/admin' to the Login controller's index method
+// $route['admin/login'] = 'admin/Login/index'; 
+// $route['admin/login'] = 'admin/Login'; 
 
 
 $route['admin/forgot-password'] = 'admin/Login/forgot_password';
@@ -36,7 +36,7 @@ $route['admin/change-password'] = 'admin/Login/change_password';
 
 
 
-$route['admin'] = 'admin/dashboard';
+// $route['admin'] = 'admin/dashboard';
 $route['admin/masters'] = 'admin/dashboard/masters';
 $route['admin/zone'] = 'admin/dashboard/zone';
 $route['admin/ZoneHierarchy'] = 'admin/dashboard/ZoneHierarchy';
