@@ -19,6 +19,16 @@ class Distributor_filter extends CI_Controller {
         
         // Load necessary libraries
         $this->load->library('form_validation');
+
+        $this->load->library('session');
+
+        $user_id = $this->session->userdata('back_user_id');
+
+        if (!$user_id) {
+
+            $this->session->set_flashdata('error', 'Session expired. Please login again.');
+            redirect('admin/login');
+        }
     }
 
     public function get_hierarchy_filter_options() {

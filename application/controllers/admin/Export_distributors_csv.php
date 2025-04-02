@@ -23,6 +23,15 @@ class Export_distributors_csv extends CI_Controller
         $this->load->model('Zone_model');
         $this->load->model('Maping_model');
         $this->load->model('Distributor_model');
+        $this->load->library('session');
+
+        $user_id = $this->session->userdata('back_user_id');
+
+        if (!$user_id) {
+
+            $this->session->set_flashdata('error', 'Session expired. Please login again.');
+            redirect('admin/login');
+        }
     }
 
 
