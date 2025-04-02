@@ -7,21 +7,35 @@ class Auth extends CI_Controller
     {
         parent::__construct();
 
+        
+
         $this->output->set_header('X-Content-Type-Options: nosniff');
         //
         $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
         $this->output->set_header('X-XSS-Protection: 1; mode=block');
         $this->load->model('User_model');
         $this->load->library('session');
+
+
+
+        
+        
+  
     }
 
     public function login()
     {
 
         date_default_timezone_set('Asia/Kolkata'); // Example for Indian Standard Time (IST)
+
+
         if ($this->session->userdata('back_user_id')) {
             redirect('admin/hierarchydata');
         }
+
+
+
+        
 
         if ($this->input->method() === 'post') {
             $email = $this->input->post('email');
