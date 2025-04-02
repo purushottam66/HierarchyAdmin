@@ -26,22 +26,24 @@ class Auth extends CI_Controller
 
     public function login()
     {
-
-        date_default_timezone_set('Asia/Kolkata'); // Example for Indian Standard Time (IST)
-
+        date_default_timezone_set('Asia/Kolkata');
 
         if ($this->session->userdata('back_user_id')) {
             redirect('admin/hierarchydata');
         }
 
-
-
-        
-
         if ($this->input->method() === 'post') {
             $email = $this->input->post('email');
             $password = $this->input->post('password');
             $recaptchaResponse = $this->input->post('g-recaptcha-response');
+
+            // Check if email is blocked
+            $blocked = $this->check_email_blocked($email);
+            if ($blocked) {
+                $this->session->set_flashdata('error', 'This email is temporarily blocked due to multiple failed attempts. Please try again later.');
+                redirect('admin/login');
+            }
+
             // Validate reCAPTCHA
             if (!$this->verifyRecaptcha($recaptchaResponse)) {
                 $this->session->set_flashdata('error', 'reCAPTCHA verification failed. Please try again.');
@@ -66,6 +68,7 @@ class Auth extends CI_Controller
                 // Validate password
                 if (password_verify($password, $user['password'])) {
                     $this->User_model->reset_login_attempts($user['id']);
+                    $this->reset_email_attempts($email); // Reset cookie-based attempts
 
                     $this->session->set_userdata('role_id', $user['role_id']);
                     $this->session->set_userdata('back_user_id', $user['id']);
@@ -73,15 +76,61 @@ class Auth extends CI_Controller
                     $this->session->set_flashdata('success', 'Login successful!');
                     redirect('admin/hierarchydata');
                 } else {
+                    $this->increment_failed_attempts($email);
                     $this->handle_failed_login($user['id'], $user['failed_attempts']);
                 }
             } else {
+                $this->increment_failed_attempts($email);
                 $this->session->set_flashdata('error', 'Invalid email or password.');
                 redirect('admin/login');
             }
         } else {
             $this->load->view('admin/login');
         }
+    }
+
+    private function check_email_blocked($email)
+    {
+        $this->db->where('email', $email);
+        $this->db->where('lock_until >', date('Y-m-d H:i:s'));
+        $query = $this->db->get('login_attempts');
+        return $query->num_rows() > 0;
+    }
+
+    private function increment_failed_attempts($email)
+    {
+        $this->db->where('email', $email);
+        $query = $this->db->get('login_attempts');
+
+        if ($query->num_rows() > 0) {
+            $attempt = $query->row_array();
+            $new_attempts = $attempt['attempts'] + 1;
+            
+            if ($new_attempts >= 3) {
+                // Block for 1 hour after 3 attempts
+                $lock_until = date('Y-m-d H:i:s', strtotime('+1 hour'));
+                $this->db->where('email', $email);
+                $this->db->update('login_attempts', [
+                    'attempts' => $new_attempts,
+                    'lock_until' => $lock_until
+                ]);
+            } else {
+                $this->db->where('email', $email);
+                $this->db->update('login_attempts', ['attempts' => $new_attempts]);
+            }
+        } else {
+            $this->db->insert('login_attempts', [
+                'email' => $email,
+                'attempts' => 1,
+                'ip_address' => $this->input->ip_address()
+            ]);
+        }
+    }
+
+    private function reset_email_attempts($email)
+    {
+        $this->db->where('email', $email);
+        $this->db->delete('login_attempts');
     }
 
 
