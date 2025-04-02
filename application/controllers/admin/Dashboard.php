@@ -9,9 +9,9 @@ class Dashboard extends CI_Controller
         parent::__construct();
 
         $this->output->set_header('X-Content-Type-Options: nosniff');
-        	
-            $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
-            $this->output->set_header('X-XSS-Protection: 1; mode=block');
+
+        $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+        $this->output->set_header('X-XSS-Protection: 1; mode=block');
         ini_set('memory_limit', '1024M');
         $this->load->model('User_model');
         $this->load->model('Role_model');
@@ -29,7 +29,6 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('error', 'Session expired. Please login again.');
             redirect('admin/login');
         }
-        
     }
 
     public function index()
@@ -96,7 +95,7 @@ class Dashboard extends CI_Controller
 
     public function zone()
     {
-       
+
         $user_id = $this->session->userdata('back_user_id');
 
         if (!$user_id) {
@@ -143,8 +142,8 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-           
-             redirect('admin/Access_denied');
+
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -172,7 +171,7 @@ class Dashboard extends CI_Controller
 
         $data['maping'] = $this->Maping_model->get_all_Maping_table_zone();
 
-      //  $data['zone'] = $this->Distributor_model->get_all_zones();
+        //  $data['zone'] = $this->Distributor_model->get_all_zones();
 
 
 
@@ -800,7 +799,7 @@ class Dashboard extends CI_Controller
             }
         }
 
-       // $zone_ids = array_unique($zone_ids);
+        // $zone_ids = array_unique($zone_ids);
 
         $draw = $this->input->post('draw');
         $start = $this->input->post('start');
@@ -839,7 +838,7 @@ class Dashboard extends CI_Controller
         $order_column = isset($sortable_columns[$order_column_index]) ? $sortable_columns[$order_column_index] : '';
 
 
-        $total_get_distributors = $this->Distributor_model->getTotal_distributors( $zone_ids,$search,  $filters);
+        $total_get_distributors = $this->Distributor_model->getTotal_distributors($zone_ids, $search,  $filters);
         $distributors_s = $this->Distributor_model->get_distributors($zone_ids, $start, $length, $search,  $order_column, $order_direction, $filters);
 
         $data = array();
@@ -928,7 +927,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -962,7 +961,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -1018,7 +1017,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -1066,7 +1065,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -1113,7 +1112,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -1238,7 +1237,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -1256,7 +1255,7 @@ class Dashboard extends CI_Controller
     {
         $user_id = $this->session->userdata('back_user_id');
 
-       
+
 
         if (!$user_id) {
             redirect('admin/login');
@@ -1279,7 +1278,7 @@ class Dashboard extends CI_Controller
         }
 
 
-     
+
 
 
         $has_view_permission = false;
@@ -1292,7 +1291,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -1428,7 +1427,7 @@ class Dashboard extends CI_Controller
         }
 
         if (!$has_view_permission) {
-             redirect('admin/Access_denied');
+            redirect('admin/Access_denied');
             exit;
         }
 
@@ -2495,7 +2494,7 @@ class Dashboard extends CI_Controller
 
 
 
-    
+
 
 
 
