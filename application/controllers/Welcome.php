@@ -14,6 +14,21 @@ class Welcome extends CI_Controller
         $this->load->library('email');
     }
 
+    // Add this new method for handling 404 errors
+    public function page_not_found()
+    {
+        $this->output->set_status_header('404');
+    
+        if ($this->session->userdata('logged_in')) {
+            // User is logged in, show frontend 404
+            $data['user_name'] = $this->session->userdata('user_name');
+            $this->load->view('errors/frontend_404', $data);
+        } else {
+            // Not logged in, redirect to login
+            redirect('login');
+        }
+    }
+
     public function index()
     {
 
