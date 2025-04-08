@@ -3,9 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 
 $route['default_controller'] = 'welcome';
-$route['404_override'] = '';
+// Add this line to specify the 404 override controller
+$route['404_override'] = 'errors/custom_404';
 $route['translate_uri_dashes'] = FALSE;
 $route['login'] = 'welcome/login';
+// $route['(.+)'] = 'errors/custom_404';
 $route['forgot_password'] = 'welcome/forgot_password';
 $route['otp'] = 'welcome/otp';
 $route['change-password'] = 'welcome/change_password';
@@ -14,6 +16,7 @@ $route['ajax_endpoint'] = 'maping/ajax_endpoint';
 $route['forgotpassword'] = 'welcome/forgotpassword';
 $route['verifyotp'] = 'welcome/verify_otp';
 $route['update-password'] = 'welcome/update_password';
+
 
 
 
@@ -222,3 +225,9 @@ $route['admin/logout'] = 'admin/auth/logout'; // Route for logging out
 
 $route['admin/dashboard'] = 'admin/dashboard'; // Route for the dashboard page
 $route['admin/fetchInactiveMappings'] = 'admin/dashboard/fetchInactiveMappings';
+
+// Add this new route for handling undefined admin routes
+$route['admin/(.+)'] = 'admin/errors/admin_404';
+
+
+

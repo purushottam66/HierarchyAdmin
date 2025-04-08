@@ -16,15 +16,7 @@ class Login extends CI_Controller
         $this->load->model('User_model');
         $this->load->library('email');
 
-        $this->load->library('session');
 
-        $user_id = $this->session->userdata('back_user_id');
-
-        if (!$user_id) {
-
-            $this->session->set_flashdata('error', 'Session expired. Please login again.');
-            redirect('admin/login');
-        }
     }
     public function index()
     {
