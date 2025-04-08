@@ -85,11 +85,6 @@
 <script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>
 <script src="<?php echo base_url('admin/assets/js/bootstrap.bundle.min.js'); ?>"></script>
 
-
-
-
-
-
 <script src="<?php echo base_url('admin/assets/js/popper.min.js'); ?>"></script>
 <!-- <script src="<?php echo base_url('admin/assets/js/bootstrap.min.js'); ?>"></script> -->
 <script src="<?php echo base_url('admin/assets/js/vendor.js'); ?>"></script>
