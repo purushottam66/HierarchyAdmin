@@ -117,8 +117,8 @@
                                 <?php if (!empty($permissions)) : ?>
                                     <?php foreach ($permissions as $permission) : ?>
                                         <?php if ($permission['module_name'] == 'Masters' && $permission['view'] == 'yes') : ?>
-                                            <li class="nav-item <?php echo (in_array($current_page, ['admin/zone', 'admin/distributors', 'admin/salesorg', 'admin/distributionchannel', 'admin/division', 'admin/gcpdata'])) ? 'menu-open' : ''; ?>">
-                                                <a href="javascript:void(0);" class="dropdown-toggle <?php echo (in_array($current_page, ['admin/zone', 'admin/distributors', 'admin/salesorg', 'admin/distributionchannel', 'admin/division', 'admin/gcpdata'])) ? 'active' : ''; ?>" data-toggle="collapse" data-target="#level1">
+                                            <li class="nav-item <?php echo (in_array($current_page, ['admin/zone', 'admin/gcpdata', 'admin/salesorg', 'admin/distributionchannel', 'admin/division', 'admin/gcpdata'])) ? 'menu-open' : ''; ?>">
+                                                <a href="javascript:void(0);" class="dropdown-toggle <?php echo (in_array($current_page, ['admin/zone', 'admin/gcpdata', 'admin/salesorg', 'admin/distributionchannel', 'admin/division', 'admin/gcpdata'])) ? 'active' : ''; ?>" data-toggle="collapse" data-target="#level1">
                                                     <span class="nav-icon">
                                                         <img src="<?php echo base_url('admin/assets/icons/Masters.png'); ?>" alt="" style="height:20px">
                                                     </span>
@@ -127,7 +127,7 @@
                                                         <i class="fa-solid fa-angles-left fa-fw" id="icon-level1"></i>
                                                     </span>
                                                 </a>
-                                                <ul class="nav nav-sub collapse navselect <?php echo (in_array($current_page, ['admin/zone', 'admin/distributors', 'admin/salesorg', 'admin/distributionchannel', 'admin/division', 'admin/gcpdata'])) ? 'show' : ''; ?>" id="level1">
+                                                <ul class="nav nav-sub collapse navselect <?php echo (in_array($current_page, ['admin/zone', 'admin/gcpdata', 'admin/salesorg', 'admin/distributionchannel', 'admin/division', 'admin/gcpdata'])) ? 'show' : ''; ?>" id="level1">
                                                     <?php
                                                     $menu_items = [
                                                         ['path' => 'admin/zone', 'label' => 'Zone', 'img' => 'admin/assets/icons/Zone.png'],
