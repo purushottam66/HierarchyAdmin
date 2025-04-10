@@ -742,7 +742,7 @@ class Distributor_model extends CI_Model
         }
         // Start building the query
         $this->db->from('distributors'); // Specify the table name
-
+        $this->db->where('STATUS', "ACTIVE");
         // Filter by zone if zone_ids are provided
         if (!empty($zone_ids)) {
             $this->db->where_in('Zone_Code', $zone_ids);
@@ -846,6 +846,8 @@ class Distributor_model extends CI_Model
         if (!empty($zone_ids)) {
             $this->db->where_in('Zone_Code', $zone_ids);
         }
+        $this->db->where('STATUS', "ACTIVE");
+
 
         // Apply filters if provided
         if (!empty($filters)) {

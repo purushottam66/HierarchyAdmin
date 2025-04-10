@@ -2,11 +2,16 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'admin/login';
+
+
 // Add this line to specify the 404 override controller
 $route['404_override'] = 'welcome/page_not_found';
 $route['translate_uri_dashes'] = FALSE;
-$route['login'] = 'welcome/login';
+
+$route['login'] = 'admin/Login/index';
+
+$route['user'] = 'welcome/login';
 // $route['(.+)'] = 'errors/custom_404';
 $route['forgot_password'] = 'welcome/forgot_password';
 $route['otp'] = 'welcome/otp';
