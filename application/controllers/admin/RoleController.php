@@ -291,22 +291,7 @@ class RoleController extends CI_Controller
         $data['user_name'] = $this->session->userdata('user_name') ?? 'Guest';
 
 
-        $hasPermission = false;
-        if (!empty($data['permissions']) && is_array($data['permissions'])) {
-            foreach ($data['permissions'] as $p) {
-                if ($p['module_name'] === "Permission Manager" && $p['view'] === "yes") {
-                    $hasPermission = true;
-                    break;
-                }
-            }
-        }
-
-
-        if (!$hasPermission) {
-            redirect('admin/Access_denied');
-            return;
-        }
-
+     
 
         $this->load->view('admin/header', $data);
         $this->load->view('admin/view', $data);
