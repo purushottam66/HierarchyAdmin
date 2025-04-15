@@ -11,7 +11,11 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['login'] = 'admin/Login/index';
 
-$route['user'] = 'welcome/login';
+$route['user/login'] = 'welcome/login';
+$route['user'] = 'welcome/index';
+
+
+
 // $route['(.+)'] = 'errors/custom_404';
 $route['forgot_password'] = 'welcome/forgot_password';
 $route['otp'] = 'welcome/otp';

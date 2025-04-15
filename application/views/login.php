@@ -56,7 +56,7 @@
 
 
                 <div class="d-flex" style="z-index: 9999;">
-                    <div class="p-2 flex-grow-1"> <a href="login" class="fxt-logo"><img src="assets/img/logo.png"
+                    <div class="p-2 flex-grow-1"> <a href="login" class="fxt-logo"><img src=" <?php echo base_url('assets/img/logo.png'); ?>"
                                 alt="Logo" style="height: 80px; object-fit: contain;"></a></div>
                     <div class="p-2 fxt-main-title" style="font-size: 20px;">About Us</div>
                     <div class="p-2 fxt-main-title" style="font-size: 20px;">Contact Us</div>

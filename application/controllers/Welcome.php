@@ -25,7 +25,7 @@ class Welcome extends CI_Controller
             $this->load->view('errors/frontend_404', $data);
         } else {
             // Not logged in, redirect to login
-            redirect('login');
+            redirect('user/login');
         }
     }
 
@@ -34,7 +34,7 @@ class Welcome extends CI_Controller
 
         if (!$this->session->userdata('logged_in')) {
 
-            redirect('login');
+            redirect('user/login');
         } else {
 
             $session_data = $this->session->all_userdata();
@@ -46,9 +46,6 @@ class Welcome extends CI_Controller
             $data['maping'] = $this->Maping_model->get_all_Maping_table($Pjp_Code_session);
 
             //$json_data = json_encode($data['maping'], JSON_PRETTY_PRINT);
-
-
-
 
             $this->load->view('index', $data);
         }
@@ -234,7 +231,7 @@ class Welcome extends CI_Controller
 
             if (!$user_id) {
                 $this->session->set_flashdata('error', 'Session expired. Please log in again.');
-                redirect('login'); // Redirect to the login page
+                redirect('user/login'); // Redirect to the login page
                 return;
             }
 
@@ -244,7 +241,7 @@ class Welcome extends CI_Controller
 
             if ($update_success) {
                 $this->session->set_flashdata('success', 'Password updated successfully.');
-                redirect('login'); // Redirect to login page or another page
+                redirect('user/login'); // Redirect to login page or another page
             } else {
                 $this->session->set_flashdata('error', 'Failed to update password. Please try again.');
                 $this->load->view('change-password'); // Reload the form with error
@@ -264,14 +261,14 @@ class Welcome extends CI_Controller
     
         if (empty($email) || empty($password)) {
             $this->session->set_flashdata('error', 'Email and Password are required.');
-            redirect('login');
+            redirect('user/login');
         }
     
         // Validate reCAPTCHA response
         $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
         if (!$recaptchaResult['success']) {
             $this->session->set_flashdata('error', 'reCAPTCHA verification failed. Please try again.');
-            redirect('login');
+            redirect('user/login');
         }
     
         // Continue with user login (fetch user by email, verify password, etc.)
@@ -279,7 +276,7 @@ class Welcome extends CI_Controller
         if ($user) {
             if ($user->employee_status != 'active') {
                 $this->session->set_flashdata('error', 'Your account is inactive. Please contact admin.');
-                redirect('login');
+                redirect('user/login');
             }
             if (password_verify($password, $user->password)) {
                 // Reset failed attempts on successful login
@@ -294,14 +291,14 @@ class Welcome extends CI_Controller
                     'logged_in'     => true
                 );
                 $this->session->set_userdata($session_data);
-                redirect('/');
+                redirect('/user');
             } else {
                 // Handle failed login (you can add your failed attempt logic here)
                 $this->handle_failed_login($user->id, $user->failed_attempts);
             }
         } else {
             $this->session->set_flashdata('error', 'Invalid email or password.');
-            redirect('login');
+            redirect('user/login');
         }
     }
     
@@ -355,7 +352,7 @@ class Welcome extends CI_Controller
         $this->Employee_model->update_login_attempts($user_id, $new_attempts, $lock_time, $status);
     
         $this->session->set_flashdata('error', 'Invalid email or password.');
-        redirect('login');
+        redirect('user/login');
     }
     
 
@@ -585,6 +582,6 @@ class Welcome extends CI_Controller
         $this->session->sess_destroy();
 
         // Redirect to the login page
-        redirect('login');
+        redirect('user');
     }
 }
