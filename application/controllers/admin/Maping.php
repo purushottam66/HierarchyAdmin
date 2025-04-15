@@ -8,9 +8,11 @@ class Maping extends CI_Controller
         parent::__construct();
 
         $this->output->set_header('X-Content-Type-Options: nosniff');
-        	
-            $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
-            $this->output->set_header('X-XSS-Protection: 1; mode=block');
+
+        $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+        $this->output->set_header('X-XSS-Protection: 1; mode=block');
+        ini_set('memory_limit', '512M'); // Or 1G
+
         $this->load->model('User_model');
         $this->load->model('Role_model');
         $this->load->model('Zone_model');
@@ -179,7 +181,7 @@ class Maping extends CI_Controller
             }
         }
 
-     
+
         if (!$hasPermission) {
             redirect('admin/Access_denied');
             return;
@@ -221,7 +223,7 @@ class Maping extends CI_Controller
 
             date_default_timezone_set('Asia/Kolkata');
             foreach ($distributors as $distributor_code) {
-              
+
                 $new_sequence = $this->Maping_model->get_next_global_sequence();
 
                 $data = array(

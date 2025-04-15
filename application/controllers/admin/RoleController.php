@@ -13,6 +13,8 @@ class RoleController extends CI_Controller
         
         $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
         $this->output->set_header('X-XSS-Protection: 1; mode=block');
+        ini_set('memory_limit', '512M'); // Or 1G
+
         $this->load->library('session');
         $this->load->model('Role_model');
         $this->load->library('form_validation');

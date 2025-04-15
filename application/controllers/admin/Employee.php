@@ -10,13 +10,15 @@ class Employee extends CI_Controller
         parent::__construct();
 
         $this->output->set_header('X-Content-Type-Options: nosniff');
-        	
-            $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
-            $this->output->set_header('X-XSS-Protection: 1; mode=block');
+
+        $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+        $this->output->set_header('X-XSS-Protection: 1; mode=block');
         $this->load->model('User_model');
         $this->load->model('Role_model');
         $this->load->model('Employee_model');
         $this->load->library('email');
+        ini_set('memory_limit', '512M'); // Or 1G
+
 
 
         $this->load->model('Log_report');
@@ -1946,10 +1948,10 @@ class Employee extends CI_Controller
             ];
 
 
-        
+
             $log_entries = [];
             foreach ($updatedData as $key => $new_value) {
-                if (isset($oldData[$key]) && $oldData[$key] != $new_value) { 
+                if (isset($oldData[$key]) && $oldData[$key] != $new_value) {
                     $log_entries[] = [
                         'table_name' => 'User',
                         'key_id' => $id,

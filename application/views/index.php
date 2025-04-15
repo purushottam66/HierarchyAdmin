@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/css/dashboard-menu-theme-default.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/dataTables.bootstrap5.css'); ?>">
 
-    
+
 
 
     <style>
@@ -146,14 +146,17 @@
         }
 
         .mgscd-menu .app-side {
-            width: 251px;
+            width: 300px !important;
         }
-
 
 
         .leaf-node .nav-tools {
             display: none;
             /* Hide toggle icon for Level 7 */
+        }
+
+        .mgscd-menu .navbar-header-left {
+            width: 304px !important;
         }
 
         .nav-title {
@@ -438,8 +441,7 @@
 
 
                             <li class="dropdown b-l">
-                                <a class=" profile-pic" href="#" 
-                                   >
+                                <a class=" profile-pic" href="#">
                                     <!-- <img class="img-circle" src="assets//img/m1.jpg" alt="Jone Doe">
                                     
                                      -->
@@ -449,7 +451,7 @@
                                 </a>
 
                                 <a href="<?php echo base_url('welcome/logout'); ?>"><i
-                                                class="fa-solid fa-right-from-bracket fa-fw"></i> Logout</a>
+                                        class="fa-solid fa-right-from-bracket fa-fw"></i> Logout</a>
                                 <!-- <ul class="dropdown-menu animated flipInY float-right">
 
 
@@ -582,7 +584,7 @@
                 <div class="app-main">
 
                     <div class="main-content bg-clouds">
-                        <div class="container p-t-15">
+                        <div class="container-fluid p-t-15">
                             <div class="row">
 
 
@@ -620,20 +622,20 @@
                                                 <th>Zone Code</th>
                                                 <th>Distributor Channel Name</th>
                                                 <th>Distributor Channel Code</th>
-                                                <th>Level 7 Designation Name</th>
-                                                <th>Level 7 Name</th>
-                                                <th>Level 6 Designation Name</th>
-                                                <th>Level 6 Name</th>
-                                                <th>Level 5 Designation Name</th>
-                                                <th>Level 5 Name</th>
-                                                <th>Level 4 Designation Name</th>
-                                                <th>Level 4 Name</th>
-                                                <th>Level 3 Designation Name</th>
-                                                <th>Level 3 Name</th>
-                                                <th>Level 2 Designation Name</th>
-                                                <th>Level 2 Name</th>
                                                 <th>Level 1 Designation Name</th>
                                                 <th>Level 1 Name</th>
+                                                <th>Level 2 Designation Name</th>
+                                                <th>Level 2 Name</th>
+                                                <th>Level 3 Designation Name</th>
+                                                <th>Level 3 Name</th>
+                                                <th>Level 4 Designation Name</th>
+                                                <th>Level 4 Name</th>
+                                                <th>Level 5 Designation Name</th>
+                                                <th>Level 5 Name</th>
+                                                <th>Level 6 Designation Name</th>
+                                                <th>Level 6 Name</th>
+                                                <th>Level 7 Designation Name</th>
+                                                <th>Level 7 Name</th>
                                                 <th>Customer Creation Date</th>
                                             </tr>
                                         </thead>

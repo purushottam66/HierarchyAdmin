@@ -15,6 +15,8 @@ class Auth extends CI_Controller
         $this->output->set_header('X-XSS-Protection: 1; mode=block');
         $this->load->model('User_model');
         $this->load->library('session');
+        ini_set('memory_limit', '512M'); // Or 1G
+
 
 
 
