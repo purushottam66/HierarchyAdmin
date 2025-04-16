@@ -232,11 +232,19 @@ $route['admin/get-population-strata-details'] = 'admin/Distributor_filter/get_po
 $route['admin/login'] = 'admin/auth/login'; // Route for the login page
 $route['admin/logout'] = 'admin/auth/logout'; // Route for logging out
 
-$route['admin/dashboard'] = 'admin/dashboard'; // Route for the dashboard page
+$route['admin/dashboard'] = 'admin/dashboard'; 
 $route['admin/fetchInactiveMappings'] = 'admin/dashboard/fetchInactiveMappings';
 
 // Add this new route for handling undefined admin routes
+
+
+
+$route['admin/userlogreport'] = 'admin/User_log_report/list'; 
+$route['admin/User_log_report/get_logs_ajax'] = 'admin/User_log_report/get_logs_ajax'; 
+
+$route['admin/mapping_log_report'] = 'admin/Mapping_log_report/list'; 
+$route['admin/Mapping_log_report/get_logs_ajax'] = 'admin/Mapping_log_report/get_logs_ajax'; 
+
+
 $route['admin/(.+)'] = 'admin/errors/admin_404';
-
-
 
