@@ -201,6 +201,8 @@ class Maping extends CI_Controller
             redirect('admin/login');
         }
 
+        // Load the log model at the start
+        $this->load->model('Mapping_log_report_model');
 
         $this->form_validation->set_rules('distributors_code[]', 'Distributor Code', 'required');
         $this->form_validation->set_rules('Sales_Code', 'Sales Code', 'required');
@@ -245,9 +247,18 @@ class Maping extends CI_Controller
                 );
 
 
+                $this->load->model('Mapping_log_report_model');
+
+
                 $insert_id = $this->Maping_model->insert_mapping($data);
                 if ($insert_id) {
 
+                    // Add insert ID to data array
+                    $data['id'] = $insert_id;
+                    
+                    // Create log entry
+                    $this->Mapping_log_report_model->insert_log($data, 'INSERT');
+                    
                     $success_msgs[] = 'Mapping for Distributor ' . $distributor_code . ' Successfully inserted - Successfully Done.';
                 } else {
 

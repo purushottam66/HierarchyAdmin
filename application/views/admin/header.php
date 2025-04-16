@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/vendor.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/dashboard-menu-theme-default.css'); ?>">
 
-    <link rel='stylesheet' href=  "<?php echo base_url('admin/assets/css/sweet-alert.css'); ?>">
+    <link rel='stylesheet' href="<?php echo base_url('admin/assets/css/sweet-alert.css'); ?>">
 
     <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/dataTables.dataTables.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/buttons.dataTables.css'); ?>">

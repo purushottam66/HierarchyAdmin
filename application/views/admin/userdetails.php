@@ -1,3 +1,5 @@
+<link rel='stylesheet' href="<?php echo base_url('admin/assets/css/sweet-alert.css'); ?>">
+
 <style>
     .setfont {
         font-size: 8px;
@@ -168,6 +170,7 @@
 </div>
 <script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/sweetalert2.min.css'); ?>">
 <script src="<?php echo base_url('admin/assets/js/sweetalert2.min.js'); ?>"></script>
@@ -340,7 +343,7 @@
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
-                alert('An error occurred while updating the employee status.');
+               
             }
         });
     }

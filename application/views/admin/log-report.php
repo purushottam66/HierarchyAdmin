@@ -7,6 +7,9 @@
             <div class="dashhead-titles">
                 <h3 class="dashhead-title">Log Report</h3>
             </div>
+
+            <a href="<?php echo base_url('admin/userlogreport'); ?>" class="btn "> user log report</a>
+            <a href="<?php echo base_url('admin/mapping_log_report'); ?>" class="btn "> mapping log report</a>
         </div>
     </header>
 
@@ -21,7 +24,7 @@
                                     <thead>
                                         <tr>
                                    
-                                            <th class="text-center">Key ID</th>
+                                            <th class="text-center">Sr.no </th>
                                             <th class="text-center">table name</th>
                                             <th class="text-center">Variable</th>
                                             <th class="text-center">old_value</th>

@@ -24,6 +24,8 @@ class Dashboard extends CI_Controller
         $this->load->model('Employee_model');
         $this->load->library('session');
 
+        $this->load->model('Mapping_log_report_model');
+
         $user_id = $this->session->userdata('back_user_id');
 
         if (!$user_id) {
@@ -1574,19 +1576,22 @@ class Dashboard extends CI_Controller
 
     public function update_maping()
     {
-
         $back_user_id = $this->session->userdata('back_user_id');
         if (!$back_user_id) {
             redirect('admin/login');
         }
-        date_default_timezone_set('Asia/Kolkata'); // Example for Indian Standard Time (IST)
-
-
+    
+        date_default_timezone_set('Asia/Kolkata');
+        $this->load->model('Mapping_log_report_model');
+    
         $id = $this->input->post('id');
-
-        $data = array(
+    
+        // Step 1: Get old data before update
+        $old_data = $this->Maping_model->get_mapping_by_id($id); // This function should return row as assoc array
+    
+        // Step 2: New data from POST
+        $new_data = array(
             'DB_Code' => $this->input->post('DB_Code'),
-
             'Level_1' => $this->input->post('level1'),
             'Level_2' => $this->input->post('level2'),
             'Level_3' => $this->input->post('level3'),
@@ -1594,33 +1599,43 @@ class Dashboard extends CI_Controller
             'Level_5' => $this->input->post('level5'),
             'Level_6' => $this->input->post('level6'),
             'Level_7' => $this->input->post('level7'),
-            'update_date' => date('Y-m-d H:i:s')  // Add update date
-
+            'update_date' => date('Y-m-d H:i:s')
         );
-
-        if ($this->Maping_model->update_mapping($id, $data)) {
+    
+        // Step 3: Update mapping
+        if ($this->Maping_model->update_mapping($id, $new_data)) {
+    
+            // Step 4: Log update to report
+            $this->Mapping_log_report_model->insert_update_log($old_data, $new_data, $id);
+    
             $this->session->set_flashdata('success', 'Mapping updated successfully');
-            redirect('admin/hierarchydata');
         } else {
             $this->session->set_flashdata('error', 'Failed to update mapping');
-            redirect('admin/hierarchydata');
         }
+    
+        redirect('admin/hierarchydata');
     }
+    
 
 
 
     public function hierarchydelete($id)
     {
-
         $back_user_id = $this->session->userdata('back_user_id');
-
         if (!$back_user_id) {
-
             redirect('admin/login');
         }
+    
+        $old_data = $this->Maping_model->get_mapping_by_id($id);
+        if ($old_data) {
+            $this->Mapping_log_report_model->delete_log($old_data, $id, 'DELETE');
+        }
+    
         $this->Maping_model->hierarchydelete($id);
         redirect('admin/hierarchydata');
     }
+    
+    
 
 
 

@@ -1285,6 +1285,25 @@ GROUP BY
         return $result > 0;
     }
 
+    public function get_mapping_by_id($id)
+    {
+        log_message('debug', "Fetching mapping by ID: $id");
+    
+        $this->db->where('id', $id);
+        $query = $this->db->get('maping');
+    
+        if ($query->num_rows() == 0) {
+            log_message('error', "No mapping found for ID: $id");
+            return null;
+        }
+    
+        log_message('debug', "Mapping data found for ID: $id");
+    
+        return $query->row_array();  // returns associative array
+    }
+    
+
+
 
     public function insert_mapping($data)
     {
@@ -1532,8 +1551,4 @@ GROUP BY
 
         return $new_sequence;
     }
-
-
-
-
 }

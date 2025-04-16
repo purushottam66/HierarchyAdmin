@@ -1308,7 +1308,6 @@ class Employee extends CI_Controller
 
 
 
-
         if (!$back_user_id) {
             redirect('admin/login');
         }
@@ -1376,23 +1375,41 @@ class Employee extends CI_Controller
 
 
 
-        // Insert employee data
-        if ($this->Employee_model->insert_employee($data)) {
 
-            // $log_data = array(
-            //     'table_name' => 'User',
-            //     'key_id' => $employee_id,
-            //     'variable' => 'Email',
-            //     'old_value' => $email,
-            //     'new_value' => $email,
-            //     'timestamp' => date('Y-m-d H:i:s'),
-            //     'updated_by' =>   $user_name
-            // );
-            // $this->Log_report->create_log($log_data);
+
+        $this->load->model('User_log_report_model');
+        $insert_id = $this->Employee_model->insert_employee($data);
+        if ($insert_id) {
+
+            // Add insert ID to data array
+            $data['id'] = $insert_id;
+
+            // Create log entry
+            $this->User_log_report_model->insert_log($data, 'INSERT');
+
             echo json_encode(['status' => 'success', 'message' => 'Employee added successfully.']);
         } else {
+
             echo json_encode(['status' => 'error', 'message' => 'Failed to add employee.']);
         }
+
+        // // Insert employee data
+        // if ($this->Employee_model->insert_employee($data)) {
+
+        //     // $log_data = array(
+        //     //     'table_name' => 'User',
+        //     //     'key_id' => $employee_id,
+        //     //     'variable' => 'Email',
+        //     //     'old_value' => $email,
+        //     //     'new_value' => $email,
+        //     //     'timestamp' => date('Y-m-d H:i:s'),
+        //     //     'updated_by' =>   $user_name
+        //     // );
+        //     // $this->Log_report->create_log($log_data);
+
+        // } else {
+        //     echo json_encode(['status' => 'error', 'message' => 'Failed to add employee.']);
+        // }
     }
 
 
@@ -1926,9 +1943,11 @@ class Employee extends CI_Controller
         } else {
             // If validation passes, update the employee data
             date_default_timezone_set('Asia/Kolkata');
+            $this->load->model('User_log_report_model');
 
             $oldData = $this->Employee_model->get_employee_by_id($id);
 
+            $old_data_emp = $this->Employee_model->get_mapping_by_id($id); // This function should return row as assoc array
 
             $updatedData = [
                 'name' => $this->input->post('name'),
@@ -1947,7 +1966,7 @@ class Employee extends CI_Controller
                 'updated_at' => date('Y-m-d H:i:s')
             ];
 
-
+            $this->User_log_report_model->insert_update_log($old_data_emp, $updatedData, $id);
 
             $log_entries = [];
             foreach ($updatedData as $key => $new_value) {
@@ -1963,6 +1982,8 @@ class Employee extends CI_Controller
                     ];
                 }
             }
+              // Step 4: Log update to report
+            
 
             $this->Employee_model->update_employee($id, $updatedData);
             if (!empty($log_entries)) {
@@ -2038,8 +2059,14 @@ class Employee extends CI_Controller
         if (!$back_user_id) {
             redirect('admin/login');
         }
+        $this->load->model('User_log_report_model');
 
-        // Get the pjp_code of the employee
+        $old_data = $this->Employee_model->get_mapping_by_id($id);
+        if ($old_data) {
+            $this->User_log_report_model->delete_log($old_data, $id, 'DELETE');
+        }
+
+
         $pjp_code = $this->Employee_model->get_pjp_code_by_employee_id($id);
 
         if (!$pjp_code) {
@@ -2047,8 +2074,6 @@ class Employee extends CI_Controller
             redirect('admin/userdetails');
             return;
         }
-
-        // Check if pjp_code is mapped to levels 1 to 7
         $is_mapped = $this->Maping_model->is_pjp_code_mapped_to_levels($pjp_code);
 
         if ($is_mapped) {
