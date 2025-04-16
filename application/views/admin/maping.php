@@ -568,11 +568,11 @@
                     d.Population_Strata_2 = $('#Population_Strata_2').val() || null;
                     d.Zone = $('#Zone_Code').val() || null;
 
-                    console.log("Sent Data with filters: ", d);
+                 
                     return d;
                 },
                 dataSrc: function(json) {
-                    console.log("Received Response: ", json);
+                   
 
                     $('#hiddenFieldsContainer').empty();
                     $('#select-all').prop('checked', false);
