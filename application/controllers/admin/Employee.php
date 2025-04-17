@@ -19,7 +19,8 @@ class Employee extends CI_Controller
         $this->load->library('email');
         ini_set('memory_limit', '512M'); // Or 1G
 
-
+        $this->load->model('User_log_report_model');
+        $this->load->model('Mapping_log_report_model');
 
         $this->load->model('Log_report');
 
@@ -1943,7 +1944,7 @@ class Employee extends CI_Controller
         } else {
             // If validation passes, update the employee data
             date_default_timezone_set('Asia/Kolkata');
-            $this->load->model('User_log_report_model');
+            
 
             $oldData = $this->Employee_model->get_employee_by_id($id);
 
