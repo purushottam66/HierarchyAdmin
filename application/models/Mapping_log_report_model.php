@@ -11,10 +11,11 @@ class Mapping_log_report_model extends CI_Model
     }
 
 
-    public function insert_update_log($old_data, $new_data, $id)
+
+    public function insert_update_log($old_data, $new_data, $id, $action_type = 'UPDATE')
     {
         $log_data = array(
-            'action_type' => 'UPDATE',
+            'action_type' => $action_type,
             'action_time' => date('Y-m-d H:i:s'),
             'action_by' => $this->session->userdata('user_name'),
             'log_id' => $id,
@@ -42,7 +43,7 @@ class Mapping_log_report_model extends CI_Model
             'create_date' => $old_data['create_date'],
             'update_date' => date('Y-m-d H:i:s')
         );
-
+    
         return $this->db->insert($this->table, $log_data);
     }
 
