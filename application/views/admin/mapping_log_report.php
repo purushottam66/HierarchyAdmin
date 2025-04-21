@@ -17,7 +17,7 @@
                     <div class="box shadow-2dp b-r-2">
                         <div class="box-body">
                             <!-- Filter Section -->
-                            <div class="row mb-3">
+                            <!-- <div class="row mb-3">
                                 <div class="col-md-3">
                                     <select id="action_type" class="form-control">
                                         <option value="">All Actions</option>
@@ -35,7 +35,7 @@
                                 <div class="col-md-3">
                                     <input type="date" id="date_to" class="form-control">
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="table-responsive">
                                 <table id="mapping_logs_table" class="display nowrap table table-bordered table-hover text-center" style="width:100%">
@@ -109,7 +109,7 @@ $(document).ready(function() {
         pageLength: 15,
         lengthMenu: [15, 30, 60, 100],
         dom: 'Bfrtip',
-        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+        buttons: [ 'csv', 'excel']
     });
 
     // Filter handling
