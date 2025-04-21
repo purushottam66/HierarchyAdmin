@@ -205,18 +205,17 @@ class Employee extends CI_Controller
     public function Save_Replace()
     {
         $back_user_id = $this->session->userdata('back_user_id');
-
+    
         if (!$back_user_id) {
             redirect('admin/login');
         }
-
+    
         $postData = $this->input->post();
         if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
             echo json_encode(["status" => "error", "message" => "Required fields are missing (set_pjp_code or selectedEmployeesselectedValue)."]);
             return;
         }
-
-
+    
         if (!empty($postData['DB_Code'])) {
             foreach ($postData['DB_Code'] as $db_code_json) {
                 $db_code_data = json_decode($db_code_json, true);
@@ -230,13 +229,17 @@ class Employee extends CI_Controller
                         'Customer_Group_Code' => $db_code_data['Customer_Group_Code'] ?? null,
                         'distributors_id' => $db_code_data['distributors_id'] ?? null
                     ];
-
-
+        
+                    log_message('info', 'Generated update conditions: ' . json_encode($updateConditions));
+        
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
-
+        
+                    log_message('info', 'Filtered update conditions: ' . json_encode($updateConditions));
+        
                     if (count($updateConditions) === 7) {
+                        log_message('info', 'Updating mapping for Level ' . $postData['level'] . ' with PJP Code: ' . $postData['set_pjp_code']);
                         $this->db->where($updateConditions);
                         $this->db->update('maping', [
                             "Level_{$postData['level']}" => $postData['set_pjp_code']
@@ -245,8 +248,9 @@ class Employee extends CI_Controller
                 }
             }
         }
-
-
+        
+        
+    
         if (!empty($postData['Vacant']) && !empty($postData['Replace_DB_Code'])) {
             foreach ($postData['Replace_DB_Code'] as $replace_db_code_json) {
                 $replace_db_code_data = json_decode($replace_db_code_json, true);
@@ -260,14 +264,18 @@ class Employee extends CI_Controller
                         'Customer_Group_Code' => $replace_db_code_data['Customer_Group_Code'] ?? null,
                         'distributors_id' => $replace_db_code_data['distributors_id'] ?? null
                     ];
-
-
+    
+                    // Log the $updateConditions array to view it in the log
+                    log_message('info', 'Generated update conditions for replacement: ' . json_encode($updateConditions));
+    
                     $updateConditions = array_filter($updateConditions, function ($value) {
                         return $value !== null;
                     });
-
+    
+                    // Log the filtered $updateConditions array
+                    log_message('info', 'Filtered update conditions for replacement: ' . json_encode($updateConditions));
+    
                     if (!empty($updateConditions)) {
-
                         $this->db->where($updateConditions);
                         $this->db->update('maping', [
                             "Level_{$postData['level']}" => $postData['Vacant']
@@ -278,14 +286,14 @@ class Employee extends CI_Controller
         } else {
             log_message('info', 'Vacant data is empty or Replace_DB_Code is not provided. No updates made.');
         }
-
-
+    
         if ($this->db->trans_status() === FALSE) {
             echo json_encode(["status" => "error", "message" => "Failed to update mapping table."]);
         } else {
             echo json_encode(["status" => "success", "message" => "Mapping table updated successfully."]);
         }
     }
+    
 
 
 
