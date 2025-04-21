@@ -211,10 +211,29 @@ class Employee extends CI_Controller
         }
     
         $postData = $this->input->post();
+        log_message('error', 'POST Data: ' . print_r($postData, true));
+        
         if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
             echo json_encode(["status" => "error", "message" => "Required fields are missing (set_pjp_code or selectedEmployeesselectedValue)."]);
             return;
         }
+
+        // Add log entry
+        $log_data = array(
+            'level' => $postData['level'],
+            'selectedEmployeesselectedValue' => $postData['selectedEmployeesselectedValue'],
+            'set_pjp_code' => $postData['set_pjp_code'], 
+            'db_code_data' => json_encode($postData['DB_Code'] ?? []),
+            'vacant_data' => $postData['Vacant'] ?? null,
+            'status' => 'pending',
+            'message' => 'Operation started',
+            'created_at' => date('Y-m-d H:i:s'),
+            'action_type' => 'Left',
+            'action_by' => $this->session->userdata('user_name')
+        );
+
+        $this->db->insert('log_report_m', $log_data);
+        $log_id = $this->db->insert_id();
     
         if (!empty($postData['DB_Code'])) {
             foreach ($postData['DB_Code'] as $db_code_json) {
@@ -287,6 +306,15 @@ class Employee extends CI_Controller
             log_message('info', 'Vacant data is empty or Replace_DB_Code is not provided. No updates made.');
         }
     
+        // Update log status after operation
+        $update_status = [
+            'status' => ($this->db->trans_status() === FALSE) ? 'error' : 'success',
+            'message' => ($this->db->trans_status() === FALSE) ? 'Failed to update mapping table.' : 'Mapping table updated successfully.'
+        ];
+
+        $this->db->where('id', $log_id);
+        $this->db->update('log_report_m', $update_status);
+
         if ($this->db->trans_status() === FALSE) {
             echo json_encode(["status" => "error", "message" => "Failed to update mapping table."]);
         } else {
@@ -306,6 +334,22 @@ class Employee extends CI_Controller
         }
         $postData = $this->input->post();
 
+        // Add log entry at the start
+        $log_data = array(
+            'level' => $postData['level'],
+            'selectedEmployeesselectedValue' => $postData['selectedEmployeesselectedValue'],
+            'set_pjp_code' => $postData['set_pjp_code'], 
+            'db_code_data' => json_encode($postData['DB_Code'] ?? []),
+            'vacant_data' => $postData['Vacant'] ?? null,
+            'status' => 'pending',
+            'message' => 'Operation started',
+            'created_at' => date('Y-m-d H:i:s'),
+            'action_type' => 'Promoted',
+            'action_by' => $this->session->userdata('user_name')
+        );
+
+        $this->db->insert('log_report_m', $log_data);
+        $log_id = $this->db->insert_id();
 
         if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
             echo json_encode([
@@ -444,6 +488,15 @@ class Employee extends CI_Controller
         }
 
         $this->db->trans_complete();
+
+        // Update log status after operation
+        $update_status = [
+            'status' => ($this->db->trans_status() === FALSE) ? 'error' : 'success',
+            'message' => ($this->db->trans_status() === FALSE) ? 'Failed to update data.' : 'Employee details updated successfully.'
+        ];
+
+        $this->db->where('id', $log_id);
+        $this->db->update('log_report_m', $update_status);
 
         if ($this->db->trans_status() === FALSE) {
             log_message('error', 'Transaction failed during Save_Replace_emp_Promoted.');
@@ -780,6 +833,23 @@ class Employee extends CI_Controller
         }
         $postData = $this->input->post();
 
+        // Add log entry
+        $log_data = array(
+            'level' => $postData['level'],
+            'selectedEmployeesselectedValue' => $postData['selectedEmployeesselectedValue'],
+            'set_pjp_code' => $postData['set_pjp_code'], 
+            'db_code_data' => json_encode($postData['DB_Code'] ?? []),
+            'vacant_data' => $postData['Vacant'] ?? null,
+            'status' => 'pending',
+            'message' => 'Operation started',
+            'created_at' => date('Y-m-d H:i:s'),
+            'action_type' => 'Transfer',
+            'action_by' => $this->session->userdata('user_name')
+        );
+
+        $this->db->insert('log_report_m', $log_data);
+        $log_id = $this->db->insert_id();
+
 
         if (empty($postData['set_pjp_code']) || empty($postData['selectedEmployeesselectedValue'])) {
             echo json_encode([
@@ -921,6 +991,15 @@ class Employee extends CI_Controller
 
         // Commit or rollback transaction
         $this->db->trans_complete();
+
+        // Update log status after operation
+        $update_status = [
+            'status' => ($this->db->trans_status() === FALSE) ? 'error' : 'success',
+            'message' => ($this->db->trans_status() === FALSE) ? 'Failed to update data.' : 'Employee details updated successfully.'
+        ];
+
+        $this->db->where('id', $log_id);
+        $this->db->update('log_report_m', $update_status);
 
         if ($this->db->trans_status() === FALSE) {
             echo json_encode([
