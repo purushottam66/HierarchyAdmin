@@ -10,6 +10,7 @@
 
             <a href="<?php echo base_url('admin/userlogreport'); ?>" class="btn "> user log report</a>
             <a href="<?php echo base_url('admin/mapping_log_report'); ?>" class="btn "> mapping log report</a>
+            <a href="<?php echo base_url('admin/UserMovement_log_report'); ?>" class="btn "> UserMovement</a>
         </div>
     </header>
 
