@@ -245,6 +245,10 @@ $route['admin/User_log_report/get_logs_ajax'] = 'admin/User_log_report/get_logs_
 $route['admin/mapping_log_report'] = 'admin/Mapping_log_report/list'; 
 $route['admin/Mapping_log_report/get_logs_ajax'] = 'admin/Mapping_log_report/get_logs_ajax'; 
 
+$route['admin/UserMovement_log_report'] = 'admin/UserMovement_log_report/list'; 
+$route['admin/UserMovement_log_report_ajex'] = 'admin/UserMovement_log_report/UserMovement_log_report_ajex'; 
+
+
 
 $route['admin/(.+)'] = 'admin/errors/admin_404';
 
