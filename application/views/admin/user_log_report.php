@@ -6,6 +6,9 @@
         <div class="dashhead bg-white">
             <div class="dashhead-titles">
                 <h3 class="dashhead-title">User Log Report</h3>
+
+                <a href="<?php echo base_url('admin/userlogreport_json'); ?>" class="btn "> api test</a>
+
             </div>
         </div>
     </header>
@@ -162,8 +165,7 @@ $(document).ready(function() {
         scrollCollapse: true,
         pageLength: 15,
         lengthMenu: [15, 30, 60, 100],
-        dom: 'Bfrtip',
-        buttons: [ 'csv', 'excel',]
+    
     });
 
     // Filter handling

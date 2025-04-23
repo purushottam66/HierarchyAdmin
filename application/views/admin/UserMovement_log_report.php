@@ -5,6 +5,8 @@
         <div class="dashhead bg-white">
             <div class="dashhead-titles">
                 <h3 class="dashhead-title">User Movement Log Report</h3>
+                <a href="<?php echo base_url('admin/UserMovement_log_report_json'); ?>" class="btn "> api test</a>
+
             </div>
         </div>
     </header>
@@ -23,10 +25,10 @@
                                             <th>Action Type</th>
                                             <th>Action By</th>
                                             <th>Level</th>
-                                            <th>Selected Employee</th>
-                                            <th>Set PJP Code</th>
+                                            <th>Old Employee</th>
+                                            <th>New Employee</th>
                                             <th>DB Code Data</th>
-                                            <th>Vacant Data</th>
+                                            <th>Vacant Employee</th>
                                             <th>Created At</th>
                                             <th>Status</th>
                                             <th>Message</th>

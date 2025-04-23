@@ -86,6 +86,11 @@ class Mapping_log_report extends CI_Controller
         $this->load->view('admin/footer', $data);
     }
 
+
+
+
+
+
     public function get_logs_ajax()
     {
         $back_user_id = $this->session->userdata('back_user_id');
@@ -169,4 +174,57 @@ class Mapping_log_report extends CI_Controller
 
         echo json_encode($response);
     }
+
+
+
+    public function json()
+    {
+        header('Content-Type: application/json');
+        $back_user_id = $this->session->userdata('back_user_id');
+        if (!$back_user_id) {
+            echo json_encode(['error' => 'Unauthorized']);
+            return;
+        }
+    
+        // Define column names for response
+        $columns = array(
+            'action_type',
+            'action_time',
+            'action_by',
+            'DB_Code',
+            'Sales_Code',
+            'Distribution_Channel_Code',
+            'Division_Code',
+            'Customer_Type_Code',
+            'Customer_Group_Code',
+            'Level_1',
+            'Level_2',
+            'Level_3',
+            'Level_4',
+            'Level_5',
+            'Level_6',
+            'Level_7'
+        );
+    
+        // Fetch all logs (no pagination or ordering)
+        $logs = $this->Mapping_log_report_model->get_all_logs();
+    
+        $response = array();
+    
+        foreach ($logs as $log) {
+            $row = array();
+            foreach ($columns as $column) {
+                if (strpos($column, 'Level_') !== false && $log['action_type'] === 'UPDATE') {
+                    $old_column = 'old_' . $column;
+                    $row[$column] = "Old: " . ($log[$old_column] ?? 'N/A') . " → New: " . ($log[$column] ?? 'N/A');
+                } else {
+                    $row[$column] = $log[$column] ?? '';
+                }
+            }
+            $response[] = $row;
+        }
+    
+        echo json_encode($response);
+    }
+    
 }

@@ -25,7 +25,7 @@ class Welcome extends CI_Controller
             $this->load->view('errors/frontend_404', $data);
         } else {
             // Not logged in, redirect to login
-            redirect('user/login');
+            redirect('admin/login');
         }
     }
 

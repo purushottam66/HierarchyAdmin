@@ -4,8 +4,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $route['default_controller'] = 'admin/login';
 
-
-// Add this line to specify the 404 override controller
 $route['404_override'] = 'welcome/page_not_found';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -240,14 +238,18 @@ $route['admin/fetchInactiveMappings'] = 'admin/dashboard/fetchInactiveMappings';
 
 
 $route['admin/userlogreport'] = 'admin/User_log_report/list'; 
+$route['admin/userlogreport_json'] = 'admin/User_log_report/json'; 
+
 $route['admin/User_log_report/get_logs_ajax'] = 'admin/User_log_report/get_logs_ajax'; 
 
 $route['admin/mapping_log_report'] = 'admin/Mapping_log_report/list'; 
+$route['admin/mapping_log_report_json'] = 'admin/Mapping_log_report/json'; 
 $route['admin/Mapping_log_report/get_logs_ajax'] = 'admin/Mapping_log_report/get_logs_ajax'; 
 
 $route['admin/UserMovement_log_report'] = 'admin/UserMovement_log_report/list'; 
-$route['admin/UserMovement_log_report_ajex'] = 'admin/UserMovement_log_report/UserMovement_log_report_ajex'; 
 
+$route['admin/UserMovement_log_report_ajex'] = 'admin/UserMovement_log_report/UserMovement_log_report_ajex'; 
+$route['admin/UserMovement_log_report_json'] = 'admin/UserMovement_log_report/json'; 
 
 
 $route['admin/(.+)'] = 'admin/errors/admin_404';

@@ -11,6 +11,13 @@ class Mapping_log_report_model extends CI_Model
     }
 
 
+    public function get_all_logs()
+    {
+        return $this->db->get('mapping_log_report')->result_array();
+    }
+
+
+
 
     public function insert_update_log($old_data, $new_data, $id, $action_type = 'UPDATE')
     {
@@ -43,7 +50,7 @@ class Mapping_log_report_model extends CI_Model
             'create_date' => $old_data['create_date'],
             'update_date' => date('Y-m-d H:i:s')
         );
-    
+
         return $this->db->insert($this->table, $log_data);
     }
 
@@ -105,7 +112,7 @@ class Mapping_log_report_model extends CI_Model
     }
 
 
-    
+
 
     public function get_logs($filters = array(), $length = 10, $start = 0)
     {
@@ -125,7 +132,7 @@ class Mapping_log_report_model extends CI_Model
             ol6.name as old_level6_name,
             ol7.name as old_level7_name');
         $this->db->from('mapping_log_report');
-        
+
         // Join for current levels
         $this->db->join('employee l1', 'l1.employee_id = mapping_log_report.Level_1', 'left');
         $this->db->join('employee l2', 'l2.employee_id = mapping_log_report.Level_2', 'left');
@@ -134,7 +141,7 @@ class Mapping_log_report_model extends CI_Model
         $this->db->join('employee l5', 'l5.employee_id = mapping_log_report.Level_5', 'left');
         $this->db->join('employee l6', 'l6.employee_id = mapping_log_report.Level_6', 'left');
         $this->db->join('employee l7', 'l7.employee_id = mapping_log_report.Level_7', 'left');
-        
+
         // Join for old levels
         $this->db->join('employee ol1', 'ol1.employee_id = mapping_log_report.old_Level_1', 'left');
         $this->db->join('employee ol2', 'ol2.employee_id = mapping_log_report.old_Level_2', 'left');
