@@ -17,12 +17,6 @@ class Auth extends CI_Controller
         $this->load->library('session');
         ini_set('memory_limit', '512M'); // Or 1G
 
-
-
-
-        
-        
-        
   
     }
 

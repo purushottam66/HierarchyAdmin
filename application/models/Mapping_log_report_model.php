@@ -117,39 +117,40 @@ class Mapping_log_report_model extends CI_Model
     public function get_logs($filters = array(), $length = 10, $start = 0)
     {
         $this->db->select('mapping_log_report.*, 
-            l1.name as level1_name, 
-            l2.name as level2_name,
-            l3.name as level3_name,
-            l4.name as level4_name,
-            l5.name as level5_name,
-            l6.name as level6_name,
-            l7.name as level7_name,
-            ol1.name as old_level1_name,
-            ol2.name as old_level2_name,
-            ol3.name as old_level3_name,
-            ol4.name as old_level4_name,
-            ol5.name as old_level5_name,
-            ol6.name as old_level6_name,
-            ol7.name as old_level7_name');
+            curr_l1.name as level1_name, 
+            curr_l2.name as level2_name,
+            curr_l3.name as level3_name,
+            curr_l4.name as level4_name,
+            curr_l5.name as level5_name,
+            curr_l6.name as level6_name,
+            curr_l7.name as level7_name,
+            old_l1.name as old_level1_name,
+            old_l2.name as old_level2_name,
+            old_l3.name as old_level3_name,
+            old_l4.name as old_level4_name,
+            old_l5.name as old_level5_name,
+            old_l6.name as old_level6_name,
+            old_l7.name as old_level7_name');
+        
         $this->db->from('mapping_log_report');
-
-        // Join for current levels
-        $this->db->join('employee l1', 'l1.employee_id = mapping_log_report.Level_1', 'left');
-        $this->db->join('employee l2', 'l2.employee_id = mapping_log_report.Level_2', 'left');
-        $this->db->join('employee l3', 'l3.employee_id = mapping_log_report.Level_3', 'left');
-        $this->db->join('employee l4', 'l4.employee_id = mapping_log_report.Level_4', 'left');
-        $this->db->join('employee l5', 'l5.employee_id = mapping_log_report.Level_5', 'left');
-        $this->db->join('employee l6', 'l6.employee_id = mapping_log_report.Level_6', 'left');
-        $this->db->join('employee l7', 'l7.employee_id = mapping_log_report.Level_7', 'left');
-
-        // Join for old levels
-        $this->db->join('employee ol1', 'ol1.employee_id = mapping_log_report.old_Level_1', 'left');
-        $this->db->join('employee ol2', 'ol2.employee_id = mapping_log_report.old_Level_2', 'left');
-        $this->db->join('employee ol3', 'ol3.employee_id = mapping_log_report.old_Level_3', 'left');
-        $this->db->join('employee ol4', 'ol4.employee_id = mapping_log_report.old_Level_4', 'left');
-        $this->db->join('employee ol5', 'ol5.employee_id = mapping_log_report.old_Level_5', 'left');
-        $this->db->join('employee ol6', 'ol6.employee_id = mapping_log_report.old_Level_6', 'left');
-        $this->db->join('employee ol7', 'ol7.employee_id = mapping_log_report.old_Level_7', 'left');
+        
+        // Joins for current levels
+        $this->db->join('employee curr_l1', 'curr_l1.pjp_code = mapping_log_report.Level_1', 'left');
+        $this->db->join('employee curr_l2', 'curr_l2.pjp_code = mapping_log_report.Level_2', 'left');
+        $this->db->join('employee curr_l3', 'curr_l3.pjp_code = mapping_log_report.Level_3', 'left');
+        $this->db->join('employee curr_l4', 'curr_l4.pjp_code = mapping_log_report.Level_4', 'left');
+        $this->db->join('employee curr_l5', 'curr_l5.pjp_code = mapping_log_report.Level_5', 'left');
+        $this->db->join('employee curr_l6', 'curr_l6.pjp_code = mapping_log_report.Level_6', 'left');
+        $this->db->join('employee curr_l7', 'curr_l7.pjp_code = mapping_log_report.Level_7', 'left');
+        
+        // Joins for old levels
+        $this->db->join('employee old_l1', 'old_l1.pjp_code = mapping_log_report.old_Level_1', 'left');
+        $this->db->join('employee old_l2', 'old_l2.pjp_code = mapping_log_report.old_Level_2', 'left');
+        $this->db->join('employee old_l3', 'old_l3.pjp_code = mapping_log_report.old_Level_3', 'left');
+        $this->db->join('employee old_l4', 'old_l4.pjp_code = mapping_log_report.old_Level_4', 'left');
+        $this->db->join('employee old_l5', 'old_l5.pjp_code = mapping_log_report.old_Level_5', 'left');
+        $this->db->join('employee old_l6', 'old_l6.pjp_code = mapping_log_report.old_Level_6', 'left');
+        $this->db->join('employee old_l7', 'old_l7.pjp_code = mapping_log_report.old_Level_7', 'left');
 
         // Apply search filter
         if (!empty($filters['search'])) {
@@ -238,4 +239,10 @@ class Mapping_log_report_model extends CI_Model
 
         return $insert_id;
     }
+
+
+
+
+
+    
 }

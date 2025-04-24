@@ -25,11 +25,11 @@ class UserMovement_log_report extends CI_Controller
             'Mapping_log_report_model'
         ]);
 
-        $user_id = $this->session->userdata('back_user_id');
-        if (!$user_id) {
-            $this->session->set_flashdata('error', 'Session expired. Please login again.');
-            redirect('admin/login');
-        }
+        // $user_id = $this->session->userdata('back_user_id');
+        // if (!$user_id) {
+        //     $this->session->set_flashdata('error', 'Session expired. Please login again.');
+        //     redirect('admin/login');
+        // }
     }
 
 
@@ -38,11 +38,11 @@ class UserMovement_log_report extends CI_Controller
     public function json()
     {
         header('Content-Type: application/json');
-        $back_user_id = $this->session->userdata('back_user_id');
-        if (!$back_user_id) {
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
-        }
+        // $back_user_id = $this->session->userdata('back_user_id');
+        // if (!$back_user_id) {
+        //     echo json_encode(['error' => 'Unauthorized']);
+        //     return;
+        // }
     
         // Select from log and join with employees
         $this->db->select('

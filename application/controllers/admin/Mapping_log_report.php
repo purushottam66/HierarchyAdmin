@@ -27,13 +27,13 @@ class Mapping_log_report extends CI_Controller
         $this->load->model('Mapping_log_report_model');
 
 
-        $user_id = $this->session->userdata('back_user_id');
+        // $user_id = $this->session->userdata('back_user_id');
 
-        if (!$user_id) {
+        // if (!$user_id) {
 
-            $this->session->set_flashdata('error', 'Session expired. Please login again.');
-            redirect('admin/login');
-        }
+        //     $this->session->set_flashdata('error', 'Session expired. Please login again.');
+        //     redirect('admin/login');
+        // }
     }
 
 
@@ -163,8 +163,12 @@ class Mapping_log_report extends CI_Controller
             $row = array();
             foreach ($columns as $column) {
                 if (strpos($column, 'Level_') !== false && $log['action_type'] === 'UPDATE') {
-                    $old_column = 'old_' . $column;
-                    $row[] = "Old: " . ($log[$old_column] ?? 'N/A') . " → New: " . ($log[$column] ?? 'N/A');
+                    $level_num = substr($column, 6);
+                    $old_name = $log['old_level' . $level_num . '_name'] ?? 'N/A';
+                    $new_name = $log['level' . $level_num . '_name'] ?? 'N/A';
+                    $old_code = $log['old_' . $column] ?? 'N/A';
+                    $new_code = $log[$column] ?? 'N/A';
+                    $row[] = "Old: " . $old_code . " (" . $old_name . ") → New: " . $new_code . " (" . $new_name . ")";
                 } else {
                     $row[] = $log[$column] ?? '';
                 }
@@ -176,17 +180,10 @@ class Mapping_log_report extends CI_Controller
     }
 
 
-
     public function json()
     {
         header('Content-Type: application/json');
-        $back_user_id = $this->session->userdata('back_user_id');
-        if (!$back_user_id) {
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
-        }
     
-        // Define column names for response
         $columns = array(
             'action_type',
             'action_time',
@@ -206,25 +203,35 @@ class Mapping_log_report extends CI_Controller
             'Level_7'
         );
     
-        // Fetch all logs (no pagination or ordering)
-        $logs = $this->Mapping_log_report_model->get_all_logs();
+        $logs = $this->Mapping_log_report_model->get_logs();
     
-        $response = array();
+        $response = array(
+            "draw" => 1,
+            "recordsTotal" => count($logs),
+            "recordsFiltered" => count($logs),
+            "data" => array()
+        );
     
         foreach ($logs as $log) {
             $row = array();
             foreach ($columns as $column) {
                 if (strpos($column, 'Level_') !== false && $log['action_type'] === 'UPDATE') {
-                    $old_column = 'old_' . $column;
-                    $row[$column] = "Old: " . ($log[$old_column] ?? 'N/A') . " → New: " . ($log[$column] ?? 'N/A');
+                    $level_num = substr($column, 6);
+                    $old_name = $log['old_level' . $level_num . '_name'] ?? 'N/A';
+                    $new_name = $log['level' . $level_num . '_name'] ?? 'N/A';
+                    $old_code = $log['old_' . $column] ?? 'N/A';
+                    $new_code = $log[$column] ?? 'N/A';
+                    $row[$column] = "Old: " . $old_code . " (" . $old_name . ") → New: " . $new_code . " (" . $new_name . ")";
                 } else {
                     $row[$column] = $log[$column] ?? '';
                 }
             }
-            $response[] = $row;
+            $response['data'][] = $row;
         }
     
         echo json_encode($response);
     }
+    
+    
     
 }
