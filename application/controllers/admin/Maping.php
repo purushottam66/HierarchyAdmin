@@ -260,7 +260,7 @@ class Maping extends CI_Controller
                         'user_id' => $user_id,
                         'parent_id' => null,
                         'action' => 'MAPPING_INSERT',
-                        'data' => json_encode($data),
+                        'data' => json_encode([[$data]]),
                         'created_at' => date('Y-m-d H:i:s'),
                         'created_by' =>   $back_user_id,
                     );

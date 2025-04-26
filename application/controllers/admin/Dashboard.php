@@ -1615,7 +1615,7 @@ class Dashboard extends CI_Controller
                 'user_id' => $id,
                 'parent_id' => null,
                 'action' => 'MAPPING_UPDATE',
-                'data' => json_encode($old_data),
+                'data' => json_encode([[$old_data]]),
                 'created_at' => date('Y-m-d H:i:s'),
                 'created_by' =>   $back_user_id,
             );

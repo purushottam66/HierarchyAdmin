@@ -218,39 +218,6 @@ class Employee extends CI_Controller
             return;
         }
 
-        if (!empty($postData['DB_Code']) && is_array($postData['DB_Code'])) {
-            $all_mapping_data = array();  // Array to store all mapping data
-
-            foreach ($postData['DB_Code'] as $entry) {
-                $decoded = json_decode($entry, true);
-                if (isset($decoded['distributors_id'])) {
-                    log_message('info', 'Distributors ID: ' . $decoded['distributors_id']);
-                    $mapping_data = $this->Maping_model->get_mapping_by_distributor_id($decoded['distributors_id']);
-
-                    if ($mapping_data) {
-                        $all_mapping_data[] = $mapping_data;  // Add mapping data to array
-                    }
-                } else {
-                    log_message('error', 'distributors_id not found in entry: ' . print_r($entry, true));
-                }
-            }
-
-            // Store all mapping data in log
-            $this->db->trans_start();
-            $log_new = array(
-                'user_id' => $back_user_id,
-                'parent_id' => null,
-                'action' => 'LEFT',
-                'data' => json_encode($all_mapping_data),  // Convert all mapping data to JSON
-                'created_at' => date('Y-m-d H:i:s'),
-                'created_by' => $back_user_id,
-            );
-
-            $this->db->insert('ci_mapping_activity', $log_new);
-            $this->db->trans_complete();
-        } else {
-            log_message('error', 'DB_Code is empty or not an array');
-        }
 
 
         if (!empty($postData['DB_Code'])) {
@@ -325,6 +292,39 @@ class Employee extends CI_Controller
         }
 
 
+        if (!empty($postData['DB_Code']) && is_array($postData['DB_Code'])) {
+            $all_mapping_data = array();  // Array to store all mapping data
+
+            foreach ($postData['DB_Code'] as $entry) {
+                $decoded = json_decode($entry, true);
+                if (isset($decoded['distributors_id'])) {
+                    log_message('info', 'Distributors ID: ' . $decoded['distributors_id']);
+                    $mapping_data = $this->Maping_model->get_mapping_by_distributor_id($decoded['distributors_id']);
+
+                    if ($mapping_data) {
+                        $all_mapping_data[] = $mapping_data;  // Add mapping data to array
+                    }
+                } else {
+                    log_message('error', 'distributors_id not found in entry: ' . print_r($entry, true));
+                }
+            }
+
+            // Store all mapping data in log
+            $this->db->trans_start();
+            $log_new = array(
+                'user_id' => $back_user_id,
+                'parent_id' => null,
+                'action' => 'LEFT',
+                'data' => json_encode($all_mapping_data),  // Convert all mapping data to JSON
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => $back_user_id,
+            );
+
+            $this->db->insert('ci_mapping_activity', $log_new);
+            $this->db->trans_complete();
+        } else {
+            log_message('error', 'DB_Code is empty or not an array');
+        }
 
 
 
@@ -360,39 +360,7 @@ class Employee extends CI_Controller
         }
 
 
-        if (!empty($postData['DB_Code']) && is_array($postData['DB_Code'])) {
-            $all_mapping_data = array();  // Array to store all mapping data
 
-            foreach ($postData['DB_Code'] as $entry) {
-                $decoded = json_decode($entry, true);
-                if (isset($decoded['distributors_id'])) {
-                    log_message('info', 'Distributors ID: ' . $decoded['distributors_id']);
-                    $mapping_data = $this->Maping_model->get_mapping_by_distributor_id($decoded['distributors_id']);
-
-                    if ($mapping_data) {
-                        $all_mapping_data[] = $mapping_data;  // Add mapping data to array
-                    }
-                } else {
-                    log_message('error', 'distributors_id not found in entry: ' . print_r($entry, true));
-                }
-            }
-
-            // Store all mapping data in log
-            $this->db->trans_start();
-            $log_new = array(
-                'user_id' => $back_user_id,
-                'parent_id' => null,
-                'action' => 'PROMOTED',
-                'data' => json_encode($all_mapping_data),  // Convert all mapping data to JSON
-                'created_at' => date('Y-m-d H:i:s'),
-                'created_by' => $back_user_id,
-            );
-
-            $this->db->insert('ci_mapping_activity', $log_new);
-            $this->db->trans_complete();
-        } else {
-            log_message('error', 'DB_Code is empty or not an array');
-        }
 
 
         if (!empty($postData['DB_Code'])) {
@@ -520,7 +488,39 @@ class Employee extends CI_Controller
             log_message('info', 'Vacant data is empty or Replace_DB_Code is not provided. No updates made.');
         }
 
+        if (!empty($postData['DB_Code']) && is_array($postData['DB_Code'])) {
+            $all_mapping_data = array();  // Array to store all mapping data
 
+            foreach ($postData['DB_Code'] as $entry) {
+                $decoded = json_decode($entry, true);
+                if (isset($decoded['distributors_id'])) {
+                    log_message('info', 'Distributors ID: ' . $decoded['distributors_id']);
+                    $mapping_data = $this->Maping_model->get_mapping_by_distributor_id($decoded['distributors_id']);
+
+                    if ($mapping_data) {
+                        $all_mapping_data[] = $mapping_data;  // Add mapping data to array
+                    }
+                } else {
+                    log_message('error', 'distributors_id not found in entry: ' . print_r($entry, true));
+                }
+            }
+
+            // Store all mapping data in log
+            $this->db->trans_start();
+            $log_new = array(
+                'user_id' => $back_user_id,
+                'parent_id' => null,
+                'action' => 'PROMOTED',
+                'data' => json_encode($all_mapping_data),  // Convert all mapping data to JSON
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => $back_user_id,
+            );
+
+            $this->db->insert('ci_mapping_activity', $log_new);
+            $this->db->trans_complete();
+        } else {
+            log_message('error', 'DB_Code is empty or not an array');
+        }
 
 
 
@@ -871,39 +871,7 @@ class Employee extends CI_Controller
             return;
         }
 
-        if (!empty($postData['DB_Code']) && is_array($postData['DB_Code'])) {
-            $all_mapping_data = array();  // Array to store all mapping data
 
-            foreach ($postData['DB_Code'] as $entry) {
-                $decoded = json_decode($entry, true);
-                if (isset($decoded['distributors_id'])) {
-                    log_message('info', 'Distributors ID: ' . $decoded['distributors_id']);
-                    $mapping_data = $this->Maping_model->get_mapping_by_distributor_id($decoded['distributors_id']);
-
-                    if ($mapping_data) {
-                        $all_mapping_data[] = $mapping_data;  // Add mapping data to array
-                    }
-                } else {
-                    log_message('error', 'distributors_id not found in entry: ' . print_r($entry, true));
-                }
-            }
-
-            // Store all mapping data in log
-            $this->db->trans_start();
-            $log_new = array(
-                'user_id' => $back_user_id,
-                'parent_id' => null,
-                'action' => 'TRANSFER',
-                'data' => json_encode($all_mapping_data),  // Convert all mapping data to JSON
-                'created_at' => date('Y-m-d H:i:s'),
-                'created_by' => $back_user_id,
-            );
-
-            $this->db->insert('ci_mapping_activity', $log_new);
-            $this->db->trans_complete();
-        } else {
-            log_message('error', 'DB_Code is empty or not an array');
-        }
 
 
 
@@ -1034,7 +1002,39 @@ class Employee extends CI_Controller
         }
 
 
+        if (!empty($postData['DB_Code']) && is_array($postData['DB_Code'])) {
+            $all_mapping_data = array();  // Array to store all mapping data
 
+            foreach ($postData['DB_Code'] as $entry) {
+                $decoded = json_decode($entry, true);
+                if (isset($decoded['distributors_id'])) {
+                    log_message('info', 'Distributors ID: ' . $decoded['distributors_id']);
+                    $mapping_data = $this->Maping_model->get_mapping_by_distributor_id($decoded['distributors_id']);
+
+                    if ($mapping_data) {
+                        $all_mapping_data[] = $mapping_data;  // Add mapping data to array
+                    }
+                } else {
+                    log_message('error', 'distributors_id not found in entry: ' . print_r($entry, true));
+                }
+            }
+
+            // Store all mapping data in log
+            $this->db->trans_start();
+            $log_new = array(
+                'user_id' => $back_user_id,
+                'parent_id' => null,
+                'action' => 'TRANSFER',
+                'data' => json_encode($all_mapping_data),  // Convert all mapping data to JSON
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => $back_user_id,
+            );
+
+            $this->db->insert('ci_mapping_activity', $log_new);
+            $this->db->trans_complete();
+        } else {
+            log_message('error', 'DB_Code is empty or not an array');
+        }
 
 
         if ($this->db->trans_status() === FALSE) {
@@ -2145,23 +2145,17 @@ class Employee extends CI_Controller
 
             $this->db->trans_start();
 
-
             $log_old = array(
                 'user_id' => $id,
                 'parent_id' => $id,
                 'action' => 'UPDATE',
-                'data' => json_encode($updatedData),
+                'data' => json_encode([[$updatedData]]),
                 'created_at' => date('Y-m-d H:i:s'),
                 'created_by' =>   $back_user_id,
             );
 
             $this->db->insert('ci_users_activity', $log_old);
             $this->db->trans_complete();
-
-
-
-            // Step 4: Log update to report
-
 
             $this->Employee_model->update_employee($id, $updatedData);
             if (!empty($log_entries)) {
