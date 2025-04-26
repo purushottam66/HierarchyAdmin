@@ -218,7 +218,17 @@ class Mapping_log_report extends CI_Controller
                     
                     'Level_5_Name' => $employee_data['Level_5']['name'] ?? '-',
                     'Level_5_Code' => $employee_data['Level_5']['employer_code'] ?? '-',
-                    'Level_5_Designation' => $employee_data['Level_5']['designation_name'] ?? '-'
+                    'Level_5_Designation' => $employee_data['Level_5']['designation_name'] ?? '-',
+
+
+                    'Level_6_Name' => $employee_data['Level_6']['name'] ?? '-',
+                    'Level_6_Code' => $employee_data['Level_6']['employer_code'] ?? '-',
+                    'Level_6_Designation' => $employee_data['Level_6']['designation_name'] ?? '-',
+
+
+                    'Level_7_Name' => $employee_data['Level_7']['name'] ?? '-',
+                    'Level_7_Code' => $employee_data['Level_7']['employer_code'] ?? '-',
+                    'Level_7_Designation' => $employee_data['Level_7']['designation_name'] ?? '-'
                 ];
             }, $logs);
 
@@ -232,7 +242,6 @@ class Mapping_log_report extends CI_Controller
                 "data" => $formatted_data
             );
 
-            log_message('debug', 'get_logs_ajax response: ' . json_encode($response));
             echo json_encode($response);
         } catch (Exception $e) {
             log_message('error', 'Error in get_logs_ajax: ' . $e->getMessage());
