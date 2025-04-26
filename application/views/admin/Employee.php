@@ -309,6 +309,8 @@
                                             </div>
                                         </div>
 
+                                        <!-- Add hidden input for zone code -->
+                                        <input type="hidden" id="zone_code" name="zone_code" value="">
                                         <div class="col-md-8">
                                             <div class="form-group">
                                                 <label for="address">Address</label>
@@ -483,9 +485,6 @@
 
                     $('#city').selectpicker('refresh');
 
-
-
-
                     if (response && response.length > 0) {
                         const uniqueZones = new Map();
 
@@ -501,9 +500,16 @@
                         if (uniqueZones.size > 0) {
                             uniqueZones.forEach(function(zone, zoneCode) {
                                 $('#region').append(
-                                    '<option value="' + zone + '">' + zone +
+                                    '<option value="' + zone + '" data-zonecode="' + zoneCode + '">' + zone +
                                     '</option>'
                                 );
+                            });
+                            
+                            // Add change event handler to update hidden zone code
+                            $('#region').on('change', function() {
+                                var selectedOption = $(this).find('option:selected');
+                                var zoneCode = selectedOption.data('zonecode');
+                                $('#zone_code').val(zoneCode);
                             });
                         } else {
                             $('#region').append(

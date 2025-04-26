@@ -244,7 +244,7 @@ $route['admin/User_log_report/get_logs_ajax'] = 'admin/User_log_report/get_logs_
 
 $route['admin/mapping_log_report'] = 'admin/Mapping_log_report/list'; 
 $route['admin/mapping_log_report_json'] = 'admin/Mapping_log_report/json'; 
-$route['admin/Mapping_log_report/get_logs_ajax'] = 'admin/Mapping_log_report/get_logs_ajax'; 
+$route['admin/Mapping_log_report_get_logs_ajax'] = 'admin/Mapping_log_report/get_logs_ajax'; 
 
 $route['admin/UserMovement_log_report'] = 'admin/UserMovement_log_report/list'; 
 

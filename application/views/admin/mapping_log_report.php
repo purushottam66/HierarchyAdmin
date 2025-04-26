@@ -6,10 +6,10 @@
         <div class="dashhead bg-white">
             <div class="dashhead-titles">
                 <h3 class="dashhead-title">Mapping Log Report</h3>
-                <a href="<?php echo base_url('admin/mapping_log_report_json'); ?>" class="btn "> api test</a>
+                <!-- <a href="<?php echo base_url('admin/mapping_log_report_json'); ?>" class="btn "> api test</a> -->
 
 
-                
+
             </div>
         </div>
     </header>
@@ -45,22 +45,64 @@
                                 <table id="mapping_logs_table" class="display nowrap table table-bordered table-hover text-center" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Action Type</th>
-                                            <th>Action Time</th>
-                                            <th>Action By</th>
-                                            <th>DB Code</th>
-                                            <th>Sales Code</th>
-                                            <th>Distribution Channel</th>
-                                            <th>Division Code</th>
-                                            <th>Customer Type</th>
-                                            <th>Customer Group</th>
-                                            <th>Level 1</th>
-                                            <th>Level 2</th>
-                                            <th>Level 3</th>
-                                            <th>Level 4</th>
-                                            <th>Level 5</th>
-                                            <th>Level 6</th>
-                                            <th>Level 7</th>
+                                            <th>ID</th>
+                                            <th>User ID</th>
+                                            <th>Parent ID</th>
+                                            <th>Action</th>
+                                            <th>Created At</th>
+                                            <th>Created By</th>
+                                            <th>id</th>
+                                            <th>Customer_Name</th>
+                                            <th>Customer_Code</th>
+                                            <th>Pin_Code</th>
+                                            <th>City</th>
+                                            <th>District</th>
+                                            <th>Contact_Number</th>
+                                            <th>Country</th>
+                                            <th>Zone</th>
+                                            <th>State</th>
+                                            <th>Population_Strata_1</th>
+                                            <th>Population_Strata_2</th>
+                                            <th>Country_Group</th>
+                                            <th>GTM_TYPE</th>
+                                            <th>SUPERSTOCKIST</th>
+                                            <th>STATUS</th>
+                                            <th>Sales_Code</th>
+                                            <th>Sales_Name</th>
+                                            <th>Distribution_Channel_Code</th>
+                                            <th>Distribution_Channel_Name</th>
+                                            <th>Division_Code</th>
+                                            <th>Division_Name</th>
+                                            <th>Customer_Type_Code</th>
+                                            <th>Customer_Type_Name</th>
+                                            <th>Customer_Group_Code</th>
+                                            <th>Customer_Group_Name</th>
+                                            <th>Customer_Creation_Date</th>
+                                            <th>Sector_Name</th>
+                                            <th>Sector_Code</th>
+                                            <th>State_Code</th>
+                                            <th>Zone_Code</th>
+                                            <th>Level_1_Name</th>
+                                            <th>Level_1_Employer_Code</th>
+                                            <th>Level_1_Designation_Name</th>
+                                            <th>Level_2_Name</th>
+                                            <th>Level_2_Employer_Code</th>
+                                            <th>Level_2_Designation_Name</th>
+                                            <th>Level_3_Name</th>
+                                            <th>Level_3_Employer_Code</th>
+                                            <th>Level_3_Designation_Name</th>
+                                            <th>Level_4_Name</th>
+                                            <th>Level_4_Employer_Code</th>
+                                            <th>Level_4_Designation_Name</th>
+                                            <th>Level_5_Name</th>
+                                            <th>Level_5_Employer_Code</th>
+                                            <th>Level_5_Designation_Name</th>
+                                            <th>Level_6_Name</th>
+                                            <th>Level_6_Employer_Code</th>
+                                            <th>Level_6_Designation_Name</th>
+                                            <th>Level_7_Name</th>
+                                            <th>Level_7_Employer_Code</th>
+                                            <th>Level_7_Designation_Name</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -75,58 +117,94 @@
 
 <script src="<?php echo base_url('admin/assets/js/jquery-3.7.1.js'); ?>"></script>
 <script>
-$(document).ready(function() {
-    var table = $('#mapping_logs_table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '<?php echo base_url("admin/Mapping_log_report/get_logs_ajax"); ?>',
-            type: 'GET',
-            data: function(d) {
-                d.action_type = $('#action_type').val();
-                d.DB_Code = $('#DB_Code').val();
-                d.date_from = $('#date_from').val();
-                d.date_to = $('#date_to').val();
-            }
-        },
-        columns: [
-            { data: 0 }, // action_type
-            { data: 1 }, // action_time
-            { data: 2 }, // action_by
-            { data: 3 }, // DB_Code
-            { data: 4 }, // Sales_Code
-            { data: 5 }, // Distribution_Channel_Code
-            { data: 6 }, // Division_Code
-            { data: 7 }, // Customer_Type_Code
-            { data: 8 }, // Customer_Group_Code
-            { data: 9 }, // Level_1
-            { data: 10 }, // Level_2
-            { data: 11 }, // Level_3
-            { data: 12 }, // Level_4
-            { data: 13 }, // Level_5
-            { data: 14 }, // Level_6
-            { data: 15 }  // Level_7
-        ],
-        scrollX: true,
-        scrollY: "550px",
-        scrollCollapse: true,
-        pageLength: 15,
-        lengthMenu: [15, 30, 60, 100],
+    $(document).ready(function() {
+        var table = $('#mapping_logs_table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '<?php echo base_url("admin/Mapping_log_report_get_logs_ajax"); ?>',
+                type: 'POST',
+                data: function(d) {
+                    d.action_type = $('#action_type').val();
+                    d.DB_Code = $('#DB_Code').val();
+                    d.date_from = $('#date_from').val();
+                    d.date_to = $('#date_to').val();
+                }
+            },
+            "columnDefs": [{
+                "targets": 0,
+                "data": "id",
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "targets": 1,
+                "data": "user_id",
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "targets": 2,
+                "data": "parent_id",
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "targets": 3,
+                "data": "action",
+                "searchable": true,
+                "orderable": true,
+                "render": function(data, type, row) {
+                    // Check the action value and return the corresponding color
+                    if (data === "old_data") {
+                        return '<span style="color: red;">' + data + '</span>';
+                    } else if (data === "updated") {
+                        return '<span style="color: orange;">' + data + '</span>';
+                    } else if (data === "delete") {
+                        return '<span style="color: green;">' + data + '</span>';
+                    } else {
+                        return data; // Default case if action is not matched
+                    }
+                }
+            },
       
-    });
+            {
+                "targets": 4,
+                "data": "created_at",
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "targets": 5,
+                "data": "created_by",
+                "searchable": true,
+                "orderable": true
+            },],
+      
+            scrollX: true,
+            scrollY: "550px",
+            scrollCollapse: true,
+            pageLength: 15,
+            lengthMenu: [15, 30, 60, 100],
 
-    // Filter handling
-    $('#action_type, #DB_Code, #date_from, #date_to').on('change', function() {
-        table.ajax.reload();
-    });
+        });
 
-    // Add delay to DB_Code search
-    var searchTimeout;
-    $('#DB_Code').on('keyup', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(function() {
+
+
+        
+
+        // फ़िल्टर हैंडलिंग
+        $('#action_type, #DB_Code, #date_from, #date_to').on('change', function() {
             table.ajax.reload();
-        }, 500);
+        });
+
+        // DB_Code सर्च में डिले जोड़ें
+        var searchTimeout;
+        $('#DB_Code').on('keyup', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(function() {
+                table.ajax.reload();
+            }, 500);
+        });
     });
-});
 </script>

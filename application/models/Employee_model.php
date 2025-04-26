@@ -80,7 +80,7 @@ class Employee_model extends CI_Model
 
     public function get_Employee_by_level($level, $limit, $offset, $search = null, $sort_by = 'id', $sort_order = 'ASC')
     {
-        $this->db->select('id, name, email, mobile, designation, level, pjp_code, employer_code, district, state, designation_name, city');
+        $this->db->select('id, name, email, mobile, designation, level, pjp_code, employer_code,  state, designation_name, city');
         $this->db->from('employee');
         $this->db->where('level', $level);
 
@@ -558,9 +558,7 @@ class Employee_model extends CI_Model
                 ->or_like('updated_at', $search)
                 ->or_like('active_date', $search)
                 ->or_like('inactive_date', $search)
-                ->or_like('town', $search)
-                ->or_like('district_code', $search)
-                ->or_like('district', $search)
+            
                 ->or_like('city', $search)
                 ->or_like('state', $search)
                 ->or_like('region', $search)
@@ -625,9 +623,7 @@ class Employee_model extends CI_Model
             $this->db->or_like('updated_at', $search);
             $this->db->or_like('active_date', $search);
             $this->db->or_like('inactive_date', $search);
-            $this->db->or_like('town', $search);
-            $this->db->or_like('district_code', $search);
-            $this->db->or_like('district', $search);
+           
             $this->db->or_like('city', $search);
             $this->db->or_like('state', $search);
             $this->db->or_like('region', $search);
@@ -679,8 +675,7 @@ class Employee_model extends CI_Model
             $this->db->or_like('e.designation_label_name', $search);
             $this->db->or_like('e.gender', $search);
             $this->db->or_like('e.adhar_card', $search);
-            $this->db->or_like('e.district_code', $search);
-            $this->db->or_like('e.district', $search);
+         
             $this->db->or_like('e.city', $search);
             $this->db->or_like('e.state', $search);
             $this->db->or_like('e.region', $search);
@@ -717,8 +712,7 @@ class Employee_model extends CI_Model
             $this->db->or_like('e.designation_label_name', $search);
             $this->db->or_like('e.gender', $search);
             $this->db->or_like('e.adhar_card', $search);
-            $this->db->or_like('e.district_code', $search);
-            $this->db->or_like('e.district', $search);
+       
             $this->db->or_like('e.city', $search);
             $this->db->or_like('e.state', $search);
             $this->db->or_like('e.region', $search);
@@ -785,8 +779,7 @@ class Employee_model extends CI_Model
             $this->db->or_like('e.designation_label_name', $search);
             $this->db->or_like('e.gender', $search);
             $this->db->or_like('e.adhar_card', $search);
-            $this->db->or_like('e.district_code', $search);
-            $this->db->or_like('e.district', $search);
+     
             $this->db->or_like('e.city', $search);
             $this->db->or_like('e.state', $search);
             $this->db->or_like('e.region', $search);

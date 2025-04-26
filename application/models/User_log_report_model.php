@@ -3,12 +3,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class User_log_report_model extends CI_Model
 {
-    private $table = 'user_log_report';
+    private $table = 'ci_users_activity';
 
     public function get_logs($filters = array(), $length = 10, $start = 0)
     {
-        $this->db->select('*');
-        $this->db->from($this->table);
+        $this->db->select('a.*, u.name as created_by_name');
+        $this->db->from($this->table . ' as a');
+        $this->db->join('users as u', 'a.created_by = u.id', 'left');
 
         // Apply search filter
         if (!empty($filters['search'])) {
@@ -47,8 +48,7 @@ class User_log_report_model extends CI_Model
         // Apply pagination
         $this->db->limit($length, $start);
 
-        $query = $this->db->get();
-        return $query->result_array();
+        return $this->db->get()->result_array();
     }
 
     public function get_total_logs($filters = array())

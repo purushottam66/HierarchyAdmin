@@ -11,6 +11,26 @@ class Maping_model extends CI_Model
     }
 
 
+    public function get_mapping_by_distributor_id($distributor_id)
+    {
+        if (!$distributor_id) {
+            return null;
+        }
+
+        $this->db->select('*');
+        $this->db->from('maping');
+        $this->db->where('distributors_id', $distributor_id);
+
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+
+        return null;
+    }
+
+
     public function get_all_Maping()
     {
         $query = $this->db->get('employee');
@@ -1288,20 +1308,20 @@ GROUP BY
     public function get_mapping_by_id($id)
     {
         log_message('debug', "Fetching mapping by ID: $id");
-    
+
         $this->db->where('id', $id);
         $query = $this->db->get('maping');
-    
+
         if ($query->num_rows() == 0) {
             log_message('error', "No mapping found for ID: $id");
             return null;
         }
-    
+
         log_message('debug', "Mapping data found for ID: $id");
-    
+
         return $query->row_array();  // returns associative array
     }
-    
+
 
 
 

@@ -12,7 +12,7 @@ class Dashboard extends CI_Controller
 
         $this->output->set_header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
         $this->output->set_header('X-XSS-Protection: 1; mode=block');
-       
+
         ini_set('memory_limit', '512M'); // Or 1G
 
         $this->load->model('User_model');
@@ -370,7 +370,6 @@ class Dashboard extends CI_Controller
             $this->db->group_end();
 
 
-            // $this->db->group_by('mp.DB_Code, ds.Customer_Name, ds.Customer_Code, ds.Pin_Code, ds.City, ds.District, ds.Contact_Number, ds.Country, ds.Zone, ds.State, ds.Population_Strata_1, ds.Population_Strata_2, ds.Country_Group, ds.GTM_TYPE, ds.SUPERSTOCKIST, ds.STATUS, ds.Customer_Type_Code, ds.Sales_Code, ds.Customer_Type_Name, ds.Customer_Group_Code, ds.Customer_Creation_Date, ds.Division_Code, ds.Sector_Code, ds.State_Code, ds.Zone_Code, ds.Distribution_Channel_Code, ds.Distribution_Channel_Name, ds.Customer_Group_Name, ds.Sales_Name, ds.Division_Name, ds.Sector_Name');
 
 
             $query = $this->db->get();
@@ -1580,15 +1579,15 @@ class Dashboard extends CI_Controller
         if (!$back_user_id) {
             redirect('admin/login');
         }
-    
+
         date_default_timezone_set('Asia/Kolkata');
         $this->load->model('Mapping_log_report_model');
-    
+
         $id = $this->input->post('id');
-    
+
         // Step 1: Get old data before update
-        $old_data = $this->Maping_model->get_mapping_by_id($id); // This function should return row as assoc array
-    
+
+
         // Step 2: New data from POST
         $new_data = array(
             'DB_Code' => $this->input->post('DB_Code'),
@@ -1601,21 +1600,40 @@ class Dashboard extends CI_Controller
             'Level_7' => $this->input->post('level7'),
             'update_date' => date('Y-m-d H:i:s')
         );
-    
+
+
+
+
         // Step 3: Update mapping
         if ($this->Maping_model->update_mapping($id, $new_data)) {
-    
+
+            $old_data = $this->Maping_model->get_mapping_by_id($id);
+           
+
+            $this->db->trans_start();
+            $log_new = array(
+                'user_id' => $id,
+                'parent_id' => null,
+                'action' => 'MAPPING_UPDATE',
+                'data' => json_encode($old_data),
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' =>   $back_user_id,
+            );
+
+            $this->db->insert('ci_mapping_activity', $log_new);
+            $this->db->trans_complete();
+
             // Step 4: Log update to report
-            $this->Mapping_log_report_model->insert_update_log($old_data, $new_data, $id);
-    
+            // $this->Mapping_log_report_model->insert_update_log($old_data, $new_data, $id);
+
             $this->session->set_flashdata('success', 'Mapping updated successfully');
         } else {
             $this->session->set_flashdata('error', 'Failed to update mapping');
         }
-    
+
         redirect('admin/hierarchydata');
     }
-    
+
 
 
 
@@ -1628,14 +1646,35 @@ class Dashboard extends CI_Controller
     
         $old_data = $this->Maping_model->get_mapping_by_id($id);
         if ($old_data) {
-            $this->Mapping_log_report_model->delete_log($old_data, $id, 'DELETE');
+            $this->db->trans_start();
+    
+            $log_new = array(
+                'user_id' => $id,
+                'parent_id' => null,
+                'action' => 'MAPPING_DELETE',
+                'data' => json_encode($old_data),
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => $back_user_id,
+            );
+    
+            $this->db->insert('ci_mapping_activity', $log_new);
+            $this->Maping_model->hierarchydelete($id);
+    
+            $this->db->trans_complete();
+    
+            if ($this->db->trans_status() === FALSE) {
+                $this->session->set_flashdata('error', 'Mapping delete failed. Please try again.');
+            } else {
+                $this->session->set_flashdata('success', 'Mapping deleted successfully.');
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Mapping record not found.');
         }
     
-        $this->Maping_model->hierarchydelete($id);
         redirect('admin/hierarchydata');
     }
     
-    
+
 
 
 

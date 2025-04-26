@@ -5,7 +5,7 @@
         <div class="dashhead bg-white">
             <div class="dashhead-titles">
                 <h3 class="dashhead-title">User Movement Log Report</h3>
-                <a href="<?php echo base_url('admin/UserMovement_log_report_json'); ?>" class="btn "> api test</a>
+                <!-- <a href="<?php echo base_url('admin/UserMovement_log_report_json'); ?>" class="btn "> api test</a> -->
 
             </div>
         </div>

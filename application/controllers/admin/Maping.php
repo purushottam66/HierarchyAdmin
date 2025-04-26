@@ -252,13 +252,23 @@ class Maping extends CI_Controller
 
                 $insert_id = $this->Maping_model->insert_mapping($data);
                 if ($insert_id) {
+                    $user_id = $this->db->insert_id(); 
 
-                    // Add insert ID to data array
-                    $data['id'] = $insert_id;
-                    
-                    // Create log entry
-                    $this->Mapping_log_report_model->insert_log($data, 'INSERT');
-                    
+
+                    $this->db->trans_start();
+                    $log_new = array(
+                        'user_id' => $user_id,
+                        'parent_id' => null,
+                        'action' => 'MAPPING_INSERT',
+                        'data' => json_encode($data),
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'created_by' =>   $back_user_id,
+                    );
+
+                    $this->db->insert('ci_mapping_activity', $log_new);
+                    $this->db->trans_complete();
+
+
                     $success_msgs[] = 'Mapping for Distributor ' . $distributor_code . ' Successfully inserted - Successfully Done.';
                 } else {
 

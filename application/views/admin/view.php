@@ -6,6 +6,10 @@
             </div>
             <div class="dashhead-toolbar">
                 <div class="dashhead-toolbar-item"><a href="">Permission Manager</a> / view role</div>
+                <a href="#" class="href">
+                    <button type="button" onclick="history.back()"
+                        class="btnss btn bg-danger text-white ">Back</button>
+                </a>
             </div>
         </div>
     </header>

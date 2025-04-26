@@ -53,8 +53,22 @@
                                         </div>
                                     <?php endif; ?>
                                     <div class="row">
-                                        <!-- Name -->
-                                        <!-- Name -->
+
+
+                                    <input type="hidden" value="<?php echo $employee['employee_status']; ?>" name="employee_status">
+                                    <input type="hidden" value="<?php echo $employee['application_id']; ?>" name="application_id">
+                                    <input type="hidden" value="<?php echo $employee['employee_id']; ?>" name="employee_id">
+                                    <input type="hidden" value="<?php echo $employee['doj']; ?>" name="doj">
+                                    <input type="hidden" value="<?php echo $employee['level']; ?>" name="level">
+                                    <input type="hidden" value="<?php echo $employee['region']; ?>" name="region">
+                                    <input type="hidden" value="<?php echo $employee['vacant_status']; ?>" name="vacant_status">
+
+                                    <input type="hidden" value="<?php echo $employee['city']; ?>" name="city">
+
+                                    <input type="hidden" value="<?php echo $employee['state']; ?>" name="state">
+
+
+                                     
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="name">Name</label>

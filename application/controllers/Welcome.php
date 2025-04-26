@@ -528,7 +528,7 @@ class Welcome extends CI_Controller
                     ->or_where('mp.Level_6', $Pjp_Code)
                     ->or_where('mp.Level_7', $Pjp_Code)
                     ->group_end();
-                $this->db->group_by('mp.DB_Code, ds.Customer_Name, ds.Customer_Code, ds.Pin_Code, ds.City, ds.District, ds.Contact_Number, ds.Country, ds.Zone, ds.State, ds.Population_Strata_1, ds.Population_Strata_2, ds.Country_Group, ds.GTM_TYPE, ds.SUPERSTOCKIST, ds.STATUS, ds.Customer_Type_Code, ds.Sales_Code, ds.Customer_Type_Name, ds.Customer_Group_Code, ds.Customer_Creation_Date, ds.Division_Code, ds.Sector_Code, ds.State_Code, ds.Zone_Code, ds.Distribution_Channel_Code, ds.Distribution_Channel_Name, ds.Customer_Group_Name, ds.Sales_Name, ds.Division_Name, ds.Sector_Name');
+                $this->db->group_by('mp.DB_Code, ds.Customer_Name, ds.Customer_Code, ds.Pin_Code, ds.City, ds.Contact_Number, ds.Country, ds.Zone, ds.State, ds.Population_Strata_1, ds.Population_Strata_2, ds.Country_Group, ds.GTM_TYPE, ds.SUPERSTOCKIST, ds.STATUS, ds.Customer_Type_Code, ds.Sales_Code, ds.Customer_Type_Name, ds.Customer_Group_Code, ds.Customer_Creation_Date, ds.Division_Code, ds.Sector_Code, ds.State_Code, ds.Zone_Code, ds.Distribution_Channel_Code, ds.Distribution_Channel_Name, ds.Customer_Group_Name, ds.Sales_Name, ds.Division_Name, ds.Sector_Name');
 
                 $query = $this->db->get();
                 $data = $query->result_array();
