@@ -134,7 +134,7 @@
                     d.date_to = $('#date_to').val();
                 },
                 dataSrc: function(response) {
-                    console.log('AJAX Response:', response);
+            
                     return response.data;
                 },
             },

@@ -67,10 +67,10 @@
                 type: "POST",
                 data: function(d) {
                     d.search = $('#dt-search-0').val(); // Add custom search parameters if needed
-                    console.log("Sent Data: ", d); // Log data being sent to server
+                 
                 },
                 dataSrc: function(json) {
-                    console.log("Received Response: ", json); // Debugging - log response
+              
                     return json.data; // Ensure API response has a 'data' property
                 },
                 error: function(xhr, error, code) {

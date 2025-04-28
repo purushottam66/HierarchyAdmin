@@ -236,7 +236,7 @@
                 var url = '<?php echo base_url("admin/employee_csv"); ?>?' + params.toString();
                 window.location.href = url;
 
-                console.log(url);
+               
             }
         });
         var table = $('#example11').DataTable({
@@ -295,7 +295,7 @@
 
 <script>
     function changeEmployeeStatus(employeeId, status) {
-        console.log(`Changing status of Employee ID: ${employeeId} to ${status}`);
+ 
 
         let activeRadio = document.getElementById("switchActive" + employeeId);
         let inactiveRadio = document.getElementById("switchInactive" + employeeId);

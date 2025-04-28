@@ -1247,7 +1247,7 @@
             });
 
             let enableButton = allSelected && levelSelected && customerDataSelected;
-            console.log("🔵 Final Button Enable Status:", enableButton);
+         
 
             $("#submitButton__").prop("disabled", !enableButton);
         }
@@ -1306,7 +1306,7 @@
         $(document).on("change", ".row-checkbox_", function() {
             let levelSelected = parseInt($(this).attr("id").replace("level_", ""), 10);
 
-            console.log(levelSelected);
+     
 
             if (!isNaN(levelSelected)) {
                 let nextLevel = levelSelected + 1;

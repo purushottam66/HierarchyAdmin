@@ -154,7 +154,7 @@ $(document).ready(function() {
                 data: { sales_codes: selectedSalesCodes },
                 dataType: 'json',
                 success: function(response) {
-                    console.log('Distribution Channels Response:', response);
+                 
 
                     // Check for error
                     if (response.error) {
@@ -286,8 +286,7 @@ $(document).ready(function() {
         // Get selected Population Strata 2 values
         const selectedPopulationStratas = $(this).val();
         
-        // Log the selected values to browser console
-        console.log('Selected Population Strata 2:', selectedPopulationStratas);
+
         
         // AJAX call to get additional data or perform filtering
         if (selectedPopulationStratas && selectedPopulationStratas.length > 0) {
@@ -300,7 +299,7 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(response) {
                     // Log the full response
-                    console.log('Population Strata Details:', response);
+               
                     
                     // Optional: Update other UI elements or perform additional actions
                     // For example, you might want to update some statistics or filter other dropdowns
@@ -313,12 +312,9 @@ $(document).ready(function() {
                 },
                 error: function(xhr, status, error) {
                     // Log any errors
-                    console.error('Error fetching Population Strata details:', error);
-                    console.log('XHR Status:', status);
-                    console.log('XHR Response:', xhr.responseText);
+                  
                     
-                    // Optional: Show user-friendly error message
-                    alert('Unable to fetch Population Strata details. Please try again.');
+               
                 }
             });
         } else {

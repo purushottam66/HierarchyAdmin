@@ -592,7 +592,7 @@
 
       function fetchDataAndUpdate_(params) {
 
-          console.log(params);
+    
 
           $.ajax({
               url: "<?= site_url('admin/get-hierarchy-filter-options') ?>",
@@ -600,7 +600,7 @@
               data: params,
               success: function(response) {
                   updateSalesCodeDropdown(response);
-                  console.log(response);
+           
                   $('#exampley').DataTable().ajax.reload();
 
               },

@@ -72,10 +72,10 @@
                 type: "POST",
                 data: function(d) {
                     d.search = $('#dt-search-0').val(); 
-                    console.log("Sent Data: ", d); 
+                  
                 },
                 dataSrc: function(json) {
-                    console.log("Received Response: ", json); 
+                  
                     return json.data;
                 },
                 error: function(xhr, error, code) {

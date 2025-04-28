@@ -98,7 +98,7 @@
         // Log table events
         table.on('xhr', function() {
             var json = table.ajax.json();
-            console.log('DataTables XHR Response:', json);
+          
         });
     });
 

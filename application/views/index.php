@@ -730,8 +730,7 @@
         $(document).ready(function() {
 
             function loadTreeData(id, level) {
-                console.log(id);
-                console.log(level);
+             
 
                 $('#loader').show();
 
@@ -818,7 +817,7 @@
                     $('#loader').hide();
 
                     if (response.status === 'success') {
-                        console.log('response Employee Data:', response);
+                     
                         displayEmployeeData(response.data);
                     } else {
                         console.error('Error:', response.message);

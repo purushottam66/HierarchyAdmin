@@ -539,7 +539,7 @@
         }
 
         function updatePagination_Replace(response) {
-            console.log("updatePagination", response);
+          
             var currentPage = parseInt(response.page);
             var totalPages = parseInt(response.total_pages);
             var totalRecords = parseInt(response.total_records);
@@ -655,10 +655,7 @@
                 var designationName = $(this).attr('data-designation_name');
                 var name = $(this).attr('data-name');
 
-                console.log(selectedLevel);
-                
-
-                console.log(selectedPjpCode);
+        
                 
 
                 let mydata =
@@ -1143,7 +1140,7 @@
         }
 
         function updatePagination(response) {
-            console.log("updatePagination", response);
+          
             var currentPage = parseInt(response.page);
             var totalPages = parseInt(response.total_pages);
             var totalRecords = parseInt(response.total_records);

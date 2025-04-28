@@ -185,7 +185,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Pass expiration time from PHP to JavaScript
             const expirationTime = "<?php echo $expiration_time; ?>";
-            console.log("Expiration Time from PHP:", expirationTime); // Check the value
+        
             startCountdown(expirationTime);
         });
     </script>

@@ -652,7 +652,7 @@
 
 
           function updatePagination_Replace(response) {
-              console.log("updatePagination", response);
+       
               var currentPage = parseInt(response.page);
               var totalPages = parseInt(response.total_pages);
               var totalRecords = parseInt(response.total_records);
@@ -811,7 +811,7 @@
                           success: function(response) {
                               if (response) {
                                   var response = JSON.parse(response);
-                                  console.log("response", response);
+                         
 
                                   let pagination = response.pagination;
                                   updatePagination_emp(pagination);
@@ -916,7 +916,7 @@
                   }
 
                   function updatePagination_emp(response) {
-                      console.log("updatePagination", response);
+               
                       var currentPage = parseInt(response.page);
                       var totalPages = parseInt(response.total_pages);
                       var totalRecords = parseInt(response.total);
@@ -995,7 +995,7 @@
                       // Get all parameters and update search
                       var params = getParams();
 
-                      console.log(params);
+               
 
 
                       // Debounce the search to avoid too many requests
@@ -1281,7 +1281,7 @@
 
 
           function updatePagination(response) {
-              console.log("updatePagination", response);
+         
               var currentPage = parseInt(response.page);
               var totalPages = parseInt(response.total_pages);
               var totalRecords = parseInt(response.total_records);

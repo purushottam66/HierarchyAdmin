@@ -608,7 +608,7 @@
                       var response = JSON.parse(response);
                       empresponse = response;
 
-                      console.log("empresponse dfhgn", empresponse);
+                
 
 
 
@@ -662,7 +662,7 @@
 
 
           function updatePagination_Replace(response) {
-              console.log("updatePagination wrerdgthfg", response);
+          
               var currentPage = parseInt(response.page);
               var totalPages = parseInt(response.total_pages);
               var totalRecords = parseInt(response.total_records);
@@ -819,7 +819,7 @@
                           success: function(response) {
                               if (response) {
                                   var response = JSON.parse(response);
-                                  console.log("response", response);
+                             
 
                                   let pagination = response.pagination;
                                   updatePagination_emp(pagination);

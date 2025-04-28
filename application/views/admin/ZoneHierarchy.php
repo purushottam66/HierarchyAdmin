@@ -471,7 +471,7 @@
                 success: function(data) {
                     var employeeData = data;
 
-                    console.log(employeeData);
+           
 
 
 
@@ -570,7 +570,7 @@
             var id = $(this).data('id');
             var level = $(this).data('level');
 
-            console.log(id, level);
+   
 
             loadTreeData(id, level);
         });
