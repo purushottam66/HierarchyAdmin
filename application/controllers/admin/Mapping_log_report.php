@@ -411,7 +411,7 @@ class Mapping_log_report extends CI_Controller
                     'Level_7_Code' => $employee_data['Level_7']['employer_code'] ?? '-',
                     'Level_7_Designation' => $employee_data['Level_7']['designation_name'] ?? '-',
                   
-                    'create_date' => date('Y-m-d H:i:s', strtotime($log['create_date'])),
+                    'old_date' => isset($mapping_data['create_date']) ? date('Y-m-d H:i:s', strtotime($mapping_data['create_date'])) : date('Y-m-d H:i:s', strtotime($log['created_at'])),
 
                 ];
             }, $logs);

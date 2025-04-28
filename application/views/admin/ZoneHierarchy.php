@@ -13,7 +13,7 @@
 
 .sidetree .app-side {
 
-    width: 296px;
+    width: 256px;
 
 }
 </style>
