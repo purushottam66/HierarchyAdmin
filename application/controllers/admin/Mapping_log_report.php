@@ -25,6 +25,7 @@ class Mapping_log_report extends CI_Controller
         $this->load->model('Distributor_model');
         $this->load->library('session');
         $this->load->model('Mapping_log_report_model');
+        date_default_timezone_set('Asia/Kolkata');
 
 
         // $user_id = $this->session->userdata('back_user_id');
@@ -105,7 +106,7 @@ class Mapping_log_report extends CI_Controller
             // Get and validate DataTables parameters
             $draw = intval($this->input->get('draw'));
             $start = max(0, intval($this->input->get('start')));
-            $length = max(10, min(100, intval($this->input->get('length')))); // Limit between 10 and 100
+            $length = max(50000, min(100, intval($this->input->get('length')))); // Limit between 10 and 100
             $search = trim($this->input->get('search')['value'] ?? '');
 
             // Validate order parameters
@@ -148,6 +149,11 @@ class Mapping_log_report extends CI_Controller
             $logs = $this->Mapping_log_report_model->get_logs($filters, $length, $start);
             $total_records = $this->Mapping_log_report_model->get_total_logs($filters);
 
+     
+
+            log_message('debug', 'get_logs_ajax total: ' . json_encode($total_records));
+
+
 
 
 
@@ -167,7 +173,7 @@ class Mapping_log_report extends CI_Controller
                     'created_at' => date('Y-m-d H:i:s', strtotime($log['created_at'])),
                     'created_by' => $log['created_by_name'] ?? $log['created_by'],
 
-                    // डिस्ट्रीब्यूटर डेटा
+                 
                     'Customer_Name' => $distributor_data['Customer_Name'] ?? '-',
                     'Customer_Code' => $distributor_data['Customer_Code'] ?? '-',
                     'Pin_Code' => $distributor_data['Pin_Code'] ?? '-',
@@ -199,7 +205,7 @@ class Mapping_log_report extends CI_Controller
                     'State_Code' => $distributor_data['State_Code'] ?? '-',
                     'Zone_Code' => $distributor_data['Zone_Code'] ?? '-',
 
-                    // कर्मचारी डेटा
+             
                     'Level_1_Name' => $employee_data['Level_1']['name'] ?? '-',
                     'Level_1_Code' => $employee_data['Level_1']['employer_code'] ?? '-',
                     'Level_1_Designation' => $employee_data['Level_1']['designation_name'] ?? '-',
@@ -228,7 +234,9 @@ class Mapping_log_report extends CI_Controller
 
                     'Level_7_Name' => $employee_data['Level_7']['name'] ?? '-',
                     'Level_7_Code' => $employee_data['Level_7']['employer_code'] ?? '-',
-                    'Level_7_Designation' => $employee_data['Level_7']['designation_name'] ?? '-'
+                    'Level_7_Designation' => $employee_data['Level_7']['designation_name'] ?? '-',
+                    'old_date' => isset($mapping_data['create_date']) ? date('Y-m-d H:i:s', strtotime($mapping_data['create_date'])) : date('Y-m-d H:i:s', strtotime($log['created_at'])),
+
                 ];
             }, $logs);
 
@@ -259,93 +267,6 @@ class Mapping_log_report extends CI_Controller
 
 
 
-    public function get_logs_ajax_backup()
-    {
-        $back_user_id = $this->session->userdata('back_user_id');
-        if (!$back_user_id) {
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
-        }
-
-        // Get DataTables parameters
-        $draw = $this->input->get('draw');
-        $start = $this->input->get('start');
-        $length = $this->input->get('length');
-        $search = $this->input->get('search')['value'];
-        $order = $this->input->get('order');
-
-        // Define column names for sorting
-        $columns = array(
-            0 => 'action_type',
-            1 => 'action_time',
-            2 => 'action_by',
-            3 => 'DB_Code',
-            4 => 'Sales_Code',
-            5 => 'Distribution_Channel_Code',
-            6 => 'Division_Code',
-            7 => 'Customer_Type_Code',
-            8 => 'Customer_Group_Code',
-            9 => 'Level_1',
-            10 => 'Level_2',
-            11 => 'Level_3',
-            12 => 'Level_4',
-            13 => 'Level_5',
-            14 => 'Level_6',
-            15 => 'Level_7'
-        );
-
-        // Filters
-        $filters = array(
-            'action_type' => $this->input->get('action_type'),
-            'DB_Code' => $this->input->get('DB_Code'),
-            'date_from' => $this->input->get('date_from'),
-            'date_to' => $this->input->get('date_to'),
-            'search' => $search,
-            'order' => array()
-        );
-
-        // Process ordering
-        if (!empty($order)) {
-            foreach ($order as $ord) {
-                $filters['order'][] = array(
-                    'column' => $columns[$ord['column']],
-                    'dir' => $ord['dir']
-                );
-            }
-        }
-
-        // Get filtered data
-        $logs = $this->Mapping_log_report_model->get_logs($filters, $length, $start);
-        $total_records = $this->Mapping_log_report_model->get_total_logs($filters);
-        $filtered_records = $total_records; // If you want separate count for filtered records
-
-        $response = array(
-            "draw" => intval($draw),
-            "recordsTotal" => intval($total_records),
-            "recordsFiltered" => intval($filtered_records),
-            "data" => array()
-        );
-
-        // Format the data
-        foreach ($logs as $log) {
-            $row = array();
-            foreach ($columns as $column) {
-                if (strpos($column, 'Level_') !== false && $log['action_type'] === 'UPDATE') {
-                    $level_num = substr($column, 6);
-                    $old_name = $log['old_level' . $level_num . '_name'] ?? 'N/A';
-                    $new_name = $log['level' . $level_num . '_name'] ?? 'N/A';
-                    $old_code = $log['old_' . $column] ?? 'N/A';
-                    $new_code = $log[$column] ?? 'N/A';
-                    $row[] = "Old: " . $old_code . " (" . $old_name . ") → New: " . $new_code . " (" . $new_name . ")";
-                } else {
-                    $row[] = $log[$column] ?? '';
-                }
-            }
-            $response['data'][] = $row;
-        }
-
-        echo json_encode($response);
-    }
 
 
     public function json()
@@ -364,7 +285,7 @@ class Mapping_log_report extends CI_Controller
             // Get and validate DataTables parameters
             $draw = intval($this->input->get('draw'));
             $start = max(0, intval($this->input->get('start')));
-            $length = max(10, min(100, intval($this->input->get('length')))); // Limit between 10 and 100
+            $length = max(5000, min(100, intval($this->input->get('length')))); // Limit between 10 and 100
             $search = trim($this->input->get('search')['value'] ?? '');
 
             // Validate order parameters
@@ -407,6 +328,7 @@ class Mapping_log_report extends CI_Controller
             $logs = $this->Mapping_log_report_model->get_logs($filters, $length, $start);
             $total_records = $this->Mapping_log_report_model->get_total_logs($filters);
 
+          
 
 
 
@@ -456,7 +378,7 @@ class Mapping_log_report extends CI_Controller
                     'Sector_Name' => $distributor_data['Sector_Name'] ?? '-',
                     'Sector_Code' => $distributor_data['Sector_Code'] ?? '-',
                     'State_Code' => $distributor_data['State_Code'] ?? '-',
-                    'Zone_Code' => $distributor_data['Zone_Code'] ?? '-',
+                    'Zone_Code' => $distributor_data['Zone_Code'] ?? '-',  
 
                     // कर्मचारी डेटा
                     'Level_1_Name' => $employee_data['Level_1']['name'] ?? '-',
@@ -487,7 +409,10 @@ class Mapping_log_report extends CI_Controller
 
                     'Level_7_Name' => $employee_data['Level_7']['name'] ?? '-',
                     'Level_7_Code' => $employee_data['Level_7']['employer_code'] ?? '-',
-                    'Level_7_Designation' => $employee_data['Level_7']['designation_name'] ?? '-'
+                    'Level_7_Designation' => $employee_data['Level_7']['designation_name'] ?? '-',
+                  
+                    'create_date' => date('Y-m-d H:i:s', strtotime($log['create_date'])),
+
                 ];
             }, $logs);
 

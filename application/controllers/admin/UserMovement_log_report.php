@@ -16,6 +16,7 @@ class UserMovement_log_report extends CI_Controller
         // Load libraries and helpers once
         $this->load->library(['session', 'form_validation']);
         $this->load->helper(['url', 'form']);
+        date_default_timezone_set('Asia/Kolkata');
         
         // Load models
         $this->load->model([

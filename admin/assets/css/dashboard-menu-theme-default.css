@@ -1292,10 +1292,10 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 	color: black;
 }
 
-.mgscd-menu .app-side .side-nav ul.nav-sub.collapse.in li ul.nav-sub.collapse.in,
+/* .mgscd-menu .app-side .side-nav ul.nav-sub.collapse.in li ul.nav-sub.collapse.in,
 .mgscd-menu .app-side .side-nav ul.nav-sub.mm-collapse.mm-show li ul.nav-sub.mm-collapse.mm-show {
 	background-color: rgba(0, 0, 0, 0.4);
-}
+} */
 
 .mgscd-menu .app-side .side-nav a:hover,
 .mgscd-menu .app-side .side-nav a:focus,
@@ -1328,7 +1328,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu aside.app-side .nav>li>a {
-	width: 240px;
+	width: -webkit-fill-available;
 }
 
 .app-side-opened.app-side-mini aside.app-side .nav>li>a {

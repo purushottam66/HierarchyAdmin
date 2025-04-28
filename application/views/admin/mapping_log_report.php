@@ -45,9 +45,9 @@
                                 <table id="mapping_logs_table" class="display nowrap table table-bordered table-hover text-center" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>User ID</th>
-                                            <th>Parent ID</th>
+                                            <th>Id</th>
+                                            <th>Batch Id</th>
+                                            <th>Batch Id</th>
                                             <th>Action</th>
                                             <th>Created At</th>
                                             <th>Created By</th>
@@ -103,6 +103,9 @@
                                             <th>Level_7_Name</th>
                                             <th>Level_7_Employer_Code</th>
                                             <th>Level_7_Designation_Name</th>
+
+                                            <th>old_date</th>
+                                         
                                         </tr>
                                     </thead>
                                 </table>
@@ -485,7 +488,14 @@
                     "data": "Level_7_Designation",
                     "searchable": true,
                     "orderable": true
-                }
+                },
+                {
+                    "targets": 58,
+                    "data": "old_date",
+                    "searchable": true,
+                    "orderable": true
+                },
+               
 
 
             ],

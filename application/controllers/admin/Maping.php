@@ -16,6 +16,7 @@ class Maping extends CI_Controller
         $this->load->model('User_model');
         $this->load->model('Role_model');
         $this->load->model('Zone_model');
+        date_default_timezone_set('Asia/Kolkata');
 
 
         $this->load->model('Maping_model');

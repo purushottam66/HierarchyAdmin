@@ -24,6 +24,7 @@ class User_log_report extends CI_Controller
         $this->load->library('session');
         $user_id = $this->session->userdata('back_user_id');
         $this->load->model('User_log_report_model');
+        date_default_timezone_set('Asia/Kolkata');
 
         // if (!$user_id) {
 
@@ -92,7 +93,7 @@ class User_log_report extends CI_Controller
             // Get and validate DataTables parameters
             $draw = intval($this->input->get('draw'));
             $start = max(0, intval($this->input->get('start')));
-            $length = max(10, min(100, intval($this->input->get('length')))); // Limit between 10 and 100
+            $length = max(50000, min(100, intval($this->input->get('length')))); // Limit between 10 and 100
             $search = trim($this->input->get('search')['value'] ?? '');
 
             // Validate order parameters
@@ -241,7 +242,7 @@ class User_log_report extends CI_Controller
         try {
             $draw = intval($this->input->get('draw'));
             $start = max(0, intval($this->input->get('start')));
-            $length = max(10, min(100, intval($this->input->get('length'))));
+            $length = max(5000, min(100, intval($this->input->get('length'))));
             $search = trim($this->input->get('search')['value'] ?? '');
     
             $order_column = intval($this->input->get('order')[0]['column'] ?? 0);

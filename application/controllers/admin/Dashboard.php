@@ -23,6 +23,7 @@ class Dashboard extends CI_Controller
         $this->load->model('Maping_model');
         $this->load->model('Employee_model');
         $this->load->library('session');
+        date_default_timezone_set('Asia/Kolkata');
 
         $this->load->model('Mapping_log_report_model');
 

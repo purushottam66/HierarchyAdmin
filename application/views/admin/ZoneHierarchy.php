@@ -1,6 +1,15 @@
 <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/dataTables.dataTables.css'); ?>">
 <link rel="stylesheet" href="<?php echo base_url('admin/assets/css/buttons.dataTables.css'); ?>">
 
+
+<style>
+
+.mgscd-menu ul.nav.nav-sub li ul.nav.nav-sub.mm-collapse.mm-show {
+    min-width: -webkit-fill-available;
+}
+</style>
+
+
 <style>
     .sidetree {
         border: 1px solid gray;

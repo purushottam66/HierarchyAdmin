@@ -24,6 +24,7 @@ class RoleController extends CI_Controller
         $this->load->model('Zone_model');
         $this->load->model('Distributor_model');
         $this->load->library('session');
+        date_default_timezone_set('Asia/Kolkata');
 
         $user_id = $this->session->userdata('back_user_id');
 
@@ -480,7 +481,7 @@ class RoleController extends CI_Controller
 
     public function email_domain_check($email)
     {
-        $domain = '@adaniwilmar.in';
+        $domain = '@awl.in';
         if (substr($email, -strlen($domain)) === $domain) {
             return TRUE;
         } else {

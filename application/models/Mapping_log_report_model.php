@@ -13,17 +13,16 @@ class Mapping_log_report_model extends CI_Model
 
     public function get_logs($filters = array(), $limit = null, $offset = null)
     {
-        // लॉग फिल्टर्स को देखने के लिए
-        log_message('debug', 'Filters received: ' . json_encode($filters));
         
-        // Select fields from the log table
+        
+  
         $this->db->select('ci_mapping_activity.*, users.name as created_by_name');
         $this->db->from('ci_mapping_activity');
         
-        // Join with users table to get creator name
+     
         $this->db->join('users', 'users.id = ci_mapping_activity.created_by', 'left');
 
-        // Apply filters
+  
         if (!empty($filters)) {
             if (!empty($filters['action_type'])) {
                 $this->db->where('ci_mapping_activity.action', $filters['action_type']);
@@ -49,7 +48,7 @@ class Mapping_log_report_model extends CI_Model
                 $this->db->group_end();
             }
 
-            // Apply ordering
+        
             if (!empty($filters['order'])) {
                 $this->db->order_by($filters['order']['column'], $filters['order']['dir']);
             } else {
@@ -57,7 +56,7 @@ class Mapping_log_report_model extends CI_Model
             }
         }
 
-        // Apply pagination
+    
         if ($limit !== null) {
             $this->db->limit($limit, $offset);
         }
@@ -65,13 +64,13 @@ class Mapping_log_report_model extends CI_Model
         $query = $this->db->get();
         $logs = $query->result_array();
 
-        // Process each log entry to get additional data
+    
         foreach ($logs as &$log) {
             $data = json_decode($log['data'], true);
             if (!empty($data[0]) && !empty($data[0][0])) {
                 $mapping = $data[0][0];
                 
-                // Get distributor data
+         
                 $this->db->select('*');
                 $this->db->from('distributors');
                 $this->db->where('Customer_Code', $mapping['DB_Code']);
@@ -107,8 +106,8 @@ class Mapping_log_report_model extends CI_Model
 
     public function get_total_logs($filters = array())
     {
-        // लॉग टोटल काउंट क्वेरी को देखने के लिए
-        log_message('debug', 'Getting total count with filters: ' . json_encode($filters));
+        
+    
         
         $this->db->select('COUNT(*) as total');
         $this->db->from('ci_mapping_activity');
@@ -144,8 +143,8 @@ class Mapping_log_report_model extends CI_Model
         $query = $this->db->get();
         $result = $query->row_array();
         
-        // लॉग टोटल काउंट को देखने के लिए
-        log_message('debug', 'Total count result: ' . json_encode($result));
+    
+ 
         
         return $result['total'];
     }

@@ -86,7 +86,7 @@
                                             <div class="form-group">
                                                 <label for="email">Email</label>
                                                 <input type="email" id="email" class="form-control" name="email" placeholder="Enter Email" required>
-                                                <div class="invalid-feedback">Email must end with @adaniwilmar.in</div>
+                                                <div class="invalid-feedback">Email must end with @awl.in</div>
                                             </div>
                                         </div>
 
@@ -169,7 +169,7 @@
         var emailValue = emailInput.value;
         var feedback = emailInput.nextElementSibling;
 
-        if (emailValue.endsWith('@adaniwilmar.in')) {
+        if (emailValue.endsWith('@awl.in')) {
             emailInput.classList.remove('is-invalid');
             feedback.style.display = 'none';
         } else {
