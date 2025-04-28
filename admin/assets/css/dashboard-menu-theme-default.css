@@ -1328,7 +1328,7 @@ body:not(.app-side-mini) .app-side .logo .logo-xs {
 }
 
 .mgscd-menu aside.app-side .nav>li>a {
-	width: -webkit-fill-available;
+	width: 240px;
 }
 
 .app-side-opened.app-side-mini aside.app-side .nav>li>a {

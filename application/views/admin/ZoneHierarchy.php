@@ -5,7 +5,16 @@
 <style>
 
 .mgscd-menu ul.nav.nav-sub li ul.nav.nav-sub.mm-collapse.mm-show {
-    min-width: -webkit-fill-available;
+    min-width: -webkit-fill-available !important;
+}
+.mgscd-menu aside.app-side .nav>li>a {
+	width: -webkit-fill-available !important;
+}
+
+.sidetree .app-side {
+
+    width: 296px;
+
 }
 </style>
 
