@@ -44,6 +44,7 @@ class Mapping_log_report extends CI_Controller
 
     public function list()
     {
+        
         $back_user_id = $this->session->userdata('back_user_id');
         if (!$back_user_id) {
             redirect('admin/login');
@@ -60,20 +61,20 @@ class Mapping_log_report extends CI_Controller
         }
 
         // Check for permission
-        // $hasPermission = false;
-        // if (!empty($data['permissions']) && is_array($data['permissions'])) {
-        //     foreach ($data['permissions'] as $p) {
-        //         if ($p['module_name'] === "User Log Report" && $p['view'] === "yes") {
-        //             $hasPermission = true;
-        //             break;
-        //         }
-        //     }
-        // }
+        $hasPermission = false;
+        if (!empty($data['permissions']) && is_array($data['permissions'])) {
+            foreach ($data['permissions'] as $p) {
+                if ($p['module_name'] === "Log Report" && $p['view'] === "yes") {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+        }
 
-        // if (!$hasPermission) {
-        //     redirect('admin/Access_denied');
-        //     return;
-        // }
+        if (!$hasPermission) {
+            redirect('admin/Access_denied');
+            return;
+        }
 
 
 
@@ -83,7 +84,7 @@ class Mapping_log_report extends CI_Controller
 
         // Load views
         $this->load->view('admin/header', $data);
-        $this->load->view('admin/mapping_log_report', $data);
+        $this->load->view('admin/mapping-log-report', $data);
         $this->load->view('admin/footer', $data);
     }
 
@@ -149,7 +150,9 @@ class Mapping_log_report extends CI_Controller
             $logs = $this->Mapping_log_report_model->get_logs($filters, $length, $start);
             $total_records = $this->Mapping_log_report_model->get_total_logs($filters);
 
-     
+            log_message('debug', 'get_logs_ajax logs: '. json_encode($logs));
+
+
 
             log_message('debug', 'get_logs_ajax total: ' . json_encode($total_records));
 
@@ -173,7 +176,7 @@ class Mapping_log_report extends CI_Controller
                     'created_at' => date('Y-m-d H:i:s', strtotime($log['created_at'])),
                     'created_by' => $log['created_by_name'] ?? $log['created_by'],
 
-                 
+
                     'Customer_Name' => $distributor_data['Customer_Name'] ?? '-',
                     'Customer_Code' => $distributor_data['Customer_Code'] ?? '-',
                     'Pin_Code' => $distributor_data['Pin_Code'] ?? '-',
@@ -205,7 +208,7 @@ class Mapping_log_report extends CI_Controller
                     'State_Code' => $distributor_data['State_Code'] ?? '-',
                     'Zone_Code' => $distributor_data['Zone_Code'] ?? '-',
 
-             
+
                     'Level_1_Name' => $employee_data['Level_1']['name'] ?? '-',
                     'Level_1_Code' => $employee_data['Level_1']['employer_code'] ?? '-',
                     'Level_1_Designation' => $employee_data['Level_1']['designation_name'] ?? '-',
@@ -235,7 +238,7 @@ class Mapping_log_report extends CI_Controller
                     'Level_7_Name' => $employee_data['Level_7']['name'] ?? '-',
                     'Level_7_Code' => $employee_data['Level_7']['employer_code'] ?? '-',
                     'Level_7_Designation' => $employee_data['Level_7']['designation_name'] ?? '-',
-                    'old_date' => isset($mapping_data['create_date']) ? date('Y-m-d H:i:s', strtotime($mapping_data['create_date'])) : date('Y-m-d H:i:s', strtotime($log['created_at'])),
+                    'new_date' => isset($mapping_data['create_date']) ? date('Y-m-d H:i:s', strtotime($mapping_data['update_date'])) : date('Y-m-d H:i:s', strtotime($log['created_at'])),
 
                 ];
             }, $logs);
@@ -265,21 +268,19 @@ class Mapping_log_report extends CI_Controller
     }
 
 
-
-
-
-
     public function json()
     {
         header('Content-Type: application/json');
 
-       
-        // Check authentication
-        $back_user_id = $this->session->userdata('back_user_id');
-        // if (!$back_user_id) {
-        //     echo json_encode(['status' => 'error', 'message' => 'Unauthorized access']);
-        //     return;
-        // }
+
+        $expected_token = 'c57f984eb1f9b891a203c99d8e991d0ed3a749cbddcad8e44aef3a46d6ed6aab'; // Replace with secure token
+        $auth_header = $this->input->get_request_header('Authorization');
+    
+        if ($auth_header !== 'Bearer ' . $expected_token) {
+            echo json_encode(['status' => 'error', 'message' => 'Unauthorized access']);
+            http_response_code(401);
+            return;
+        }
 
         try {
             // Get and validate DataTables parameters
@@ -328,7 +329,7 @@ class Mapping_log_report extends CI_Controller
             $logs = $this->Mapping_log_report_model->get_logs($filters, $length, $start);
             $total_records = $this->Mapping_log_report_model->get_total_logs($filters);
 
-          
+
 
 
 
@@ -342,14 +343,16 @@ class Mapping_log_report extends CI_Controller
 
                 return [
                     'id' => $log['id'],
-                    'user_id' => $log['user_id'],
-                    'parent_id' => $log['parent_id'] ?? '-',
+                    'batch_id' => $log['user_id'],
+                    'batch_parent_id' => $log['parent_id'] ?? '-',
                     'action' => $log['action'],
                     'created_at' => date('Y-m-d H:i:s', strtotime($log['created_at'])),
                     'created_by' => $log['created_by_name'] ?? $log['created_by'],
+                    'Customer_Name' => $distributor_data['Customer_Name'] ?? '-',
+
 
                     // डिस्ट्रीब्यूटर डेटा
-                    'Customer_Name' => $distributor_data['Customer_Name'] ?? '-',
+                    'distributors_id' => $mapping_data['distributors_id'] ?? '-',
                     'Customer_Code' => $distributor_data['Customer_Code'] ?? '-',
                     'Pin_Code' => $distributor_data['Pin_Code'] ?? '-',
                     'City' => $distributor_data['City'] ?? '-',
@@ -378,7 +381,7 @@ class Mapping_log_report extends CI_Controller
                     'Sector_Name' => $distributor_data['Sector_Name'] ?? '-',
                     'Sector_Code' => $distributor_data['Sector_Code'] ?? '-',
                     'State_Code' => $distributor_data['State_Code'] ?? '-',
-                    'Zone_Code' => $distributor_data['Zone_Code'] ?? '-',  
+                    'Zone_Code' => $distributor_data['Zone_Code'] ?? '-',
 
                     // कर्मचारी डेटा
                     'Level_1_Name' => $employee_data['Level_1']['name'] ?? '-',
@@ -410,8 +413,8 @@ class Mapping_log_report extends CI_Controller
                     'Level_7_Name' => $employee_data['Level_7']['name'] ?? '-',
                     'Level_7_Code' => $employee_data['Level_7']['employer_code'] ?? '-',
                     'Level_7_Designation' => $employee_data['Level_7']['designation_name'] ?? '-',
-                  
-                    'old_date' => isset($mapping_data['create_date']) ? date('Y-m-d H:i:s', strtotime($mapping_data['create_date'])) : date('Y-m-d H:i:s', strtotime($log['created_at'])),
+
+                    'new_date' => isset($mapping_data['create_date']) ? date('Y-m-d H:i:s', strtotime($mapping_data['update_date'])) : date('Y-m-d H:i:s', strtotime($log['created_at'])),
 
                 ];
             }, $logs);

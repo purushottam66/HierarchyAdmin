@@ -492,45 +492,50 @@ class RoleController extends CI_Controller
 
 
 
-
     public function update_role_user()
     {
-
         $back_user_id = $this->session->userdata('back_user_id');
         if (!$back_user_id) {
             log_message('error', 'Unauthorized access attempt to update_role_user.');
             redirect('admin/login');
         }
-
-
+    
         $this->form_validation->set_rules('name', 'Name', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|max_length[10]');
         $this->form_validation->set_rules('address', 'Address', 'required');
         $this->form_validation->set_rules('role', 'Role', 'required');
-
+    
         if ($this->form_validation->run() == FALSE) {
-
             $validation_errors = validation_errors();
-
-
             $this->session->set_flashdata('error', $validation_errors);
             redirect('admin/role');
         } else {
-
             $user_id = $this->input->post('user_id');
+            $email = $this->input->post('email');
+    
+            // ✅ Check for duplicate email in other users
+            $existing_user = $this->db->where('email', $email)
+                                      ->where('id !=', $user_id)
+                                      ->get('users')
+                                      ->row();
+    
+            if ($existing_user) {
+                $this->session->set_flashdata('error', 'Email already exists for another user.');
+                redirect('admin/role');
+            }
+    
             $data = [
                 'name' => $this->input->post('name'),
-                'email' => $this->input->post('email'),
+                'email' => $email,
                 'mobile' => $this->input->post('mobile'),
                 'address' => $this->input->post('address'),
                 'role_id' => $this->input->post('role'),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
-
-
+    
             $is_updated = $this->Role_model->update_user_role($user_id, $data);
-
+    
             if ($is_updated) {
                 log_message('info', 'User ID ' . $user_id . ' updated successfully.');
                 $this->session->set_flashdata('success', 'User updated successfully.');
@@ -542,6 +547,7 @@ class RoleController extends CI_Controller
             }
         }
     }
+    
 
 
 

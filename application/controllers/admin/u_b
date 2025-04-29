@@ -52,20 +52,20 @@ class User_log_report extends CI_Controller
         }
 
         // Check for permission
-         $hasPermission = false;
-         if (!empty($data['permissions']) && is_array($data['permissions'])) {
-             foreach ($data['permissions'] as $p) {
-                 if ($p['module_name'] === "Log Report" && $p['view'] === "yes") {
-                     $hasPermission = true;
-                     break;
-                 }
-             }
-         }
+        // $hasPermission = false;
+        // if (!empty($data['permissions']) && is_array($data['permissions'])) {
+        //     foreach ($data['permissions'] as $p) {
+        //         if ($p['module_name'] === "User Log Report" && $p['view'] === "yes") {
+        //             $hasPermission = true;
+        //             break;
+        //         }
+        //     }
+        // }
 
-        if (!$hasPermission) {
-             redirect('admin/Access_denied');
-             return;
-         }
+        // if (!$hasPermission) {
+        //     redirect('admin/Access_denied');
+        //     return;
+        // }
 
 
 
@@ -75,7 +75,7 @@ class User_log_report extends CI_Controller
 
         // Load views
         $this->load->view('admin/header', $data);
-        $this->load->view('admin/user-log-report', $data);
+        $this->load->view('admin/user_log_report', $data);
         $this->load->view('admin/footer', $data);
     }
 
@@ -233,14 +233,11 @@ class User_log_report extends CI_Controller
     {
         header('Content-Type: application/json');
 
-        $expected_token = 'c57f984eb1f9b891a203c99d8e991d0ed3a749cbddcad8e44aef3a46d6ed6aab'; // Replace with secure token
-        $auth_header = $this->input->get_request_header('Authorization');
-    
-        if ($auth_header !== 'Bearer ' . $expected_token) {
-            echo json_encode(['status' => 'error', 'message' => 'Unauthorized access']);
-            http_response_code(401);
-            return;
-        }
+        $back_user_id = $this->session->userdata('back_user_id');
+        // if (!$back_user_id) {
+        //     echo json_encode(['status' => 'error', 'message' => 'Unauthorized access']);
+        //     return;
+        // }
     
         try {
             $draw = intval($this->input->get('draw'));

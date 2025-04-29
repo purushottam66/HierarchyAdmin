@@ -1709,23 +1709,7 @@ class Employee extends CI_Controller
             echo json_encode(['status' => 'error', 'message' => 'Failed to add employee.']);
         }
 
-        // // Insert employee data
-        // if ($this->Employee_model->insert_employee($data)) {
-
-        //     // $log_data = array(
-        //     //     'table_name' => 'User',
-        //     //     'key_id' => $employee_id,
-        //     //     'variable' => 'Email',
-        //     //     'old_value' => $email,
-        //     //     'new_value' => $email,
-        //     //     'timestamp' => date('Y-m-d H:i:s'),
-        //     //     'updated_by' =>   $user_name
-        //     // );
-        //     // $this->Log_report->create_log($log_data);
-
-        // } else {
-        //     echo json_encode(['status' => 'error', 'message' => 'Failed to add employee.']);
-        // }
+  
     }
 
 

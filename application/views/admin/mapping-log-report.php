@@ -20,6 +20,10 @@
                 <div class="col-md-12">
                     <div class="box shadow-2dp b-r-2">
                         <div class="box-body">
+                            
+
+                        <a href="<?php echo base_url('admin/userlogreport'); ?>" class="btn active"> user log report</a>
+                        <a  href="<?php echo base_url('admin/mapping_log_report'); ?>" class="btn active text-white " style="background:#FB8B03"> mapping log report</a>
                             <!-- Filter Section -->
                             <!-- <div class="row mb-3">
                                 <div class="col-md-3">
@@ -47,7 +51,7 @@
                                         <tr>
                                             <th>Id</th>
                                             <th>Batch Id</th>
-                                            <th>Batch Id</th>
+                                            <th> Parent Batch Id</th>
                                             <th>Action</th>
                                             <th>Created At</th>
                                             <th>Created By</th>
@@ -104,7 +108,7 @@
                                             <th>Level_7_Employer_Code</th>
                                             <th>Level_7_Designation_Name</th>
 
-                                            <th>old_date</th>
+                                            <th>New_date</th>
                                          
                                         </tr>
                                     </thead>
@@ -125,7 +129,7 @@
             processing: true,
             serverSide: false,
             ajax: {
-                url: '<?php echo base_url("admin/Mapping_log_report_get_logs_ajax"); ?>',
+                url: '<?php echo base_url("admin/mapping-log-report-get-logs-ajax"); ?>',
                 type: 'POST',
                 data: function(d) {
                     d.action_type = $('#action_type').val();
@@ -491,7 +495,7 @@
                 },
                 {
                     "targets": 58,
-                    "data": "old_date",
+                    "data": "new_date",
                     "searchable": true,
                     "orderable": true
                 },

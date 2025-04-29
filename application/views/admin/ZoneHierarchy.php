@@ -3,19 +3,40 @@
 
 
 <style>
+    .mgscd-menu ul.nav.nav-sub li ul.nav.nav-sub.mm-collapse.mm-show {
+        min-width: -webkit-fill-available !important;
+    }
 
-.mgscd-menu ul.nav.nav-sub li ul.nav.nav-sub.mm-collapse.mm-show {
-    min-width: -webkit-fill-available !important;
-}
-.mgscd-menu aside.app-side .nav>li>a {
-	width: -webkit-fill-available !important;
-}
+    .mgscd-menu aside.app-side .nav>li>a {
+        width: -webkit-fill-available !important;
+    }
 
-.sidetree .app-side {
 
-    width: 256px;
 
-}
+
+
+
+    /* 1024px से शुरू करते हुए धीरे-धीरे width बढ़ाना */
+    @media (min-width: 1024px) {
+        .sidetree .app-side {
+            width: 186px;
+        }
+    }
+
+
+
+
+    @media (min-width: 1044px) {
+        .sidetree .app-side {
+            width: 261px;
+        }
+    }
+
+    @media (min-width: 1054px) {
+        .sidetree .app-side {
+            width: 231px;
+        }
+    }
 </style>
 
 
@@ -480,7 +501,7 @@
                 success: function(data) {
                     var employeeData = data;
 
-           
+
 
 
 
@@ -579,7 +600,7 @@
             var id = $(this).data('id');
             var level = $(this).data('level');
 
-   
+
 
             loadTreeData(id, level);
         });

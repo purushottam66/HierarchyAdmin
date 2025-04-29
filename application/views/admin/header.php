@@ -430,8 +430,8 @@
                                     <?php foreach ($permissions as $permission) : ?>
                                         <?php if ($permission['module_name'] == 'Log Report' && $permission['view'] == 'yes') : ?>
                                             <li>
-                                                <a class="<?php echo ($current_page == 'admin/logreport') ? 'active' : ''; ?>"
-                                                    href="<?php echo base_url('admin/logreport'); ?>">
+                                                <a class="<?php echo ($current_page == 'admin/userlogreport') ? 'active' : ''; ?>"
+                                                    href="<?php echo base_url('admin/userlogreport'); ?>">
                                                     <span class="nav-icon">
                                                         <img src="<?php echo base_url('admin/assets/icons/cron.png'); ?>" alt=""
                                                             style="height:20px">
