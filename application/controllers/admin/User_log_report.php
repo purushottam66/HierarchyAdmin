@@ -52,20 +52,20 @@ class User_log_report extends CI_Controller
         }
 
         // Check for permission
-         $hasPermission = false;
-         if (!empty($data['permissions']) && is_array($data['permissions'])) {
-             foreach ($data['permissions'] as $p) {
-                 if ($p['module_name'] === "Log Report" && $p['view'] === "yes") {
-                     $hasPermission = true;
-                     break;
-                 }
-             }
-         }
+        //  $hasPermission = false;
+        //  if (!empty($data['permissions']) && is_array($data['permissions'])) {
+        //      foreach ($data['permissions'] as $p) {
+        //          if ($p['module_name'] === "Log Report" && $p['view'] === "yes") {
+        //              $hasPermission = true;
+        //              break;
+        //          }
+        //      }
+        //  }
 
-        if (!$hasPermission) {
-             redirect('admin/Access_denied');
-             return;
-         }
+        // if (!$hasPermission) {
+        //      redirect('admin/Access_denied');
+        //      return;
+        //  }
 
 
 

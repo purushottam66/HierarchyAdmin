@@ -2309,11 +2309,12 @@ class Employee extends CI_Controller
                 'user_id' => $id,
                 'parent_id' => $id,
                 'action' => 'UPDATE',
-                'data' => json_encode([[$updatedData]]),
+                'data' => json_encode($updatedData),
                 'created_at' => date('Y-m-d H:i:s'),
                 'created_by' =>   $back_user_id,
             );
 
+            
             $this->db->insert('ci_users_activity', $log_old);
             $this->db->trans_complete();
 
