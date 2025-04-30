@@ -2305,6 +2305,9 @@ class Employee extends CI_Controller
 
             $this->db->trans_start();
 
+
+           // log_message('debug', 'old_data_emp: '. print_r($updatedData, true));
+
             $log_old = array(
                 'user_id' => $id,
                 'parent_id' => $id,

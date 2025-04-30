@@ -254,10 +254,10 @@ $route['admin/mapping_log_report'] = 'admin/Mapping_log_report/list';
 $route['admin/mapping_log_report_json'] = 'admin/Mapping_log_report/json'; 
 $route['admin/mapping-log-report-get-logs-ajax'] = 'admin/Mapping_log_report/get_logs_ajax'; 
 
-$route['admin/UserMovement_log_report'] = 'admin/UserMovement_log_report/list'; 
+// $route['admin/UserMovement_log_report'] = 'admin/UserMovement_log_report/list'; 
 
-$route['admin/UserMovement_log_report_ajex'] = 'admin/UserMovement_log_report/UserMovement_log_report_ajex'; 
-$route['admin/UserMovement_log_report_json'] = 'admin/UserMovement_log_report/json'; 
+// $route['admin/UserMovement_log_report_ajex'] = 'admin/UserMovement_log_report/UserMovement_log_report_ajex'; 
+// $route['admin/UserMovement_log_report_json'] = 'admin/UserMovement_log_report/json'; 
 
 // Add this new route for handling undefined admin routes
 $route['admin/(.+)'] = 'admin/errors/admin_404';

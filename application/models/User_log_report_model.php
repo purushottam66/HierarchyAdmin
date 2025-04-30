@@ -11,6 +11,9 @@ class User_log_report_model extends CI_Model
         $this->db->from($this->table . ' as a');
         $this->db->join('users as u', 'a.created_by = u.id', 'left');
 
+
+        log_message('info', 'User Log Report Model - get_logs() - Filters: ' . json_encode($filters));
+
         // Apply search filter
         if (!empty($filters['search'])) {
             $this->db->group_start();
@@ -22,27 +25,19 @@ class User_log_report_model extends CI_Model
         }
 
         // Apply specific filters
-        if (!empty($filters['action_type'])) {
-            $this->db->where('action_type', $filters['action_type']);
-        }
-        if (!empty($filters['employee_search'])) {
-            $this->db->group_start();
-            $this->db->like('name', $filters['employee_search']);
-            $this->db->or_like('employee_id', $filters['employee_search']);
-            $this->db->group_end();
-        }
+
         if (!empty($filters['date_from'])) {
-            $this->db->where('action_time >=', $filters['date_from'] . ' 00:00:00');
+            $this->db->where('DATE(created_at)', $filters['date_from']);
         }
-        if (!empty($filters['date_to'])) {
-            $this->db->where('action_time <=', $filters['date_to'] . ' 23:59:59');
-        }
+        
+        
+
 
         // Apply ordering
         if (!empty($filters['order'])) {
             $this->db->order_by($filters['order']['column'], $filters['order']['dir']);
         } else {
-            $this->db->order_by('action_time', 'DESC');
+            $this->db->order_by('created_at', 'DESC');
         }
 
         // Apply pagination
@@ -65,21 +60,11 @@ class User_log_report_model extends CI_Model
             $this->db->group_end();
         }
 
-        if (!empty($filters['action_type'])) {
-            $this->db->where('action_type', $filters['action_type']);
-        }
-        if (!empty($filters['employee_search'])) {
-            $this->db->group_start();
-            $this->db->like('name', $filters['employee_search']);
-            $this->db->or_like('employee_id', $filters['employee_search']);
-            $this->db->group_end();
-        }
         if (!empty($filters['date_from'])) {
-            $this->db->where('action_time >=', $filters['date_from'] . ' 00:00:00');
+            $this->db->where('DATE(created_at)', $filters['date_from']);
         }
-        if (!empty($filters['date_to'])) {
-            $this->db->where('action_time <=', $filters['date_to'] . ' 23:59:59');
-        }
+        
+
 
         return $this->db->count_all_results();
     }
@@ -88,7 +73,7 @@ class User_log_report_model extends CI_Model
     {
         $log_data = array(
             'action_type' => $action_type,
-            'action_time' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
             'action_by' => $this->session->userdata('user_name'),
             'id' => $data['id'] ?? null,
             'name' => $data['name'] ?? null,
@@ -125,7 +110,7 @@ class User_log_report_model extends CI_Model
     {
         $log_data = array(
             'action_type' => 'UPDATE',
-            'action_time' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
             'action_by' => $this->session->userdata('user_name'),
             'id' => $id ?? null,
             'name' => $updatedData['name'] ?? null,
@@ -198,7 +183,7 @@ class User_log_report_model extends CI_Model
     {
         $log_data = array(
             'action_type' => 'DELETE',
-            'action_time' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
             'action_by' => $this->session->userdata('user_name'),
             'id' => $data['id'] ?? null,
             'name' => $data['name'] ?? null,

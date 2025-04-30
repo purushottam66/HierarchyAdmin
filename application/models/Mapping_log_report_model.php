@@ -13,16 +13,18 @@ class Mapping_log_report_model extends CI_Model
 
     public function get_logs($filters = array(), $limit = null, $offset = null)
     {
-        
-        
-  
+
+        log_message('info', 'Filters: ' . print_r($filters, true));
+
+
+
         $this->db->select('ci_mapping_activity.*, users.name as created_by_name');
         $this->db->from('ci_mapping_activity');
-        
-     
+
+
         $this->db->join('users', 'users.id = ci_mapping_activity.created_by', 'left');
 
-  
+
         if (!empty($filters)) {
             if (!empty($filters['action_type'])) {
                 $this->db->where('ci_mapping_activity.action', $filters['action_type']);
@@ -33,12 +35,9 @@ class Mapping_log_report_model extends CI_Model
             }
 
             if (!empty($filters['date_from'])) {
-                $this->db->where('DATE(ci_mapping_activity.created_at) >=', $filters['date_from']);
+                $this->db->where('DATE(ci_mapping_activity.created_at)', $filters['date_from']);
             }
 
-            if (!empty($filters['date_to'])) {
-                $this->db->where('DATE(ci_mapping_activity.created_at) <=', $filters['date_to']);
-            }
 
             if (!empty($filters['search'])) {
                 $this->db->group_start();
@@ -48,7 +47,7 @@ class Mapping_log_report_model extends CI_Model
                 $this->db->group_end();
             }
 
-        
+
             if (!empty($filters['order'])) {
                 $this->db->order_by($filters['order']['column'], $filters['order']['dir']);
             } else {
@@ -56,7 +55,7 @@ class Mapping_log_report_model extends CI_Model
             }
         }
 
-    
+
         if ($limit !== null) {
             $this->db->limit($limit, $offset);
         }
@@ -64,13 +63,13 @@ class Mapping_log_report_model extends CI_Model
         $query = $this->db->get();
         $logs = $query->result_array();
 
-    
+
         foreach ($logs as &$log) {
             $data = json_decode($log['data'], true);
             if (!empty($data[0]) && !empty($data[0][0])) {
                 $mapping = $data[0][0];
-                
-         
+
+
                 $this->db->select('*');
                 $this->db->from('distributors');
                 $this->db->where('Customer_Code', $mapping['DB_Code']);
@@ -80,7 +79,7 @@ class Mapping_log_report_model extends CI_Model
                 $this->db->where('Customer_Type_Code', $mapping['Customer_Type_Code']);
                 $this->db->where('Customer_Group_Code', $mapping['Customer_Group_Code']);
                 $distributor = $this->db->get()->row_array();
-                
+
                 if ($distributor) {
                     $log['distributor_data'] = $distributor;
                 }
@@ -106,9 +105,9 @@ class Mapping_log_report_model extends CI_Model
 
     public function get_total_logs($filters = array())
     {
-        
-    
-        
+
+
+
         $this->db->select('COUNT(*) as total');
         $this->db->from('ci_mapping_activity');
         $this->db->join('users', 'users.id = ci_mapping_activity.created_by', 'left');
@@ -124,12 +123,10 @@ class Mapping_log_report_model extends CI_Model
             }
 
             if (!empty($filters['date_from'])) {
-                $this->db->where('DATE(ci_mapping_activity.created_at) >=', $filters['date_from']);
+                $this->db->where('DATE(ci_mapping_activity.created_at)', $filters['date_from']);
             }
 
-            if (!empty($filters['date_to'])) {
-                $this->db->where('DATE(ci_mapping_activity.created_at) <=', $filters['date_to']);
-            }
+
 
             if (!empty($filters['search'])) {
                 $this->db->group_start();
@@ -142,10 +139,10 @@ class Mapping_log_report_model extends CI_Model
 
         $query = $this->db->get();
         $result = $query->row_array();
-        
-    
- 
-        
+
+
+
+
         return $result['total'];
     }
 }

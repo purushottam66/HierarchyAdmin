@@ -253,9 +253,22 @@ class User_log_report extends CI_Controller
             if (!in_array($order_dir, ['ASC', 'DESC'])) $order_dir = 'ASC';
     
             $columns = ['user_id', 'parent_id', 'action', 'data', 'created_at', 'created_by'];
-    
+
+
+            $date_from = $this->input->get('date_from');
+
+            if (empty($date_from) || !strtotime($date_from)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Please select a valid date',
+                ]);
+                http_response_code(400); // Bad Request
+                return;
+            }
+            
             $filters = [
                 'search' => $search,
+                'date_from' => $date_from,
                 'order' => [
                     'column' => $columns[$order_column] ?? 'created_at',
                     'dir' => $order_dir

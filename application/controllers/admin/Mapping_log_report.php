@@ -129,6 +129,8 @@ class Mapping_log_report extends CI_Controller
 
             // Validate date inputs
             $date_from = $this->input->get('date_from');
+
+          
             $date_to = $this->input->get('date_to');
             if ($date_from && !strtotime($date_from)) $date_from = null;
             if ($date_to && !strtotime($date_to)) $date_to = null;
@@ -308,16 +310,23 @@ class Mapping_log_report extends CI_Controller
 
             // Validate date inputs
             $date_from = $this->input->get('date_from');
-            $date_to = $this->input->get('date_to');
-            if ($date_from && !strtotime($date_from)) $date_from = null;
-            if ($date_to && !strtotime($date_to)) $date_to = null;
+           
+      
 
+            if (empty($date_from) || !strtotime($date_from)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Please select a valid date',
+                ]);
+                http_response_code(400); // Bad Request
+                return;
+            }
             // Build filters array
             $filters = array(
                 'action_type' => $this->input->get('action_type'),
                 'employee_search' => trim($this->input->get('employee_search')),
                 'date_from' => $date_from,
-                'date_to' => $date_to,
+              
                 'search' => $search,
                 'order' => array(
                     'column' => $columns[$order_column] ?? 'created_at',
